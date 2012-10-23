@@ -12,6 +12,12 @@
         android:icon="@drawable/ic_launcher"
         android:theme="@style/Theme.shift_tracker">
 
+        <!-- Providers -->
+        <provider
+            android:authorities="com.dgsd.android.ShiftTracker.Data.Provider"
+            android:multiprocess="false"
+            android:name=".Data.Provider"/>
+
         <activity
             android:name="StartupActivity"
             android:label="@string/app_name">
