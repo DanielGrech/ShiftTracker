@@ -4,6 +4,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.support.v4.content.CursorLoader;
+import android.text.TextUtils;
+import android.text.format.DateUtils;
+import android.text.format.Time;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +15,9 @@ import android.widget.TextView;
 import com.dgsd.android.ShiftTracker.Data.DbField;
 import com.dgsd.android.ShiftTracker.Data.DbTable;
 import com.dgsd.android.ShiftTracker.Data.Provider;
+import com.dgsd.android.ShiftTracker.R;
 import com.emilsjolander.components.StickyListHeaders.StickyListHeadersCursorAdapter;
 
-import java.util.Map;
 import java.util.Random;
 
 public class WeekAdapter extends StickyListHeadersCursorAdapter {
@@ -23,27 +26,45 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
     private LayoutInflater inflater;
     private int mStartingJulianDay;
     private Random mRand;
+    private Time mTime;
+
+    private SparseArray<String> mJdToTitleArray;
 
     public WeekAdapter(Context context, Cursor c, int julianDay) {
         super(context, c, false);
         inflater = LayoutInflater.from(context);
         mStartingJulianDay = julianDay;
         mRand = new Random();
+        mTime = new Time();
+
+        //Caching
+        mJdToTitleArray = new SparseArray<String>();
     }
 
     @Override
     protected View newHeaderView(Context context, Cursor cursor) {
-//        HeaderViewHolder holder = new HeaderViewHolder();
-//        View v = inflater.inflate(R.layout.header, null);
-//        holder.text = (TextView) v.findViewById(R.id.text);
-//        v.setTag(holder);
-        TextView v = new TextView(context);
+        View v = inflater.inflate(R.layout.title_with_underline, null);
+        new HeaderViewHolder(v);
         return v;
     }
 
     @Override
     protected void bindHeaderView(View view, Context context, Cursor cursor) {
-        ((TextView)view).setText("HEADER: " + cursor.getString(cursor.getColumnIndex(DbField.JULIAN_DAY.name)));
+        HeaderViewHolder holder = (HeaderViewHolder) view.getTag();
+
+        final int jd = cursor.getInt(cursor.getColumnIndex(DbField.JULIAN_DAY.name));
+        String title = mJdToTitleArray.get(jd, null);
+        if(TextUtils.isEmpty(title)) {
+
+            mTime.setJulianDay(jd);
+            title = DateUtils.formatDateTime(getContext(), mTime.toMillis(true),
+                    DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_WEEKDAY |
+                            DateUtils.FORMAT_ABBREV_ALL | DateUtils.FORMAT_NO_YEAR);
+
+            mJdToTitleArray.put(jd, title);
+        }
+
+        holder.title.setText(title);
     }
 
     @Override
@@ -69,6 +90,8 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
 
     @Override
     public Cursor swapCursor(Cursor cursor) {
+        clearCaches();
+
         if(cursor == null)
             return super.swapCursor(null);
 
@@ -123,6 +146,10 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
         return super.swapCursor(mc);
     }
 
+    private void clearCaches() {
+        mJdToTitleArray.clear();
+    }
+
     public CursorLoader getLoaderForWeekStarting(Context context) {
         final String sel = DbField.JULIAN_DAY + " >= ? AND " + DbField.JULIAN_DAY + " < ?";
         final String[] args = new String[] {
@@ -133,5 +160,17 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
         final String sort = DbField.JULIAN_DAY + " ASC," + DbField.START_TIME + " ASC";
 
         return new CursorLoader(context, Provider.SHIFTS_URI, null, sel, args, sort);
+    }
+
+    private static class HeaderViewHolder {
+        TextView title;
+
+        public HeaderViewHolder(View view) {
+            if(view == null)
+                return;
+
+            title = (TextView) view.findViewById(R.id.text);
+            view.setTag(this);
+        }
     }
 }

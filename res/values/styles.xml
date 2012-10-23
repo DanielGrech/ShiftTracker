@@ -19,6 +19,8 @@
 <resources>
 
     <style name="Theme.shift_tracker" parent="@style/Theme.Sherlock.Light">
+        <item name="android:windowBackground">@color/window_background</item>
+
         <item name="actionBarItemBackground">@drawable/selectable_background_shift_tracker</item>
         <item name="popupMenuStyle">@style/shift_tracker_PopupMenu</item>
         <item name="dropDownListViewStyle">@style/shift_tracker_DropDownListView</item>

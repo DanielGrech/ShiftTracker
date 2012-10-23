@@ -5,4 +5,50 @@
     <string name="today">Today</string>
     <string name="settings">Settings</string>
     <string name="about">About</string>
+
+    <!-- Settings -->
+    <string name="settings_category_display">Display</string>
+    <string name="settings_category_"></string>
+    <string name="settings_category_"></string>
+    <string name="settings_category_"></string>
+    <string name="settings_category_"></string>
+
+    <string name="settings_key_start_day">start_day</string>
+    <string name="settings_key_"></string>
+    <string name="settings_key_"></string>
+    <string name="settings_key_"></string>
+    <string name="settings_key_"></string>
+
+    <string name="settings_title_start_day">Week Start Day</string>
+    <string name="settings_title_"></string>
+    <string name="settings_title_"></string>
+    <string name="settings_title_"></string>
+    <string name="settings_title_"></string>
+
+    <string name="settings_summary_start_day">The first day of your week</string>
+    <string name="settings_summary_"></string>
+    <string name="settings_summary_"></string>
+    <string name="settings_summary_"></string>
+
+    <string-array name="days_of_week">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+
+    <string-array name="days_of_week_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>0</item>
+    </string-array>
+
 </resources>
+

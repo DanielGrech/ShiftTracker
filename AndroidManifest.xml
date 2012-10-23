@@ -8,6 +8,7 @@
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="16"/>
 
     <application
+        android:name=".StApp"
         android:label="@string/app_name"
         android:icon="@drawable/ic_launcher"
         android:theme="@style/Theme.shift_tracker">
@@ -29,5 +30,6 @@
 
         <activity android:name=".MainActivity"/>
         <activity android:name=".AllInOneActivity"/>
+        <activity android:name=".SettingsActivity"/>
     </application>
 </manifest>

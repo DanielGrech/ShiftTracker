@@ -1,5 +1,6 @@
 package com.dgsd.android.ShiftTracker;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.format.Time;
@@ -43,6 +44,10 @@ public class MainActivity extends SherlockFragmentActivity implements GoToFragme
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
+            case R.id.settings: {
+                startActivity(new Intent(this, SettingsActivity.class));
+                break;
+            }
             case R.id.go_to: {
                 if(mGoToFragment != null && mGoToFragment.isResumed()) {
                     //We're showing already!

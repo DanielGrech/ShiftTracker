@@ -4,7 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dg="http://schemas.android.com/apk/res/com.dgsd.android.ShiftTracker"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:attr/windowBackground">
 
     <com.viewpagerindicator.TitlePageIndicator
         android:id="@+id/indicator"
@@ -12,9 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:padding="4dip"
-        android:textColor="@android:color/white"
-        android:background="#111111"
-        dg:footerColor="#CC0000"
+        android:textColor="@color/window_background"
+        android:background="@drawable/ab_stacked_solid_shift_tracker"
+        dg:footerColor="@color/window_background"
+        dg:footerLineHeight="0dip"
         dg:footerIndicatorStyle="triangle"
         dg:selectedBold="true"/>
 

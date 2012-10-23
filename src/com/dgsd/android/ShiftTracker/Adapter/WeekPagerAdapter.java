@@ -1,12 +1,15 @@
 package com.dgsd.android.ShiftTracker.Adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.text.format.DateUtils;
 import android.text.format.Time;
+import com.dgsd.android.ShiftTracker.Const;
 import com.dgsd.android.ShiftTracker.Fragment.WeekFragment;
+import com.dgsd.android.ShiftTracker.R;
 
 import java.util.Formatter;
 import java.util.HashMap;
@@ -21,6 +24,7 @@ public class WeekPagerAdapter extends FragmentStatePagerAdapter {
     private Context mContext;
 
     private int mCenterJulianDay = -1;
+    private int mWeekStartDay = 1; //Monday;
 
     private Time mTime;
     private Formatter mFormatter;
@@ -33,8 +37,12 @@ public class WeekPagerAdapter extends FragmentStatePagerAdapter {
         mStringBuilder = new StringBuilder();
         mFormatter = new Formatter(mStringBuilder);
 
+        SharedPreferences p = context.getSharedPreferences(Const.SHARED_PREFS_NAME, Context.MODE_PRIVATE);
+        String startDayAsStr = p.getString(context.getString(R.string.settings_key_start_day), "0");
+        mWeekStartDay = Integer.valueOf(startDayAsStr);
+
         //TODO: This assumes week starts on Monday. Should be configurable
-        mCenterJulianDay = adjustJulianDay(0, weekContainingJulianDay);
+        mCenterJulianDay = adjustJulianDay(mWeekStartDay, weekContainingJulianDay);
     }
 
     @Override
@@ -65,8 +73,8 @@ public class WeekPagerAdapter extends FragmentStatePagerAdapter {
 
     protected String getTitleForPosition(int pos) {
         mTime.setJulianDay(getJulianDayForPosition(pos));
-        if(mTime.weekDay != 0) {
-            while(mTime.weekDay != 0) {
+        if(mTime.weekDay != mWeekStartDay) {
+            while(mTime.weekDay != mWeekStartDay) {
                 mTime.monthDay--;
                 mTime.normalize(true);
             }
@@ -92,8 +100,7 @@ public class WeekPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     public int getPositionForJulianDay(int julianDay) {
-        //TODO: This assumes week starts on Monday. Should be configurable
-        final int jd = adjustJulianDay(0, julianDay);
+        final int jd = adjustJulianDay(mWeekStartDay, julianDay);
         if(mCenterJulianDay == jd) {
             return getCenterPosition();
         } else if(mCenterJulianDay < jd) {
