@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.text.format.DateUtils;
 import android.text.format.Time;
-import com.dgsd.android.ShiftTracker.WeekFragment;
+import com.dgsd.android.ShiftTracker.Fragment.WeekFragment;
 
 import java.util.Formatter;
 import java.util.HashMap;

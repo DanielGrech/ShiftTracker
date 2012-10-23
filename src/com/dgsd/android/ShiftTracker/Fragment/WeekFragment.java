@@ -1,17 +1,15 @@
-package com.dgsd.android.ShiftTracker;
+package com.dgsd.android.ShiftTracker.Fragment;
 
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.dgsd.android.ShiftTracker.Adapter.WeekAdapter;
-import com.dgsd.android.ShiftTracker.Data.DbField;
-import com.dgsd.android.ShiftTracker.Data.Provider;
+import com.dgsd.android.ShiftTracker.R;
 import com.emilsjolander.components.StickyListHeaders.StickyListHeadersListView;
 
 public class WeekFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<Cursor> {
