@@ -19,6 +19,6 @@
         android:layout_above="@id/stats_wrapper"
         android:dividerHeight="0dip"
         android:divider="@android:color/transparent"
-        android:cacheColorHint="@android:color/transparent" />
+        android:cacheColorHint="@android:color/transparent"/>
 
 </RelativeLayout>

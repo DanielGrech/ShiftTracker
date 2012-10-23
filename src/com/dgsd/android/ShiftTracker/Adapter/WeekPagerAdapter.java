@@ -97,9 +97,9 @@ public class WeekPagerAdapter extends FragmentStatePagerAdapter {
         if(mCenterJulianDay == jd) {
             return getCenterPosition();
         } else if(mCenterJulianDay < jd) {
-            return getCenterPosition() + (jd - mCenterJulianDay);
+            return getCenterPosition() + ((jd - mCenterJulianDay) / 7);
         } else {
-            return getCenterPosition() - (mCenterJulianDay - jd);
+            return getCenterPosition() - ((mCenterJulianDay - jd) / 7);
         }
     }
 

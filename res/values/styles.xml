@@ -44,7 +44,7 @@
         <item name="android:dropDownSpinnerStyle">@style/Spinnershift_tracker</item>
         <item name="android:progressBarStyleHorizontal">@style/ProgressBarshift_tracker</item>
         <item name="android:seekBarStyle">@style/SeekBarshift_tracker</item>
-        <item name="android:listChoiceBackgroundIndicator">@drawable/list_selector_holo_light</item>
+        <item name="android:listChoiceBackgroundIndicator">@drawable/selectable_background_shift_tracker</item>
         <item name="android:fastScrollThumbDrawable">@drawable/fastscroll_thumb_holo</item>
         
     </style>
