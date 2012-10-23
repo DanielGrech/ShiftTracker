@@ -9,7 +9,6 @@ public class DbField {
     public static final DbField START_TIME = new DbField("start", "integer");
     public static final DbField END_TIME = new DbField("end", "integer");
     public static final DbField PAY_RATE = new DbField("payrate", "real");
-    public static final DbField DURATION = new DbField("duration", "integer", "default (start - end)");
     public static final DbField NAME = new DbField("name", "text");
     public static final DbField BREAK_DURATION = new DbField("break_duration", "text");
 

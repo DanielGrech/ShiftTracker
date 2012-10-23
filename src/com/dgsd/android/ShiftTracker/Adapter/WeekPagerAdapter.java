@@ -60,7 +60,7 @@ public class WeekPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int pos) {
-        return new WeekFragment();
+        return WeekFragment.newInstance(getJulianDayForPosition(pos));
     }
 
     protected String getTitleForPosition(int pos) {

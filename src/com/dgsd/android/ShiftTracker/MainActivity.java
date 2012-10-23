@@ -26,7 +26,6 @@ public class MainActivity extends SherlockFragmentActivity {
         mIndicator = (TitlePageIndicator) findViewById(R.id.indicator);
         mPager = (ViewPager) findViewById(R.id.pager);
 
-
         mAdapter = new WeekPagerAdapter(this, getSupportFragmentManager(), currentJd);
         mPager.setAdapter(mAdapter);
         mIndicator.setViewPager(mPager, mAdapter.getPositionForJulianDay(currentJd));
