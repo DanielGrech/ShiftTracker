@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dg="http://schemas.android.com/apk/res/com.dgsd.android.ShiftTracker"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.viewpagerindicator.TitlePageIndicator
+        android:id="@+id/indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:padding="4dip"
+        android:textColor="@android:color/white"
+        android:background="#111111"
+        dg:footerColor="#CC0000"
+        dg:footerIndicatorStyle="triangle"
+        dg:selectedBold="true"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/indicator"/>
+
+</RelativeLayout>
