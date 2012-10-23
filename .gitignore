@@ -1,0 +1,9 @@
+*.properties
+*.class
+*.apk
+.idea/*
+.idea
+gen/*
+proguard-project.txt
+build.xml
+*.iml
