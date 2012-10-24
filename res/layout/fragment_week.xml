@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="50dip"
         android:layout_alignParentBottom="true"
-        android:background="#111111" />
+        android:background="#111111"
+        android:visibility="gone"/>
 
     <com.emilsjolander.components.StickyListHeaders.StickyListHeadersListView
         android:id="@+id/list"

@@ -18,7 +18,7 @@
         android:minHeight="32dip"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textStyle="bold"
-        android:textColor="@color/pressed_shift_tracker"
+        android:textColor="@color/blue"
         android:gravity="left|center_vertical"
         android:singleLine="true"
         android:ellipsize="end"
@@ -27,6 +27,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dip"
-        android:background="@color/pressed_shift_tracker" />
+        android:background="@color/blue" />
 
 </LinearLayout>

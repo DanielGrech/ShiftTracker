@@ -17,6 +17,7 @@
 -->
 
 <resources>
-    <color name="pressed_shift_tracker">#CCCC0000</color>
-    <color name="window_background">#E8E8E8</color>
+    <color name="blue">#37568F</color>
+    <color name="pressed_shift_tracker">#CC33B5E5</color>
+    <color name="window_background">#FAFAFA</color>
 </resources>
