@@ -24,7 +24,6 @@ import com.emilsjolander.components.StickyListHeaders.StickyListHeadersCursorAda
 import java.text.NumberFormat;
 import java.util.Formatter;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class WeekAdapter extends StickyListHeadersCursorAdapter {
     public static final String NEW_ROW_KEY = WeekAdapter.class.getName() + "_NEW_ROW_KEY";
@@ -43,6 +42,8 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
     private Formatter mFormatter;
     private StringBuilder mStringBuilder;
 
+    private NumberFormat mCurrencyFormatter;
+
     public WeekAdapter(Context context, Cursor c, int julianDay) {
         super(context, c, false);
         inflater = LayoutInflater.from(context);
@@ -54,6 +55,8 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
 
         mStringBuilder = new StringBuilder();
         mFormatter = new Formatter((mStringBuilder));
+
+        mCurrencyFormatter = NumberFormat.getCurrencyInstance();
 
         //Caching
         mJdToTitleArray = new SparseArray<String>();
@@ -172,7 +175,7 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
         mIdToPayArray.clear();
     }
 
-    public CursorLoader getLoaderForWeekStarting(Context context) {
+    public CursorLoader getWeeklyLoader(Context context) {
         final String sel = DbField.JULIAN_DAY + " >= ? AND " + DbField.JULIAN_DAY + " < ?";
         final String[] args = new String[] {
                 String.valueOf(mStartingJulianDay),
@@ -208,14 +211,7 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
         if(!TextUtils.isEmpty(pay))
             return pay;
 
-        long duration = shift.endTime - shift.startTime;
-        duration -= shift.breakDuration;
-
-        long minutes = duration / TimeUtils.InMillis.MINUTE;
-        float hours = minutes / 60.0f;
-
-        float payValue = hours * shift.payRate;
-        pay = NumberFormat.getCurrencyInstance().format(payValue);
+        pay = mCurrencyFormatter.format(shift.getIncome());
 
         mIdToPayArray.put( (int) shift.id, pay);
         return pay;

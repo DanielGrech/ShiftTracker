@@ -5,13 +5,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/stats_wrapper"
         android:layout_width="match_parent"
         android:layout_height="50dip"
         android:layout_alignParentBottom="true"
-        android:background="#111111"
-        android:visibility="gone"/>
+        android:paddingLeft="8dip"
+        android:paddingRight="8dip"
+        android:background="@drawable/ab_bottom_solid_shift_tracker">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/total"
+            android:textSize="25dip"
+            android:textColor="?android:attr/textColorPrimary"/>
+
+        <TextView
+            android:id="@+id/total_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:fontFamily="sans-serif-light"
+            android:textSize="25dip"
+            android:textColor="@color/blue"/>
+    </RelativeLayout>
 
     <com.emilsjolander.components.StickyListHeaders.StickyListHeadersListView
         android:id="@+id/list"

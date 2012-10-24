@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.dgsd.android.ShiftTracker.Data.DbField;
 import com.dgsd.android.ShiftTracker.Util.JsonRepresentable;
+import com.dgsd.android.ShiftTracker.Util.TimeUtils;
 import org.json.JSONObject;
 
 public class Shift implements Parcelable, JsonRepresentable {
@@ -55,6 +56,18 @@ public class Shift implements Parcelable, JsonRepresentable {
         s.payRate = cursor.getFloat(payCol);
         s.breakDuration = cursor.getLong(breakCol);
         return s;
+    }
+
+    public float getIncome() {
+        return getHoursDuration() * payRate;
+    }
+
+    public float getHoursDuration() {
+        long duration = endTime - startTime;
+        duration -= breakDuration;
+
+        long minutes = duration / TimeUtils.InMillis.MINUTE;
+        return minutes / 60.0f;
     }
 
     @Override
