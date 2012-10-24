@@ -23,7 +23,6 @@ public class MainActivity extends SherlockFragmentActivity implements GoToFragme
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        UIUtils.tryForceMenuOverflow(this);
 
         final int currentJd = TimeUtils.getCurrentJulianDay();
 
