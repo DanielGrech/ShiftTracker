@@ -31,5 +31,6 @@
         <activity android:name=".MainActivity"/>
         <activity android:name=".AllInOneActivity"/>
         <activity android:name=".SettingsActivity"/>
+        <activity android:name=".EditShiftActivity"/>
     </application>
 </manifest>

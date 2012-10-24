@@ -1,5 +1,6 @@
 package com.dgsd.android.ShiftTracker.Fragment;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -12,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.dgsd.android.ShiftTracker.Adapter.WeekAdapter;
+import com.dgsd.android.ShiftTracker.EditShiftActivity;
 import com.dgsd.android.ShiftTracker.Model.Shift;
 import com.dgsd.android.ShiftTracker.R;
 import com.emilsjolander.components.StickyListHeaders.StickyListHeadersListView;
@@ -124,6 +126,7 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
 
     @Override
     public void onItemClick(AdapterView<?> list, View view, int pos, long id) {
-
+        final Intent intent = new Intent(getActivity(), EditShiftActivity.class);
+        startActivity(intent);
     }
 }

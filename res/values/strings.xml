@@ -7,6 +7,9 @@
     <string name="about">About</string>
     <string name="add_shift">Add Shift</string>
     <string name="total">Total</string>
+    <string name="done">Done</string>
+    <string name="discard">Discard</string>
+    <string name="cancel">Cancel</string>
 
     <!-- Settings -->
     <string name="settings_category_display">Display</string>
