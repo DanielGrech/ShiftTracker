@@ -13,6 +13,7 @@ public class DbTable {
         DbField.END_TIME,
         DbField.PAY_RATE,
         DbField.NAME,
+        DbField.NOTE,
         DbField.BREAK_DURATION
     });
 

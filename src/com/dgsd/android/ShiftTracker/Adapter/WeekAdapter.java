@@ -16,11 +16,15 @@ import android.widget.TextView;
 import com.dgsd.android.ShiftTracker.Data.DbField;
 import com.dgsd.android.ShiftTracker.Data.DbTable;
 import com.dgsd.android.ShiftTracker.Data.Provider;
+import com.dgsd.android.ShiftTracker.Model.Shift;
 import com.dgsd.android.ShiftTracker.R;
+import com.dgsd.android.ShiftTracker.Util.TimeUtils;
 import com.emilsjolander.components.StickyListHeaders.StickyListHeadersCursorAdapter;
 
+import java.text.NumberFormat;
 import java.util.Formatter;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class WeekAdapter extends StickyListHeadersCursorAdapter {
     public static final String NEW_ROW_KEY = WeekAdapter.class.getName() + "_NEW_ROW_KEY";
@@ -32,6 +36,7 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
 
     private SparseArray<String> mJdToTitleArray;
     private SparseArray<String> mIdToTimeArray;
+    private SparseArray<String> mIdToPayArray;
 
     private boolean mIs24Hour;
 
@@ -53,6 +58,7 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
         //Caching
         mJdToTitleArray = new SparseArray<String>();
         mIdToTimeArray = new SparseArray<String>();
+        mIdToPayArray = new SparseArray<String>();
     }
 
     @Override
@@ -89,9 +95,9 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder holder = (ViewHolder) view.getTag();
-        final String name = cursor.getString(cursor.getColumnIndex(DbField.NAME.name));
 
-        if(TextUtils.equals(NEW_ROW_KEY, name)) {
+        final Shift shift = Shift.fromCursor(cursor);
+        if(TextUtils.equals(NEW_ROW_KEY, shift.name)) {
             holder.noShiftWrapper.setVisibility(View.VISIBLE);
             holder.shiftWrapper.setVisibility(View.GONE);
 
@@ -101,10 +107,10 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
         holder.noShiftWrapper.setVisibility(View.GONE);
         holder.shiftWrapper.setVisibility(View.VISIBLE);
 
-        holder.name.setText(name);
-        holder.time.setText(getTimeText(cursor));
-        holder.pay.setText("$15");
-        holder.note.setText("This is a note!");
+        holder.name.setText(shift.name);
+        holder.time.setText(getTimeText(shift));
+        holder.pay.setText(getPayText(shift));
+        holder.note.setText(shift.note);
     }
 
     @Override
@@ -151,7 +157,8 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
             row[3] = -1;                                // DbField.END_TIME
             row[4] = -1;                                // DbField.PAY_RATE
             row[5] = NEW_ROW_KEY;                       // DbField.NAME
-            row[6] = -1;                                // DbField.BREAK_DURATION
+            row[6] = null;                              // DbField.NOTE
+            row[7] = -1;                                // DbField.BREAK_DURATION
 
             mc.addRow(row);
         }
@@ -162,6 +169,7 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
     private void clearCaches() {
         mJdToTitleArray.clear();
         mIdToTimeArray.clear();
+        mIdToPayArray.clear();
     }
 
     public CursorLoader getLoaderForWeekStarting(Context context) {
@@ -176,9 +184,8 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
         return new CursorLoader(context, Provider.SHIFTS_URI, null, sel, args, sort);
     }
 
-    private String getTimeText(Cursor cursor) {
-        final int id = cursor.getInt(0);
-        String time = mIdToTimeArray.get(id);
+    private String getTimeText(Shift shift) {
+        String time = mIdToTimeArray.get( (int) shift.id);
         if(!TextUtils.isEmpty(time))
             return time;
 
@@ -186,14 +193,32 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
         if(mIs24Hour)
             flags |= DateUtils.FORMAT_24HOUR;
 
-        final long t1 = cursor.getLong(cursor.getColumnIndex(DbField.START_TIME.name));
-        final long t2 = cursor.getLong(cursor.getColumnIndex(DbField.END_TIME.name));
-
         mStringBuilder.setLength(0);
-        time = DateUtils.formatDateRange(getContext(), mFormatter, t1, t2, flags).toString();
+        time = DateUtils.formatDateRange(getContext(), mFormatter, shift.startTime, shift.endTime, flags).toString();
 
-        mIdToTimeArray.put(id, time);
+        mIdToTimeArray.put( (int) shift.id, time);
         return time;
+    }
+
+    private String getPayText(Shift shift) {
+        if(shift.payRate <= 0.01)
+            return null;
+
+        String pay = mIdToPayArray.get( (int) shift.id);
+        if(!TextUtils.isEmpty(pay))
+            return pay;
+
+        long duration = shift.endTime - shift.startTime;
+        duration -= shift.breakDuration;
+
+        long minutes = duration / TimeUtils.InMillis.MINUTE;
+        float hours = minutes / 60.0f;
+
+        float payValue = hours * shift.payRate;
+        pay = NumberFormat.getCurrencyInstance().format(payValue);
+
+        mIdToPayArray.put( (int) shift.id, pay);
+        return pay;
     }
 
     private static class HeaderViewHolder {

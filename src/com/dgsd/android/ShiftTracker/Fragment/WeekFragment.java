@@ -7,12 +7,13 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.dgsd.android.ShiftTracker.Adapter.WeekAdapter;
 import com.dgsd.android.ShiftTracker.R;
 import com.emilsjolander.components.StickyListHeaders.StickyListHeadersListView;
 
-public class WeekFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class WeekFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<Cursor>,AdapterView.OnItemClickListener {
     private static final String KEY_JD = "_julian_day";
 
     private static final int LOADER_ID_SHIFTS = 0x01;
@@ -49,6 +50,7 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
 
         mList = (StickyListHeadersListView) v.findViewById(R.id.list);
         mList.setAdapter(mAdapter);
+        mList.setOnItemClickListener(this);
 
         return v;
     }
@@ -78,5 +80,10 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
         mAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> list, View view, int pos, long id) {
+
     }
 }
