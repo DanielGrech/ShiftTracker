@@ -20,6 +20,9 @@
         android:layout_above="@id/stats_wrapper"
         android:listSelector="@android:color/transparent"
         android:dividerHeight="0dip"
+        android:paddingLeft="8dip"
+        android:paddingRight="8dip"
+        android:scrollbarStyle="outsideOverlay"
         android:divider="@android:color/transparent"
         android:cacheColorHint="@android:color/transparent"/>
 

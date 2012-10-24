@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.support.v4.content.CursorLoader;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.util.SparseArray;
@@ -18,6 +19,7 @@ import com.dgsd.android.ShiftTracker.Data.Provider;
 import com.dgsd.android.ShiftTracker.R;
 import com.emilsjolander.components.StickyListHeaders.StickyListHeadersCursorAdapter;
 
+import java.util.Formatter;
 import java.util.Random;
 
 public class WeekAdapter extends StickyListHeadersCursorAdapter {
@@ -29,6 +31,12 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
     private Time mTime;
 
     private SparseArray<String> mJdToTitleArray;
+    private SparseArray<String> mIdToTimeArray;
+
+    private boolean mIs24Hour;
+
+    private Formatter mFormatter;
+    private StringBuilder mStringBuilder;
 
     public WeekAdapter(Context context, Cursor c, int julianDay) {
         super(context, c, false);
@@ -37,8 +45,14 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
         mRand = new Random();
         mTime = new Time();
 
+        mIs24Hour = DateFormat.is24HourFormat(context);
+
+        mStringBuilder = new StringBuilder();
+        mFormatter = new Formatter((mStringBuilder));
+
         //Caching
         mJdToTitleArray = new SparseArray<String>();
+        mIdToTimeArray = new SparseArray<String>();
     }
 
     @Override
@@ -74,17 +88,29 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        ((TextView)view).setText(cursor.getString(cursor.getColumnIndex(DbField.NAME.name)));
+        ViewHolder holder = (ViewHolder) view.getTag();
+        final String name = cursor.getString(cursor.getColumnIndex(DbField.NAME.name));
+
+        if(TextUtils.equals(NEW_ROW_KEY, name)) {
+            holder.noShiftWrapper.setVisibility(View.VISIBLE);
+            holder.shiftWrapper.setVisibility(View.GONE);
+
+            return;
+        }
+
+        holder.noShiftWrapper.setVisibility(View.GONE);
+        holder.shiftWrapper.setVisibility(View.VISIBLE);
+
+        holder.name.setText(name);
+        holder.time.setText(getTimeText(cursor));
+        holder.pay.setText("$15");
+        holder.note.setText("This is a note!");
     }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-//        ViewHolder holder = new ViewHolder();
-//        View v = inflater.inflate(R.layout.test_list_item_layout, null);
-//        holder.text = (TextView) v.findViewById(R.id.text);
-//        v.setTag(holder);
-        TextView v = new TextView(context);
-        v.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 140));
+        View v = inflater.inflate(R.layout.list_item_shift_wrapper, null);
+        new ViewHolder(v);
         return v;
     }
 
@@ -100,8 +126,8 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
         int jd = mStartingJulianDay;
         final int colCount = cursor.getColumnCount();
 
+        SparseArray<Object[]> jdToRowArray = new SparseArray<Object[]>();
         if(cursor.moveToFirst()) {
-            SparseArray<Object[]> jdToRowArray = new SparseArray<Object[]>();
             final int jdIndex = cursor.getColumnIndex(DbField.JULIAN_DAY.name);
             do {
                 Object[] row = new Object[colCount];
@@ -110,37 +136,24 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
 
                 jdToRowArray.put(cursor.getInt(jdIndex), row);
             } while(cursor.moveToNext());
+        }
 
-            for(int i = jd; i < jd + 7; i++) {
-                Object[] row = jdToRowArray.get(i);
-                if(row == null) {
-                    //Nothing for this jd, insert black row!
-                    row = new Object[colCount];
-                    row[0] = mRand.nextInt(Integer.MAX_VALUE); //DbField.ID
-                    row[1] = i; // DbField.JULIAN_DAY
-                    row[2] = -1; // DbField.START_TIME
-                    row[3] = -1; // DbField.END_TIME
-                    row[4] = -1; // DbField.PAY_RATE
-                    row[5] = NEW_ROW_KEY; //DbField.NAME
-                    row[6] = -1; //DbField.BREAK_DURATION
-                }
-
+        for (int i = jd; i < jd + 7; i++) {
+            Object[] row = jdToRowArray.get(i);
+            if (row != null)
                 mc.addRow(row);
-            }
-        } else {
-            //No shifts at all .. add defaults for all!
-            for(int i = 0; i < 7; i++) {
-                Object[] row = new Object[colCount];
-                row[0] = mRand.nextInt(Integer.MAX_VALUE); //DbField.ID
-                row[1] = jd++; // DbField.JULIAN_DAY
-                row[2] = -1; // DbField.START_TIME
-                row[3] = -1; // DbField.END_TIME
-                row[4] = -1; // DbField.PAY_RATE
-                row[5] = NEW_ROW_KEY; //DbField.NAME
-                row[6] = -1; //DbField.BREAK_DURATION
 
-                mc.addRow(row);
-            }
+            //Add a 'Add Shift' row
+            row = new Object[colCount];
+            row[0] = mRand.nextInt(Integer.MAX_VALUE);  // DbField.ID
+            row[1] = i;                                 // DbField.JULIAN_DAY
+            row[2] = -1;                                // DbField.START_TIME
+            row[3] = -1;                                // DbField.END_TIME
+            row[4] = -1;                                // DbField.PAY_RATE
+            row[5] = NEW_ROW_KEY;                       // DbField.NAME
+            row[6] = -1;                                // DbField.BREAK_DURATION
+
+            mc.addRow(row);
         }
 
         return super.swapCursor(mc);
@@ -148,6 +161,7 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
 
     private void clearCaches() {
         mJdToTitleArray.clear();
+        mIdToTimeArray.clear();
     }
 
     public CursorLoader getLoaderForWeekStarting(Context context) {
@@ -162,6 +176,26 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
         return new CursorLoader(context, Provider.SHIFTS_URI, null, sel, args, sort);
     }
 
+    private String getTimeText(Cursor cursor) {
+        final int id = cursor.getInt(0);
+        String time = mIdToTimeArray.get(id);
+        if(!TextUtils.isEmpty(time))
+            return time;
+
+        int flags = DateUtils.FORMAT_SHOW_TIME;
+        if(mIs24Hour)
+            flags |= DateUtils.FORMAT_24HOUR;
+
+        final long t1 = cursor.getLong(cursor.getColumnIndex(DbField.START_TIME.name));
+        final long t2 = cursor.getLong(cursor.getColumnIndex(DbField.END_TIME.name));
+
+        mStringBuilder.setLength(0);
+        time = DateUtils.formatDateRange(getContext(), mFormatter, t1, t2, flags).toString();
+
+        mIdToTimeArray.put(id, time);
+        return time;
+    }
+
     private static class HeaderViewHolder {
         TextView title;
 
@@ -170,6 +204,32 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
                 return;
 
             title = (TextView) view.findViewById(R.id.text);
+
+            view.setTag(this);
+        }
+    }
+
+    private static class ViewHolder {
+        View noShiftWrapper;
+        View shiftWrapper;
+
+        TextView name;
+        TextView time;
+        TextView note;
+        TextView pay;
+
+        public ViewHolder(View view) {
+            if(view == null)
+                return;
+
+            noShiftWrapper = view.findViewById(R.id.no_shift);
+            shiftWrapper = view.findViewById(R.id.new_shift);
+
+            name = (TextView) view.findViewById(R.id.name);
+            time = (TextView) view.findViewById(R.id.time);
+            note = (TextView) view.findViewById(R.id.note);
+            pay = (TextView) view.findViewById(R.id.pay);
+
             view.setTag(this);
         }
     }

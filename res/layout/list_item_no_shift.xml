@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:layout_gravity="center"
+    android:background="@drawable/selectable_background_shift_tracker">
+
+    <ImageView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="36dip"
+        android:layout_height="36dip"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_action_add"
+        android:contentDescription="@string/add_shift"
+        android:scaleType="fitCenter"/>
+
+</RelativeLayout>
+
+    <!--<TextView-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="?android:attr/listPreferredItemHeight"-->
+    <!--android:minHeight="?android:attr/listPreferredItemHeight"-->
+    <!--android:textAppearance="?android:attr/textAppearanceListItemSmall"-->
+    <!--android:textColor="?android:attr/textColorSecondaryInverse"-->
+    <!--android:gravity="center"-->
+    <!--android:background="@drawable/selectable_background_shift_tracker"-->
+    <!--android:paddingLeft="?android:attr/listPreferredItemPaddingLeft"-->
+    <!--android:paddingRight="?android:attr/listPreferredItemPaddingRight"-->
+    <!--android:text="@string/add_shift"/>-->

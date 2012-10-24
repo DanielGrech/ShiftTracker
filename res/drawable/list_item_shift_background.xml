@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Bottom line -->
+    <item>
+        <shape>
+            <solid android:color="@color/border_color" />
+        </shape>
+    </item>
+
+    <!-- Cover everything but our border.. -->
+    <item android:bottom="1dip">
+        <shape>
+            <solid android:color="@color/window_background" />
+        </shape>
+    </item>
+
+    <!-- Our selector -->
+    <item android:drawable="@drawable/selectable_background_shift_tracker" />
+</layer-list>

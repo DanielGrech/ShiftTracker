@@ -20,4 +20,5 @@
     <color name="blue">#37568F</color>
     <color name="pressed_shift_tracker">#CC33B5E5</color>
     <color name="window_background">#FAFAFA</color>
+    <color name="border_color">#E8E8E8</color>
 </resources>

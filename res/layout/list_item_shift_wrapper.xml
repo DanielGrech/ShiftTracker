@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/shift_type_wrapper"
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:minHeight="?android:attr/listPreferredItemHeight">
+
+    <include
+        android:id="@+id/no_shift"
+        android:visibility="gone"
+        layout="@layout/list_item_no_shift"/>
+
+    <include
+        android:id="@+id/new_shift"
+        layout="@layout/list_item_shift" />
+
+</RelativeLayout>
