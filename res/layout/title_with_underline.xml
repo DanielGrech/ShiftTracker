@@ -15,7 +15,6 @@
         android:layout_marginRight="8dip"
         android:minHeight="32dip"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textStyle="bold"
         android:textColor="@color/blue"
         android:gravity="left|center_vertical"
         android:singleLine="true"
@@ -24,7 +23,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dip"
+        android:layout_height="1dip"
         android:background="@color/blue" />
 
 </LinearLayout>
