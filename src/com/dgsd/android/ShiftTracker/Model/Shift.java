@@ -74,7 +74,8 @@ public class Shift implements Parcelable {
 
     public long getDurationInMinutes() {
         long duration = endTime - startTime;
-        duration -= (breakDuration * TimeUtils.InMillis.MINUTE);
+        if(breakDuration > 0)
+            duration -= (breakDuration * TimeUtils.InMillis.MINUTE);
 
         if(duration < 0)
             duration = 0;
