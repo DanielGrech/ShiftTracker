@@ -34,6 +34,7 @@
 
         <activity android:name=".MainActivity"/>
         <activity android:name=".AllInOneActivity"/>
+        <activity android:name=".LicensesActivity" />
         <activity android:name=".SettingsActivity"/>
         <activity android:name=".EditShiftActivity" android:windowSoftInputMode="stateHidden"/>
     </application>

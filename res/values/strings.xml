@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="support_email">dgsoftwaredevelopment@gmail.com</string>
+
     <string name="app_name">Shift Tracker</string>
     <string name="go_to">Go To</string>
     <string name="today">Today</string>
@@ -20,6 +22,9 @@
     <string name="pay_rate">Pay Rate</string>
     <string name="unpaid_break">Unpaid Break</string>
     <string name="delete">Delete</string>
+    <string name="contact">Contact</string>
+    <string name="contact_support">Contact Support</string>
+    <string name="licenses">Licenses</string>
 
     <!-- Settings -->
     <string name="settings_category_display">Display</string>
