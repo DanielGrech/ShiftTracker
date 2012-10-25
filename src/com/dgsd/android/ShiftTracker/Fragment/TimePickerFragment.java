@@ -63,6 +63,7 @@ public class TimePickerFragment extends SherlockDialogFragment implements TimePi
             Time time = new Time();
             time.hour = hour;
             time.minute = minute;
+            time.second = 0;
             time.normalize(true);
 
             mOnTimeSelectedListener.onTimeSelected(time.toMillis(true));
