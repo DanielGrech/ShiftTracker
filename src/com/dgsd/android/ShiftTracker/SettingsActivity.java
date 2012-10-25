@@ -1,6 +1,7 @@
 package com.dgsd.android.ShiftTracker;
 
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.actionbarsherlock.view.Menu;
@@ -26,6 +27,10 @@ public class SettingsActivity extends SherlockPreferenceActivity {
         prefMgr.setSharedPreferencesMode(MODE_WORLD_READABLE);
 
         addPreferencesFromResource(R.xml.settings);
+
+        //Set the version string
+        Preference p = prefMgr.findPreference(getString(R.string.settings_key_version));
+        p.setSummary(DiagnosticUtils.getApplicationVersionString(this));
     }
 
     @Override

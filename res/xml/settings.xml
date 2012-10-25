@@ -12,7 +12,15 @@
             android:entryValues="@array/days_of_week_values" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/about">
+    <PreferenceCategory android:title="@string/settings_category_about">
+        <Preference
+            android:title="@string/version"
+            android:key="@string/settings_key_version"/>
+
+        <Preference
+            android:title="@string/copyright"
+            android:summary="@string/copyright_summary"/>
+
         <Preference
             android:title="@string/licenses">
             <intent

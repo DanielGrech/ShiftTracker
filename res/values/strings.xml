@@ -25,10 +25,13 @@
     <string name="contact">Contact</string>
     <string name="contact_support">Contact Support</string>
     <string name="licenses">Licenses</string>
+    <string name="version">Version</string>
+    <string name="copyright">Copyright</string>
+    <string name="copyright_summary">Copyright © Daniel Grech</string>
 
     <!-- Settings -->
     <string name="settings_category_display">Display</string>
-    <string name="settings_category_"></string>
+    <string name="settings_category_about">@string/about</string>
     <string name="settings_category_"></string>
     <string name="settings_category_"></string>
     <string name="settings_category_"></string>
@@ -37,7 +40,7 @@
     <string name="settings_key_"></string>
     <string name="settings_key_"></string>
     <string name="settings_key_"></string>
-    <string name="settings_key_"></string>
+    <string name="settings_key_version">version</string>
 
     <string name="settings_title_start_day">Week Start Day</string>
     <string name="settings_title_"></string>
