@@ -31,6 +31,7 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
     private StickyListHeadersListView mList;
     private TextView mTotalText;
     private WeekAdapter mAdapter;
+    private ViewGroup mStatsWrapper;
 
     private int mStartJulianDay = -1;
 
@@ -64,6 +65,14 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
         mList.setOnItemClickListener(this);
 
         mTotalText = (TextView) v.findViewById(R.id.total_text);
+
+        mStatsWrapper = (ViewGroup) v.findViewById(R.id.stats_wrapper);
+        mStatsWrapper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         return v;
     }

@@ -12,7 +12,7 @@
         android:layout_alignParentBottom="true"
         android:paddingLeft="8dip"
         android:paddingRight="8dip"
-        android:background="@drawable/ab_bottom_solid_shift_tracker">
+        android:background="@drawable/selectable_background_stats">
 
         <TextView
             android:id="@+id/total_label"
