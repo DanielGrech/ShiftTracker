@@ -32,32 +32,11 @@ public class LicensesActivity extends SherlockActivity {
 	}
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getSupportMenuInflater().inflate(R.menu.settings, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch(item.getItemId()) {
 			case android.R.id.home:
-                Intent upIntent = new Intent(this, StApp.getHomeClass(this));
-                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-                    // This activity is not part of the application's task, so create a new task
-                    // with a synthesized back stack.
-                    TaskStackBuilder.from(this)
-                            .addNextIntent(upIntent)
-                            .startActivities();
-                    finish();
-                } else {
-                    // This activity is part of the application's task, so simply
-                    // navigate up to the hierarchical parent activity.
-                    NavUtils.navigateUpTo(this, upIntent);
-                }
+                StApp.doDefaultNavigateUp(this);
                 return true;
-            case R.id.contact:
-                startActivity(IntentUtils.newEmailIntent(getString(R.string.support_email),
-                        DiagnosticUtils.getApplicationName(this) + " support", null, "Contact support"));
 			default:
 				return super.onOptionsItemSelected(item);
 		}
