@@ -8,17 +8,16 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.dgsd.android.ShiftTracker.Adapter.WeekPagerAdapter;
-import com.dgsd.android.ShiftTracker.Fragment.GoToFragment;
+import com.dgsd.android.ShiftTracker.Fragment.DatePickerFragment;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
-import com.dgsd.android.ShiftTracker.Util.UIUtils;
 import com.viewpagerindicator.TitlePageIndicator;
 
-public class MainActivity extends SherlockFragmentActivity implements GoToFragment.OnDateSelectedListener {
+public class MainActivity extends SherlockFragmentActivity implements DatePickerFragment.OnDateSelectedListener {
 
     private TitlePageIndicator mIndicator;
     private ViewPager mPager;
     private WeekPagerAdapter mAdapter;
-    private GoToFragment mGoToFragment;
+    private DatePickerFragment mGoToFragment;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +62,7 @@ public class MainActivity extends SherlockFragmentActivity implements GoToFragme
                 time.setJulianDay(centerJd + (count / 2));
                 final long max = time.toMillis(true);
 
-                mGoToFragment = GoToFragment.newInstance(min, max);
+                mGoToFragment = DatePickerFragment.newInstance("Go to date..", "Go to date", min, max);
                 mGoToFragment.setOnDateSelectedListener(this);
                 mGoToFragment.show(getSupportFragmentManager(), null);
             }

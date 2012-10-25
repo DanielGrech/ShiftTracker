@@ -10,6 +10,16 @@
     <string name="done">Done</string>
     <string name="discard">Discard</string>
     <string name="cancel">Cancel</string>
+    <string name="name">Name</string>
+    <string name="notes">Notes</string>
+    <string name="date">Date</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
+    <string name="dollars_per_hour">$ / hour</string>
+    <string name="mins">mins</string>
+    <string name="pay_rate">Pay Rate</string>
+    <string name="unpaid_break">Unpaid Break</string>
+    <string name="delete">Delete</string>
 
     <!-- Settings -->
     <string name="settings_category_display">Display</string>

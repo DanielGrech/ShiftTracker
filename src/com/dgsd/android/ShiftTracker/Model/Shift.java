@@ -1,14 +1,13 @@
 package com.dgsd.android.ShiftTracker.Model;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.dgsd.android.ShiftTracker.Data.DbField;
-import com.dgsd.android.ShiftTracker.Util.JsonRepresentable;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
-import org.json.JSONObject;
 
-public class Shift implements Parcelable, JsonRepresentable {
+public class Shift implements Parcelable {
     public long id;
     public String name;
     public String note;
@@ -16,7 +15,18 @@ public class Shift implements Parcelable, JsonRepresentable {
     public long endTime;
     public int julianDay;
     public float payRate;
-    public long breakDuration;
+    public int breakDuration;
+
+    public Shift() {
+        id = -1;
+        name = null;
+        note = null;
+        startTime = -1;
+        endTime = -1;
+        julianDay = -1;
+        payRate = -1;
+        breakDuration = -1;
+    }
 
     public static Shift fromParcel(Parcel in) {
         Shift s = new Shift();
@@ -28,7 +38,7 @@ public class Shift implements Parcelable, JsonRepresentable {
         s.endTime = in.readLong();
         s.julianDay = in.readInt();
         s.payRate = in.readFloat();
-        s.breakDuration = in.readLong();
+        s.breakDuration = in.readInt();
 
         return s;
     }
@@ -54,30 +64,39 @@ public class Shift implements Parcelable, JsonRepresentable {
         s.endTime = cursor.getLong(endCol);
         s.julianDay = cursor.getInt(dayCol);
         s.payRate = cursor.getFloat(payCol);
-        s.breakDuration = cursor.getLong(breakCol);
+        s.breakDuration = cursor.getInt(breakCol);
         return s;
     }
 
     public float getIncome() {
-        return getHoursDuration() * payRate;
+        return (getDurationInMinutes() / 60.0f) * payRate;
     }
 
-    public float getHoursDuration() {
+    public long getDurationInMinutes() {
         long duration = endTime - startTime;
-        duration -= breakDuration;
+        duration -= (breakDuration * TimeUtils.InMillis.MINUTE);
 
-        long minutes = duration / TimeUtils.InMillis.MINUTE;
-        return minutes / 60.0f;
+        if(duration < 0)
+            duration = 0;
+
+        return duration / TimeUtils.InMillis.MINUTE;
     }
 
-    @Override
-    public JSONObject toJson() {
-        return null;
-    }
+    public ContentValues toContentValues() {
+        ContentValues values = new ContentValues();
 
-    @Override
-    public void fromJson(JSONObject json) {
+        if(id >= 0)
+            values.put(DbField.ID.name, id);
 
+        values.put(DbField.JULIAN_DAY.name, julianDay);
+        values.put(DbField.START_TIME.name, startTime);
+        values.put(DbField.END_TIME.name, endTime);
+        values.put(DbField.PAY_RATE.name, payRate);
+        values.put(DbField.NAME.name, name);
+        values.put(DbField.NOTE.name, note);
+        values.put(DbField.BREAK_DURATION.name, breakDuration);
+
+        return values;
     }
 
     @Override
@@ -94,7 +113,7 @@ public class Shift implements Parcelable, JsonRepresentable {
         dest.writeLong(endTime);
         dest.writeInt(julianDay);
         dest.writeFloat(payRate);
-        dest.writeLong(breakDuration);
+        dest.writeInt(breakDuration);
     }
 
     public static final Creator<Shift> CREATOR = new Creator<Shift>() {

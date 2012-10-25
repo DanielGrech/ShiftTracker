@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbarStyle="outsideOverlay"
+    android:paddingTop="16dip"
+    android:paddingLeft="16dip"
+    android:paddingRight="16dip">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/name_label"
+            android:text="@string/name"
+            style="@style/edit_shift_title"/>
+
+        <com.dgsd.android.ShiftTracker.View.StatefulEditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext|flagNavigateNext"
+            android:inputType="textCapSentences"
+            android:nextFocusForward="@+id/pay_rate"
+            android:nextFocusRight="@+id/pay_rate"
+            android:nextFocusDown="@+id/pay_rate"
+            android:singleLine="true"
+            android:fontFamily="sans-serif-light"
+            android:layout_marginBottom="8dip"/>
+
+        <TextView
+            android:id="@+id/date_label"
+            android:text="@string/date"
+            style="@style/edit_shift_title"/>
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="45dip"
+            android:layout_marginBottom="8dip"
+            android:background="@drawable/selectable_line_with_triangle"
+            android:gravity="left|center_vertical"
+            android:textSize="20sp"
+            android:singleLine="true"
+            android:fontFamily="sans-serif-light"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/start_label"
+                android:text="@string/start"
+                android:layout_height="wrap_content"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                style="@style/edit_shift_title"/>
+
+            <TextView
+                android:id="@+id/end_label"
+                android:text="@string/end"
+                android:layout_height="wrap_content"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                style="@style/edit_shift_title"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dip"
+            android:layout_marginBottom="8dip">
+
+            <TextView
+                android:id="@+id/start_time"
+                android:layout_height="match_parent"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:background="@drawable/selectable_line_with_triangle"
+                android:gravity="left|center_vertical"
+                android:textSize="20sp"
+                android:singleLine="true"
+                android:fontFamily="sans-serif-light"/>
+
+            <TextView
+                android:id="@+id/end_time"
+                android:layout_height="match_parent"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:background="@drawable/selectable_line_with_triangle"
+                android:gravity="left|center_vertical"
+                android:textSize="20sp"
+                android:singleLine="true"
+                android:fontFamily="sans-serif-light"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/pay_label"
+                android:text="@string/pay_rate"
+                android:layout_height="wrap_content"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                style="@style/edit_shift_title"/>
+
+            <TextView
+                android:id="@+id/break_label"
+                android:text="@string/unpaid_break"
+                android:layout_height="wrap_content"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                style="@style/edit_shift_title"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dip"
+            android:layout_marginBottom="8dip">
+
+            <com.dgsd.android.ShiftTracker.View.StatefulEditText
+                android:id="@+id/pay_rate"
+                android:layout_height="match_parent"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical"
+                android:textSize="20sp"
+                android:inputType="numberDecimal"
+                android:hint="@string/dollars_per_hour"
+                android:singleLine="true"
+                android:imeOptions="actionNext|flagNavigateNext"
+                android:nextFocusRight="@+id/unpaid_break"
+                android:nextFocusDown="@+id/notes"
+                android:nextFocusForward="@+id/unpaid_break"
+                android:fontFamily="sans-serif-light"/>
+
+            <com.dgsd.android.ShiftTracker.View.StatefulEditText
+                android:id="@+id/unpaid_break"
+                android:layout_height="match_parent"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical"
+                android:imeOptions="actionNext|flagNavigateNext"
+                android:inputType="number"
+                android:textSize="20sp"
+                android:hint="@string/mins"
+                android:singleLine="true"
+                android:nextFocusDown="@+id/notes"
+                android:nextFocusLeft="@id/pay_rate"
+                android:fontFamily="sans-serif-light"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/notes_label"
+            android:text="@string/notes"
+            style="@style/edit_shift_title"/>
+
+        <com.dgsd.android.ShiftTracker.View.StatefulEditText
+            android:id="@+id/notes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minLines="3"
+            android:inputType="textMultiLine"
+            android:imeOptions="actionNext"
+            android:gravity="left|bottom"
+            android:nextFocusUp="@id/unpaid_break"
+            android:fontFamily="sans-serif-light"
+            android:layout_marginBottom="8dip"/>
+
+    </LinearLayout>
+</ScrollView>

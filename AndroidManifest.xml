@@ -19,6 +19,10 @@
             android:multiprocess="false"
             android:name=".Data.Provider"/>
 
+        <!-- Services -->
+        <service android:name=".Service.DbService" />
+
+        <!-- Activities -->
         <activity
             android:name="StartupActivity"
             android:label="@string/app_name">
@@ -31,6 +35,6 @@
         <activity android:name=".MainActivity"/>
         <activity android:name=".AllInOneActivity"/>
         <activity android:name=".SettingsActivity"/>
-        <activity android:name=".EditShiftActivity"/>
+        <activity android:name=".EditShiftActivity" android:windowSoftInputMode="stateHidden"/>
     </application>
 </manifest>

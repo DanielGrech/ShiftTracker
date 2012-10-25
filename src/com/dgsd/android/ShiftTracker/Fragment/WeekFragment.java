@@ -129,6 +129,14 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
     @Override
     public void onItemClick(AdapterView<?> list, View view, int pos, long id) {
         final Intent intent = new Intent(getActivity(), EditShiftActivity.class);
+
+        WeekAdapter.ViewHolder holder = (WeekAdapter.ViewHolder) view.getTag();
+        if(holder != null) {
+            intent.putExtra(EditShiftActivity.EXTRA_JULIAN_DAY, holder.julianDay);
+            if(holder.shift != null)
+                intent.putExtra(EditShiftActivity.EXTRA_SHIFT, holder.shift);
+        }
+
         startActivity(intent);
     }
 }

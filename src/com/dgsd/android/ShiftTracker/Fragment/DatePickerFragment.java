@@ -11,21 +11,34 @@ import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.dgsd.android.ShiftTracker.Util.Api;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
 
-public class GoToFragment extends SherlockDialogFragment {
+public class DatePickerFragment extends SherlockDialogFragment {
+    private static final String KEY_DATE = "_date";
     private static final String KEY_MIN_DATE = "_min";
     private static final String KEY_MAX_DATE = "_max";
+    private static final String KEY_TITLE = "_title";
+    private static final String KEY_POS_BTN = "_pos_btn";
 
+    private int mDate = -1;
     private long mMinDate = Long.MIN_VALUE;
     private long mMaxDate = Long.MAX_VALUE;
+    private String mTitle;
+    private String mPositiveBtnText;
 
     private OnDateSelectedListener mOnDateSelectedListener;
 
-    public static GoToFragment newInstance(long min, long max) {
-        GoToFragment frag = new GoToFragment();
+    public static DatePickerFragment newInstance(String title, String postiveButton, long min, long max) {
+        return newInstance(title, postiveButton, min, max, -1);
+    }
+
+    public static DatePickerFragment newInstance(String title, String postiveButton, long min, long max, int date) {
+        DatePickerFragment frag = new DatePickerFragment();
 
         Bundle args = new Bundle();
+        args.putInt(KEY_DATE, date);
         args.putLong(KEY_MIN_DATE, min);
         args.putLong(KEY_MAX_DATE, max);
+        args.putString(KEY_TITLE, title);
+        args.putString(KEY_POS_BTN, postiveButton);
         frag.setArguments(args);
 
         return frag;
@@ -37,18 +50,25 @@ public class GoToFragment extends SherlockDialogFragment {
 
         final Bundle args = getArguments();
         if(args != null) {
+            mDate = args.getInt(KEY_DATE, mDate);
             mMinDate = args.getLong(KEY_MIN_DATE, mMinDate);
             mMaxDate = args.getLong(KEY_MAX_DATE, mMaxDate);
+            mTitle = args.getString(KEY_TITLE);
+            mPositiveBtnText = args.getString(KEY_POS_BTN);
         }
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Time time = new Time();
-        time.setToNow();
+
+        if(mDate == -1)
+            time.setToNow();
+        else
+            time.setJulianDay(mDate);
 
         DatePickerDialog dpd = new DatePickerDialog(getActivity(), null, time.year, time.month, time.monthDay);
-        dpd.setTitle("Go to date..");
+        dpd.setTitle(mTitle);
 
         final DatePicker dp = dpd.getDatePicker();
         dp.setMaxDate(mMaxDate);
@@ -56,7 +76,7 @@ public class GoToFragment extends SherlockDialogFragment {
         if(Api.isMin(Api.HONEYCOMB))
             dp.setCalendarViewShown(false);
 
-        dpd.setButton(DialogInterface.BUTTON_POSITIVE, "Go to date", new DialogInterface.OnClickListener() {
+        dpd.setButton(DialogInterface.BUTTON_POSITIVE, mPositiveBtnText, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if(mOnDateSelectedListener != null) {
