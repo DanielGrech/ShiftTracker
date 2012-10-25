@@ -26,6 +26,32 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/settings_category_defaults">
+        <Preference
+            android:key="@string/settings_key_default_start_time"
+            android:title="@string/settings_title_default_start_time"
+            android:summary="@string/settings_summary_default_start_time" />
+
+        <Preference
+            android:key="@string/settings_key_default_end_time"
+            android:title="@string/settings_title_default_end_time"
+            android:summary="@string/settings_summary_default_end_time" />
+
+        <EditTextPreference
+            android:key="@string/settings_key_default_break_duration"
+            android:title="@string/settings_title_default_break_duration"
+            android:summary="@string/settings_summary_default_break_duration"
+            android:gravity="left|center_vertical"
+            android:hint="@string/mins"
+            android:fontFamily="sans-serif-light"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:inputType="number"
+            android:textSize="20sp"/>
+
+    </PreferenceCategory>
+
+
     <PreferenceCategory android:title="@string/settings_category_about">
         <Preference
             android:title="@string/version"

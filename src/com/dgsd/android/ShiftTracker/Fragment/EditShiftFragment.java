@@ -20,6 +20,7 @@ import com.dgsd.android.ShiftTracker.Data.DbField;
 import com.dgsd.android.ShiftTracker.Data.Provider;
 import com.dgsd.android.ShiftTracker.Model.Shift;
 import com.dgsd.android.ShiftTracker.R;
+import com.dgsd.android.ShiftTracker.Util.Prefs;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
 import com.dgsd.android.ShiftTracker.View.StatefulEditText;
 
@@ -194,6 +195,9 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
             t.hour = 17;
             t.normalize(true);
             setEndTime(t.toMillis(true));
+
+            final String breakKey = getString(R.string.settings_key_default_break_duration);
+            mUnpaidBreak.setText(Prefs.getInstance(getActivity()).get(breakKey, null));
         }
     }
 

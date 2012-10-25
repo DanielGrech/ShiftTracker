@@ -32,26 +32,31 @@
     <!-- Settings -->
     <string name="settings_category_display">Display</string>
     <string name="settings_category_about">@string/about</string>
-    <string name="settings_category_"></string>
+    <string name="settings_category_defaults">Defaults</string>
     <string name="settings_category_"></string>
     <string name="settings_category_"></string>
 
     <string name="settings_key_start_day">start_day</string>
     <string name="settings_key_show_total_hours">show_total_hours</string>
     <string name="settings_key_show_income">show_income</string>
-    <string name="settings_key_"></string>
+    <string name="settings_key_default_start_time">default_start_time</string>
+    <string name="settings_key_default_end_time">default_end_time</string>
     <string name="settings_key_version">version</string>
+    <string name="settings_key_default_break_duration">default_break_duration</string>
 
     <string name="settings_title_start_day">Week Start Day</string>
-    <string name="settings_title_show_total_hours">Show total hours</string>
+    <string name="settings_title_show_total_hours">Show Total Hours</string>
     <string name="settings_title_show_income">Show Income</string>
-    <string name="settings_title_"></string>
-    <string name="settings_title_"></string>
+    <string name="settings_title_default_start_time">Default Start Time</string>
+    <string name="settings_title_default_end_time">Default End Time</string>
+    <string name="settings_title_default_break_duration">Default Unpaid Break Duration</string>
 
     <string name="settings_summary_start_day">The first day of your week</string>
     <string name="settings_summary_show_total_hours">Show the total number of hours worked in a week</string>
     <string name="settings_summary_show_income">Show your income in the interface</string>
-    <string name="settings_summary_"></string>
+    <string name="settings_summary_default_start_time">The default start time to use when creating a new shift</string>
+    <string name="settings_summary_default_end_time">The default end time to use when creating a new shift</string>
+    <string name="settings_summary_default_break_duration">Default duration for unpaid breaks</string>
 
     <string-array name="days_of_week">
         <item>Monday</item>
