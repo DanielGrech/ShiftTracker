@@ -190,14 +190,18 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
             t.minute = 0;
             t.second = 0;
             t.normalize(true);
-            setStartTime(t.toMillis(true));
+
+
+            final Prefs p = Prefs.getInstance(getActivity());
+            setStartTime(p.get(getString(R.string.settings_key_default_start_time), t.toMillis(true)));
 
             t.hour = 17;
             t.normalize(true);
-            setEndTime(t.toMillis(true));
 
-            final String breakKey = getString(R.string.settings_key_default_break_duration);
-            mUnpaidBreak.setText(Prefs.getInstance(getActivity()).get(breakKey, null));
+            setEndTime(p.get(getString(R.string.settings_key_default_end_time), t.toMillis(true)));
+
+            mUnpaidBreak.setText(p.get(getString(R.string.settings_key_default_break_duration), null));
+            mPayRate.setText(p.get(getString(R.string.settings_key_default_pay_rate), null));
         }
     }
 

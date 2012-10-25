@@ -27,15 +27,17 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/settings_category_defaults">
-        <Preference
+        <com.dgsd.android.ShiftTracker.View.TimePickerPreference
             android:key="@string/settings_key_default_start_time"
             android:title="@string/settings_title_default_start_time"
-            android:summary="@string/settings_summary_default_start_time" />
+            android:summary="@string/settings_summary_default_start_time"
+            android:defaultValue="32400000"/>
 
-        <Preference
+        <com.dgsd.android.ShiftTracker.View.TimePickerPreference
             android:key="@string/settings_key_default_end_time"
             android:title="@string/settings_title_default_end_time"
-            android:summary="@string/settings_summary_default_end_time" />
+            android:summary="@string/settings_summary_default_end_time"
+            android:defaultValue="61200000"/>
 
         <EditTextPreference
             android:key="@string/settings_key_default_break_duration"
@@ -47,6 +49,18 @@
             android:imeOptions="actionDone"
             android:singleLine="true"
             android:inputType="number"
+            android:textSize="20sp"/>
+
+        <EditTextPreference
+            android:key="@string/settings_key_default_pay_rate"
+            android:title="@string/settings_title_default_pay_rate"
+            android:summary="@string/settings_summary_default_pay_rate"
+            android:gravity="left|center_vertical"
+            android:hint="@string/dollars_per_hour"
+            android:fontFamily="sans-serif-light"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:inputType="numberDecimal"
             android:textSize="20sp"/>
 
     </PreferenceCategory>
