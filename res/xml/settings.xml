@@ -8,8 +8,22 @@
             android:key="@string/settings_key_start_day"
             android:title="@string/settings_title_start_day"
             android:summary="@string/settings_summary_start_day"
+            android:defaultValue="1"
             android:entries="@array/days_of_week"
             android:entryValues="@array/days_of_week_values" />
+
+        <CheckBoxPreference
+            android:key="@string/settings_key_show_total_hours"
+            android:title="@string/settings_title_show_total_hours"
+            android:summary="@string/settings_summary_show_total_hours"
+            android:defaultValue="true" />
+
+        <CheckBoxPreference
+            android:key="@string/settings_key_show_income"
+            android:title="@string/settings_title_show_income"
+            android:summary="@string/settings_summary_show_income"
+            android:defaultValue="true" />
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/settings_category_about">

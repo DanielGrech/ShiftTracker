@@ -18,6 +18,7 @@ import com.dgsd.android.ShiftTracker.Data.DbTable;
 import com.dgsd.android.ShiftTracker.Data.Provider;
 import com.dgsd.android.ShiftTracker.Model.Shift;
 import com.dgsd.android.ShiftTracker.R;
+import com.dgsd.android.ShiftTracker.Util.Prefs;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
 import com.emilsjolander.components.StickyListHeaders.StickyListHeadersCursorAdapter;
 
@@ -37,6 +38,7 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
     private SparseArray<String> mIdToPayArray;
 
     private boolean mIs24Hour;
+    private boolean mShowIncomePref;
 
     private Formatter mFormatter;
     private StringBuilder mStringBuilder;
@@ -61,6 +63,8 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
         mJdToTitleArray = new SparseArray<String>();
         mIdToTimeArray = new SparseArray<String>();
         mIdToPayArray = new SparseArray<String>();
+
+        mShowIncomePref = Prefs.getInstance(context).get(context.getString(R.string.settings_key_show_income), true);
     }
 
     @Override
@@ -114,8 +118,22 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
 
         holder.name.setText(shift.name);
         holder.time.setText(getTimeText(shift));
-        holder.pay.setText(getPayText(shift));
-        holder.note.setText(shift.note);
+
+        String payText = getPayText(shift);
+        if(mShowIncomePref && !TextUtils.isEmpty(payText)) {
+            holder.pay.setText(payText);
+            holder.pay.setVisibility(View.VISIBLE);
+        } else {
+            holder.pay.setText(null);
+            holder.pay.setVisibility(View.GONE);
+        }
+
+        if(TextUtils.isEmpty(shift.note)) {
+            holder.note.setVisibility(View.GONE);
+        } else {
+            holder.note.setText(shift.note);
+            holder.note.setVisibility(View.VISIBLE);
+        }
 
         holder.shift = shift;
         holder.julianDay = shift.julianDay;

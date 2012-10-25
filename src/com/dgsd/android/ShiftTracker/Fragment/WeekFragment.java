@@ -16,6 +16,7 @@ import com.dgsd.android.ShiftTracker.Adapter.WeekAdapter;
 import com.dgsd.android.ShiftTracker.EditShiftActivity;
 import com.dgsd.android.ShiftTracker.Model.Shift;
 import com.dgsd.android.ShiftTracker.R;
+import com.dgsd.android.ShiftTracker.Util.Prefs;
 import com.dgsd.android.ShiftTracker.Util.UIUtils;
 import com.emilsjolander.components.StickyListHeaders.StickyListHeadersListView;
 
@@ -34,6 +35,9 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
     private ViewGroup mStatsWrapper;
 
     private int mStartJulianDay = -1;
+
+    private boolean mShowHoursPref = true;
+    private boolean mShowIncomePref = true;
 
     public static WeekFragment newInstance(int startJulianDay) {
         WeekFragment frag = new WeekFragment();
@@ -85,6 +89,15 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        Prefs p = Prefs.getInstance(getActivity());
+        mShowHoursPref = p.get(getString(R.string.settings_key_show_total_hours), true);
+        mShowIncomePref = p.get(getString(R.string.settings_key_show_income), true);
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
         switch(id) {
             case LOADER_ID_SHIFTS: {
@@ -105,7 +118,7 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
                 mAdapter.swapCursor(cursor);
                 break;
             case LOADER_ID_TOTAL:
-                if(cursor != null && cursor.moveToFirst()) {
+                if((mShowHoursPref || mShowIncomePref) && cursor != null && cursor.moveToFirst()) {
                     float pay = 0.0f;
                     long mins = 0;
                     do {
@@ -115,15 +128,31 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
                         mins += shift.getDurationInMinutes();
                     } while(cursor.moveToNext());
 
-                    String payText = NumberFormat.getCurrencyInstance().format(pay);
-                    String hoursText = UIUtils.getDurationAsHours(mins) + " Hrs";
+                    String payText = mShowIncomePref ? NumberFormat.getCurrencyInstance().format(pay) : null;
+                    String hoursText = mShowHoursPref ? UIUtils.getDurationAsHours(mins) + " Hrs" : null;
 
-                    if(TextUtils.isEmpty(payText))
-                        mTotalText.setText(hoursText);
-                    else
-                        mTotalText.setText(payText + " / " + hoursText);
+                    if(TextUtils.isEmpty(payText)) {
+                        if(TextUtils.isEmpty(hoursText)) {
+                            mStatsWrapper.setVisibility(View.GONE);
+                        } else {
+                            mStatsWrapper.setVisibility(View.VISIBLE);
+                            mTotalText.setText(hoursText);
+                        }
+                    } else {
+                        mStatsWrapper.setVisibility(View.VISIBLE);
+                        if(TextUtils.isEmpty(hoursText)) {
+                            mTotalText.setText(payText);
+                        } else {
+                            mTotalText.setText(payText + " / " + hoursText);
+                        }
+                    }
                 } else {
                     mTotalText.setText(BLANK_TOTAL_TEXT);
+                    if(!mShowHoursPref) {
+                        mStatsWrapper.setVisibility(View.GONE);
+                    } else {
+                        mStatsWrapper.setVisibility(View.VISIBLE);
+                    }
                 }
                 break;
         }
@@ -132,6 +161,7 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
+        mStatsWrapper.setVisibility(View.GONE);
         mTotalText.setText(BLANK_TOTAL_TEXT);
     }
 

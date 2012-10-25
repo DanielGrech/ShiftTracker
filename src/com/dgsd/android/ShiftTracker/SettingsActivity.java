@@ -40,6 +40,11 @@ public class SettingsActivity extends SherlockPreferenceActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        StApp.doDefaultNavigateUp(this);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch(item.getItemId()) {
             case android.R.id.home:
