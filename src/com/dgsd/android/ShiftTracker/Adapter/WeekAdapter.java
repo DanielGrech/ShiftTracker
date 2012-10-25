@@ -81,7 +81,7 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
             mTime.setJulianDay(jd);
             title = DateUtils.formatDateTime(getContext(), mTime.toMillis(true),
                     DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_WEEKDAY |
-                            DateUtils.FORMAT_ABBREV_ALL | DateUtils.FORMAT_NO_YEAR);
+                            DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_NO_YEAR);
 
             mJdToTitleArray.put(jd, title);
         }
