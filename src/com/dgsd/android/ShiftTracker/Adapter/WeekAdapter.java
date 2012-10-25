@@ -22,8 +22,7 @@ import com.dgsd.android.ShiftTracker.Util.TimeUtils;
 import com.emilsjolander.components.StickyListHeaders.StickyListHeadersCursorAdapter;
 
 import java.text.NumberFormat;
-import java.util.Formatter;
-import java.util.Random;
+import java.util.*;
 
 public class WeekAdapter extends StickyListHeadersCursorAdapter {
     public static final String NEW_ROW_KEY = WeekAdapter.class.getName() + "_NEW_ROW_KEY";
@@ -104,6 +103,9 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
             holder.noShiftWrapper.setVisibility(View.VISIBLE);
             holder.shiftWrapper.setVisibility(View.GONE);
 
+            holder.shift = null;
+            holder.julianDay = shift.julianDay;
+
             return;
         }
 
@@ -114,6 +116,9 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
         holder.time.setText(getTimeText(shift));
         holder.pay.setText(getPayText(shift));
         holder.note.setText(shift.note);
+
+        holder.shift = shift;
+        holder.julianDay = shift.julianDay;
     }
 
     @Override
@@ -135,7 +140,8 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
         int jd = mStartingJulianDay;
         final int colCount = cursor.getColumnCount();
 
-        SparseArray<Object[]> jdToRowArray = new SparseArray<Object[]>();
+        SparseArray<List<Object[]>> jdToRowArray = new SparseArray<List<Object[]>>();
+
         if(cursor.moveToFirst()) {
             final int jdIndex = cursor.getColumnIndex(DbField.JULIAN_DAY.name);
             do {
@@ -143,17 +149,26 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
                 for(int i = 0; i < colCount; i++)
                     row[i] = cursor.getString(i);
 
-                jdToRowArray.put(cursor.getInt(jdIndex), row);
+                final int shiftDay = cursor.getInt(jdIndex);
+
+                List<Object[]> rowsOnSameJd = jdToRowArray.get(shiftDay, null);
+                if(rowsOnSameJd == null)
+                    rowsOnSameJd = new ArrayList<Object[]>();
+
+                rowsOnSameJd.add(row);
+
+                jdToRowArray.put(shiftDay, rowsOnSameJd);
             } while(cursor.moveToNext());
         }
 
         for (int i = jd; i < jd + 7; i++) {
-            Object[] row = jdToRowArray.get(i);
-            if (row != null)
-                mc.addRow(row);
+            List<Object[]> rows = jdToRowArray.get(i);
+            if (rows != null)
+                for(Object[] row : rows)
+                    mc.addRow(row);
 
             //Add a 'Add Shift' row
-            row = new Object[colCount];
+            Object[] row = new Object[colCount];
             row[0] = mRand.nextInt(Integer.MAX_VALUE);  // DbField.ID
             row[1] = i;                                 // DbField.JULIAN_DAY
             row[2] = -1;                                // DbField.START_TIME
@@ -230,7 +245,7 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
         }
     }
 
-    private static class ViewHolder {
+    public static class ViewHolder {
         View noShiftWrapper;
         View shiftWrapper;
 
@@ -238,6 +253,9 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
         TextView time;
         TextView note;
         TextView pay;
+
+        public Shift shift;
+        public int julianDay;
 
         public ViewHolder(View view) {
             if(view == null)
@@ -250,6 +268,8 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
             time = (TextView) view.findViewById(R.id.time);
             note = (TextView) view.findViewById(R.id.note);
             pay = (TextView) view.findViewById(R.id.pay);
+
+            julianDay = -1;
 
             view.setTag(this);
         }
