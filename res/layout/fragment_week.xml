@@ -15,6 +15,7 @@
         android:background="@drawable/ab_bottom_solid_shift_tracker">
 
         <TextView
+            android:id="@+id/total_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -26,10 +27,12 @@
 
         <TextView
             android:id="@+id/total_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/total_label"
+            android:gravity="right"
             android:fontFamily="sans-serif-light"
             android:textSize="25dip"
             android:textColor="@color/blue"/>
