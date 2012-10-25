@@ -16,6 +16,7 @@ import com.dgsd.android.ShiftTracker.Adapter.WeekAdapter;
 import com.dgsd.android.ShiftTracker.EditShiftActivity;
 import com.dgsd.android.ShiftTracker.Model.Shift;
 import com.dgsd.android.ShiftTracker.R;
+import com.dgsd.android.ShiftTracker.Util.UIUtils;
 import com.emilsjolander.components.StickyListHeaders.StickyListHeadersListView;
 
 import java.text.NumberFormat;
@@ -96,21 +97,22 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
                 break;
             case LOADER_ID_TOTAL:
                 if(cursor != null && cursor.moveToFirst()) {
-                    float hours = 0.0f, pay = 0.0f;
+                    float pay = 0.0f;
+                    long mins = 0;
                     do {
                         Shift shift = Shift.fromCursor(cursor);
 
                         pay += shift.getIncome();
-                        hours += shift.getHoursDuration();
+                        mins += shift.getDurationInMinutes();
                     } while(cursor.moveToNext());
 
                     String payText = NumberFormat.getCurrencyInstance().format(pay);
-                    String hoursText = (hours == 0.0 ? 0 : hours) + " Hrs";
+                    String hoursText = UIUtils.getDurationAsHours(mins) + " Hrs";
 
                     if(TextUtils.isEmpty(payText))
                         mTotalText.setText(hoursText);
                     else
-                        mTotalText.setText(payText + "/" + hoursText);
+                        mTotalText.setText(payText + " / " + hoursText);
                 } else {
                     mTotalText.setText(BLANK_TOTAL_TEXT);
                 }
