@@ -19,7 +19,7 @@
             android:text="@string/name"
             style="@style/edit_shift_title"/>
 
-        <com.dgsd.android.ShiftTracker.View.StatefulEditText
+        <com.dgsd.android.ShiftTracker.View.StatefulAutoCompleteTextView
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

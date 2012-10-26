@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 import com.dgsd.android.ShiftTracker.BuildConfig;
 
@@ -18,6 +19,7 @@ public class Provider extends ContentProvider {
     private static final String TAG = Provider.class.getSimpleName();
 
     public static final String QUERY_PARAMETER_LIMIT = "limit";
+    public static final String QUERY_PARAMETER_DISTINCT = "distinct";
 
     public static final String AUTHORITY = "com.dgsd.android.ShiftTracker.Data.Provider";
     private static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
@@ -70,7 +72,12 @@ public class Provider extends ContentProvider {
                     throw new IllegalArgumentException("Unknown URI: " + uri);
             }
 
+            final String distinct = uri.getQueryParameter(QUERY_PARAMETER_DISTINCT);
             final String limit = uri.getQueryParameter(QUERY_PARAMETER_LIMIT);
+
+            if(!TextUtils.isEmpty(distinct))
+                qb.setDistinct(true);
+
             Cursor cursor = qb.query(mDb.getReadableDatabase(), proj, sel, selArgs, null, null, sort, limit);
             cursor.setNotificationUri(getContext().getContentResolver(), uri);
 

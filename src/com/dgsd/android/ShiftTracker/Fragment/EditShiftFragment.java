@@ -1,10 +1,12 @@
 package com.dgsd.android.ShiftTracker.Fragment;
 
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -23,6 +25,7 @@ import com.dgsd.android.ShiftTracker.Model.Shift;
 import com.dgsd.android.ShiftTracker.R;
 import com.dgsd.android.ShiftTracker.Util.Prefs;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
+import com.dgsd.android.ShiftTracker.View.StatefulAutoCompleteTextView;
 import com.dgsd.android.ShiftTracker.View.StatefulEditText;
 
 public class EditShiftFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<Cursor>,
@@ -33,12 +36,13 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
     private static final String KEY_JULIAN_DAY = "_julian_day";
 
     private static final int LOADER_ID_SHIFT = 0x01;
+    private static final int LOADER_ID_NAMES = 0x02;
 
     private Shift mInitialShift;
     private int mInitialJulianDay;
     private boolean mHasLoadedShift = false;
 
-    private StatefulEditText mName;
+    private StatefulAutoCompleteTextView mName;
     private StatefulEditText mNotes;
     private StatefulEditText mPayRate;
     private StatefulEditText mUnpaidBreak;
@@ -47,10 +51,13 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
     private TextView mEndTime;
     private CheckBox mSaveAsTemplate;
 
+    private SimpleCursorAdapter mNameAdapter;
+
     private DatePickerFragment mDateDialog;
     private TimePickerFragment mTimeDialog;
 
     private LastTimeSelected mLastTimeSelected;
+    private String mLastNameFilter;
 
     private static enum LastTimeSelected {START, END};
 
@@ -91,7 +98,7 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_edit_shift, container, false);
 
-        mName = (StatefulEditText) v.findViewById(R.id.name);
+        mName = (StatefulAutoCompleteTextView) v.findViewById(R.id.name);
         mNotes = (StatefulEditText) v.findViewById(R.id.notes);
         mPayRate = (StatefulEditText) v.findViewById(R.id.pay_rate);
         mUnpaidBreak = (StatefulEditText) v.findViewById(R.id.unpaid_break);
@@ -104,6 +111,11 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
         mStartTime.setOnClickListener(this);
         mEndTime.setOnClickListener(this);
 
+        mNameAdapter = new SimpleCursorAdapter(getActivity(), android.R.layout.simple_list_item_1, null,
+                new String[]{DbField.NAME.name}, new int[]{android.R.id.text1}, 0);
+        mNameAdapter.setStringConversionColumn(0);//Index of 'Name' column
+        mName.setAdapter(mNameAdapter);
+
         mName.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
@@ -111,6 +123,9 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
             @Override
             public void afterTextChanged(Editable editable) {
                 mName.setError(null);
+
+                mLastNameFilter = mName.getText() == null ? null : mName.getText().toString();
+                getLoaderManager().restartLoader(LOADER_ID_NAMES, null, EditShiftFragment.this);
             }
         });
 
@@ -134,16 +149,38 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
         super.onActivityCreated(savedInstanceState);
         if(mInitialShift != null && mInitialShift.id != -1)
             getLoaderManager().initLoader(LOADER_ID_SHIFT, null, this);
+
+        getLoaderManager().initLoader(LOADER_ID_NAMES, null, this);
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
-        return new CursorLoader(getActivity(),
-                                Provider.SHIFTS_URI,
-                                null,
-                                DbField.ID + "=?",
-                                new String[]{String.valueOf(mInitialShift == null ? -1 : mInitialShift.id)},
-                                null);
+        switch(id) {
+            case LOADER_ID_NAMES:
+                Uri uri = Provider.SHIFTS_URI.buildUpon().appendQueryParameter(Provider.QUERY_PARAMETER_DISTINCT, "1").build();
+                final String[] proj = {DbField.NAME.name, "1 as _id"};
+                final String sort = DbField.NAME + " ASC";
+                final String sel;
+                final String[] selArgs;
+
+                if(TextUtils.isEmpty(mLastNameFilter)) {
+                    sel = null;
+                    selArgs = null;
+                } else {
+                    sel = DbField.NAME + " LIKE ?";
+                    selArgs = new String[]{"%" + mLastNameFilter + "%"};
+                }
+
+                return new CursorLoader(getActivity(), uri, proj, sel, selArgs, sort);
+            case LOADER_ID_SHIFT:
+                return new CursorLoader(getActivity(),
+                        Provider.SHIFTS_URI,
+                        null,
+                        DbField.ID + "=?",
+                        new String[]{String.valueOf(mInitialShift == null ? -1 : mInitialShift.id)},
+                        null);
+        }
+        return null;
     }
 
     @Override
@@ -156,12 +193,21 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
                     mHasLoadedShift = true;
 
                 break;
+            case LOADER_ID_NAMES:
+                mNameAdapter.swapCursor(cursor);
+                break;
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        switch(loader.getId()) {
+            case LOADER_ID_SHIFT:
+                break;
+            case LOADER_ID_NAMES:
+                mNameAdapter.swapCursor(null);
+                break;
+        }
     }
 
     private void prepopulate() {
