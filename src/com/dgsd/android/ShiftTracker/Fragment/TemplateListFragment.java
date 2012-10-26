@@ -42,6 +42,7 @@ public class TemplateListFragment extends SherlockDialogFragment implements Load
         mList = (ListView) v.findViewById(R.id.list);
         mList.setAdapter(mAdapter);
         mList.setOnItemClickListener(this);
+        mList.setEmptyView(v.findViewById(android.R.id.empty));
 
         getDialog().setTitle(R.string.shift_templates);
 

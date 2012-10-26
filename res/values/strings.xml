@@ -32,6 +32,7 @@
     <string name="from_template">From Template</string>
     <string name="create_new">Create New</string>
     <string name="shift_templates">Shift Templates</string>
+    <string name="no_templates">No templates saved</string>
 
     <!-- Settings -->
     <string name="settings_category_display">Display</string>

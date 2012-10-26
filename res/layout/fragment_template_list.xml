@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ListView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/list"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:listSelector="@drawable/selectable_background_shift_tracker"
-    android:dividerHeight="1dip"
-    android:divider="@color/border_color"
-    android:scrollbarStyle="outsideOverlay"
-    android:cacheColorHint="@android:color/transparent"/>
+    android:layout_height="match_parent">
+    <ListView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:listSelector="@drawable/selectable_background_shift_tracker"
+        android:dividerHeight="1dip"
+        android:divider="@color/border_color"
+        android:scrollbarStyle="outsideOverlay"
+        android:cacheColorHint="@android:color/transparent"/>
+
+    <ViewStub
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout="@layout/empty_template_list"/>
+</LinearLayout>

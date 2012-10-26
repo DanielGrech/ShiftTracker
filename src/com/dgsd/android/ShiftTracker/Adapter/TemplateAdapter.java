@@ -1,5 +1,6 @@
 package com.dgsd.android.ShiftTracker.Adapter;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.SimpleCursorAdapter;
@@ -8,10 +9,13 @@ import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 import android.util.SparseArray;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.dgsd.android.ShiftTracker.Data.DbField;
+import com.dgsd.android.ShiftTracker.Data.Provider;
 import com.dgsd.android.ShiftTracker.Model.Shift;
 import com.dgsd.android.ShiftTracker.R;
+import com.dgsd.android.ShiftTracker.Service.DbService;
 import com.dgsd.android.ShiftTracker.Util.UIUtils;
 
 import java.util.Formatter;
@@ -54,6 +58,16 @@ public class TemplateAdapter extends SimpleCursorAdapter implements SimpleCursor
             holder.note.setVisibility(View.VISIBLE);
         }
 
+        final long shiftId = holder.shift.id;
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final ContentValues values = new ContentValues();
+                values.put(DbField.IS_TEMPLATE.name, 0);
+                DbService.async_update(mContext, Provider.SHIFTS_URI, DbField.ID + "=" + shiftId, values);
+            }
+        });
+
         return true;
     }
 
@@ -89,6 +103,7 @@ public class TemplateAdapter extends SimpleCursorAdapter implements SimpleCursor
         TextView name;
         TextView time;
         TextView note;
+        ImageView delete;
 
         public Shift shift;
 
@@ -99,6 +114,7 @@ public class TemplateAdapter extends SimpleCursorAdapter implements SimpleCursor
             name = (TextView) view.findViewById(R.id.name);
             time = (TextView) view.findViewById(R.id.time);
             note = (TextView) view.findViewById(R.id.note);
+            delete = (ImageView) view.findViewById(R.id.delete);
 
             view.setTag(this);
         }
