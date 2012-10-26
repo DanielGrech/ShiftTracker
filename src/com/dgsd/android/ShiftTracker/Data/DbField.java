@@ -12,8 +12,7 @@ public class DbField {
     public static final DbField NAME = new DbField("name", "text");
     public static final DbField NOTE = new DbField("note", "text");
     public static final DbField BREAK_DURATION = new DbField("break_duration", "integer");
-
-
+    public static final DbField IS_TEMPLATE = new DbField("is_template", "integer");
 
     public String name;
 	public String type;

@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:scrollbarStyle="outsideOverlay"
     android:paddingTop="16dip"
-    android:paddingLeft="16dip"
-    android:paddingRight="16dip">
+    android:paddingLeft="@dimen/edit_shift_side_padding"
+    android:paddingRight="@dimen/edit_shift_side_padding">
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -170,7 +170,19 @@
             android:gravity="left|bottom"
             android:nextFocusUp="@id/unpaid_break"
             android:fontFamily="sans-serif-light"
-            android:layout_marginBottom="8dip"/>
+            android:layout_marginBottom="16dip"/>
 
+        <CheckBox
+            android:id="@+id/is_template"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="15sp"
+            android:gravity="left|center_vertical"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textAllCaps="true"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/save_shift_as_template"/>
     </LinearLayout>
 </ScrollView>

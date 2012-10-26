@@ -16,6 +16,7 @@ public class Shift implements Parcelable {
     public int julianDay;
     public float payRate;
     public int breakDuration;
+    public boolean isTemplate;
 
     public Shift() {
         id = -1;
@@ -26,6 +27,7 @@ public class Shift implements Parcelable {
         julianDay = -1;
         payRate = -1;
         breakDuration = -1;
+        isTemplate = false;
     }
 
     public static Shift fromParcel(Parcel in) {
@@ -39,6 +41,7 @@ public class Shift implements Parcelable {
         s.julianDay = in.readInt();
         s.payRate = in.readFloat();
         s.breakDuration = in.readInt();
+        s.isTemplate = in.readInt() == 1;
 
         return s;
     }
@@ -55,6 +58,7 @@ public class Shift implements Parcelable {
         final int endCol = cursor.getColumnIndex(DbField.END_TIME.name);
         final int dayCol = cursor.getColumnIndex(DbField.JULIAN_DAY.name);
         final int breakCol = cursor.getColumnIndex(DbField.BREAK_DURATION.name);
+        final int isTemplateCol = cursor.getColumnIndex(DbField.IS_TEMPLATE.name);
 
         Shift s = new Shift();
         s.id = cursor.getLong(idCol);
@@ -65,11 +69,15 @@ public class Shift implements Parcelable {
         s.julianDay = cursor.getInt(dayCol);
         s.payRate = cursor.getFloat(payCol);
         s.breakDuration = cursor.getInt(breakCol);
+        s.isTemplate = cursor.getInt(isTemplateCol) == 1;
         return s;
     }
 
     public float getIncome() {
-        return (getDurationInMinutes() / 60.0f) * payRate;
+        if(payRate < 0)
+            return 0;
+        else
+            return (getDurationInMinutes() / 60.0f) * payRate;
     }
 
     public long getDurationInMinutes() {
@@ -96,6 +104,7 @@ public class Shift implements Parcelable {
         values.put(DbField.NAME.name, name);
         values.put(DbField.NOTE.name, note);
         values.put(DbField.BREAK_DURATION.name, breakDuration);
+        values.put(DbField.IS_TEMPLATE.name, isTemplate ? 1 : 0);
 
         return values;
     }
@@ -115,6 +124,7 @@ public class Shift implements Parcelable {
         dest.writeInt(julianDay);
         dest.writeFloat(payRate);
         dest.writeInt(breakDuration);
+        dest.writeInt(isTemplate ? 1 : 0);
     }
 
     public static final Creator<Shift> CREATOR = new Creator<Shift>() {

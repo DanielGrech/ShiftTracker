@@ -104,7 +104,6 @@
         <item name="android:singleLine">true</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">sans-serif-light</item>
-        <item name="android:textAllCaps">true</item>
     </style>
 
 </resources>

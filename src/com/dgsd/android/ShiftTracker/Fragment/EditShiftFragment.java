@@ -14,6 +14,7 @@ import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.dgsd.android.ShiftTracker.Data.DbField;
@@ -44,6 +45,7 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
     private TextView mDate;
     private TextView mStartTime;
     private TextView mEndTime;
+    private CheckBox mSaveAsTemplate;
 
     private DatePickerFragment mDateDialog;
     private TimePickerFragment mTimeDialog;
@@ -96,6 +98,7 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
         mDate = (TextView) v.findViewById(R.id.date);
         mStartTime = (TextView) v.findViewById(R.id.start_time);
         mEndTime = (TextView) v.findViewById(R.id.end_time);
+        mSaveAsTemplate = (CheckBox) v.findViewById(R.id.is_template);
 
         mDate.setOnClickListener(this);
         mStartTime.setOnClickListener(this);
@@ -165,6 +168,7 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
         if(mInitialShift != null) {
             mName.setText(mInitialShift.name);
             mNotes.setText(mInitialShift.note);
+            mSaveAsTemplate.setChecked(mInitialShift.isTemplate);
             if(mInitialShift.julianDay >= 0)
                 onDateSelected(mInitialShift.julianDay);
 
@@ -269,6 +273,9 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
 
     @Override
     public void onDateSelected(int julianDay) {
+        if(getActivity() == null)
+            return;
+
         final long millis = TimeUtils.getStartMillisForJulianDay(julianDay);
         mDate.setTag(julianDay);
         mDate.setText(DateUtils.formatDateRange(getActivity(), millis, millis,
@@ -277,6 +284,9 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
 
     @Override
     public void onTimeSelected(long millis) {
+        if(getActivity() == null)
+            return;
+
         TextView tv = null;
         if(mLastTimeSelected == LastTimeSelected.START)
             tv = mStartTime;
@@ -306,6 +316,27 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
         shift.julianDay = mDate.getTag() == null ? -1 : (Integer) mDate.getTag();
         shift.startTime = mDate.getTag() == null ? -1 : (Long) mStartTime.getTag();
         shift.endTime = mDate.getTag() == null ? -1 : (Long) mEndTime.getTag();
+        shift.isTemplate = mSaveAsTemplate.isChecked();
+
+        Time time = new Time();
+
+        time.set(shift.startTime);
+        int hour = time.hour;
+        int min = time.minute;
+        time.setToNow();
+        time.hour = hour;
+        time.minute = min;
+        time.normalize(true);
+        shift.startTime = time.toMillis(true);
+
+        time.set(shift.endTime);
+        hour = time.hour;
+        min = time.minute;
+        time.setToNow();
+        time.hour = hour;
+        time.minute = min;
+        time.normalize(true);
+        shift.endTime = time.toMillis(true);
 
         try {
             CharSequence breakDuration = mUnpaidBreak.getText();
@@ -390,7 +421,14 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
             return error;
         }
 
-        if(startMillis >= endMillis) {
+        Time start = new Time();
+        Time end = new Time();
+
+        start.set(startMillis);
+        end.set(endMillis);
+
+        if(start.hour > end.hour ||
+                (start.hour == end.hour && start.minute > end.minute)) {
             String error = "End time is before start time";
             mEndTime.setError(error);
             return error;

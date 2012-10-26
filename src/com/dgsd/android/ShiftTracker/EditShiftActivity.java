@@ -1,5 +1,6 @@
 package com.dgsd.android.ShiftTracker;
 
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
@@ -94,12 +95,14 @@ public class EditShiftActivity extends SherlockFragmentActivity {
                         String error = mEditShiftFragment.validate();
                         if(TextUtils.isEmpty(error)) {
                             Shift shift = mEditShiftFragment.getShift();
-                            if(mEditShiftFragment.isEditing())
+
+                            final ContentValues values = shift.toContentValues();
+                            if(mEditShiftFragment.isEditing()) {
                                 DbService.async_update(EditShiftActivity.this, Provider.SHIFTS_URI,
-                                        DbField.ID + "=" + mEditShiftFragment.getEditingId(), shift.toContentValues());
-                            else
-                                DbService.async_insert(EditShiftActivity.this, Provider.SHIFTS_URI,
-                                        shift.toContentValues());
+                                        DbField.ID + "=" + mEditShiftFragment.getEditingId(), values);
+                            } else {
+                                DbService.async_insert(EditShiftActivity.this, Provider.SHIFTS_URI, values);
+                            }
 
                             finish();
                         } else {

@@ -14,7 +14,8 @@ public class DbTable {
         DbField.PAY_RATE,
         DbField.NAME,
         DbField.NOTE,
-        DbField.BREAK_DURATION
+        DbField.BREAK_DURATION,
+        DbField.IS_TEMPLATE
     });
 
 	public String name;
