@@ -214,7 +214,7 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
         final String sel = DbField.JULIAN_DAY + " >= ? AND " + DbField.JULIAN_DAY + " < ?";
         final String[] args = new String[] {
                 String.valueOf(mStartingJulianDay),
-                String.valueOf(mStartingJulianDay + 6)
+                String.valueOf(mStartingJulianDay + 7)
         };
 
         final String sort = DbField.JULIAN_DAY + " ASC," + DbField.START_TIME + " ASC, " + DbField.NAME + " ASC";

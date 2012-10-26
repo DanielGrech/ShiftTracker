@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="50dip"
         android:layout_alignParentBottom="true"
-        android:paddingLeft="8dip"
-        android:paddingRight="8dip"
+        android:paddingLeft="16dip"
+        android:paddingRight="16dip"
         android:background="@drawable/ab_bottom_solid_shift_tracker">
 
         <TextView

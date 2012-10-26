@@ -4,18 +4,24 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.AdapterView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
+import com.dgsd.android.ShiftTracker.Adapter.TemplateAdapter;
 import com.dgsd.android.ShiftTracker.Adapter.WeekAdapter;
+import com.dgsd.android.ShiftTracker.Data.DbField;
+import com.dgsd.android.ShiftTracker.Data.Provider;
 import com.dgsd.android.ShiftTracker.EditShiftActivity;
 import com.dgsd.android.ShiftTracker.Model.Shift;
 import com.dgsd.android.ShiftTracker.R;
+import com.dgsd.android.ShiftTracker.Service.DbService;
+import com.dgsd.android.ShiftTracker.Util.Anim;
+import com.dgsd.android.ShiftTracker.Util.Api;
 import com.dgsd.android.ShiftTracker.Util.Prefs;
 import com.dgsd.android.ShiftTracker.Util.UIUtils;
 import com.emilsjolander.components.StickyListHeaders.StickyListHeadersListView;
@@ -28,16 +34,21 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
 
     private static final int LOADER_ID_SHIFTS = 0x01;
     private static final int LOADER_ID_TOTAL = 0x02;
+    private static final int LOADER_ID_TEMPLATES = 0x03;
 
     private StickyListHeadersListView mList;
     private TextView mTotalText;
     private WeekAdapter mAdapter;
     private ViewGroup mStatsWrapper;
 
+    private TemplateListFragment mTemplateList;
+
     private int mStartJulianDay = -1;
 
     private boolean mShowHoursPref = true;
     private boolean mShowIncomePref = true;
+
+    private boolean mHasTemplates = false;
 
     public static WeekFragment newInstance(int startJulianDay) {
         WeekFragment frag = new WeekFragment();
@@ -65,8 +76,11 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
         mAdapter = new WeekAdapter(getActivity(), null, mStartJulianDay);
 
         mList = (StickyListHeadersListView) v.findViewById(R.id.list);
+        mList.setLayoutAnimation(Anim.getListViewFadeInAnimator());
         mList.setAdapter(mAdapter);
         mList.setOnItemClickListener(this);
+
+        registerForContextMenu(mList);
 
         mTotalText = (TextView) v.findViewById(R.id.total_text);
 
@@ -77,6 +91,7 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        getLoaderManager().initLoader(LOADER_ID_TEMPLATES, null, this);
         getLoaderManager().initLoader(LOADER_ID_SHIFTS, null, this);
         getLoaderManager().initLoader(LOADER_ID_TOTAL, null, this);
     }
@@ -99,6 +114,9 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
             case LOADER_ID_TOTAL: {
                 return mAdapter.getWeeklyLoader(getActivity());
             }
+            case LOADER_ID_TEMPLATES:
+                return new CursorLoader(getActivity(), Provider.SHIFTS_URI, null,
+                        DbField.IS_TEMPLATE + "> 0", null, null);
             default:
                 return null;
         }
@@ -107,6 +125,9 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         switch(loader.getId()) {
+            case LOADER_ID_TEMPLATES:
+                mHasTemplates = cursor != null && cursor.getCount() > 0;
+                break;
             case LOADER_ID_SHIFTS:
                 mAdapter.swapCursor(cursor);
                 break;
@@ -159,16 +180,104 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
     }
 
     @Override
-    public void onItemClick(AdapterView<?> list, View view, int pos, long id) {
-        final Intent intent = new Intent(getActivity(), EditShiftActivity.class);
-
-        WeekAdapter.ViewHolder holder = (WeekAdapter.ViewHolder) view.getTag();
-        if(holder != null) {
-            intent.putExtra(EditShiftActivity.EXTRA_JULIAN_DAY, holder.julianDay);
-            if(holder.shift != null)
-                intent.putExtra(EditShiftActivity.EXTRA_SHIFT, holder.shift);
+    public void onItemClick(AdapterView<?> list, final View view, int pos, long id) {
+        final WeekAdapter.ViewHolder holder = (WeekAdapter.ViewHolder) view.getTag();
+        final Intent intent = getIntentFor(holder);
+        if(!mHasTemplates || (holder != null && holder.shift != null)) {
+            startActivity(intent);
+            return;
         }
 
-        startActivity(intent);
+        final int jd = holder == null ? -1 : holder.julianDay;
+        if(Api.isMin(Api.HONEYCOMB)) {
+            PopupMenu popup = new PopupMenu(getActivity(), view.findViewById(R.id.text));
+            popup.getMenuInflater().inflate(R.menu.week_list_item_popup, popup.getMenu());
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch(item.getItemId()) {
+                        case R.id.template_shift:
+                            showTemplateChooser(jd);
+                            break;
+                        case R.id.new_shift:
+                            startActivity(intent);
+                            break;
+                    }
+                    return false;
+                }
+            });
+
+            popup.show();
+        } else {
+            mList.showContextMenuForChild(view);
+        }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        final View targetView = ((AdapterView.AdapterContextMenuInfo) menuInfo).targetView;
+        final View view = (ViewGroup) targetView.findViewById(R.id.new_shift).getParent();
+        final WeekAdapter.ViewHolder holder = (WeekAdapter.ViewHolder) view.getTag();
+        if(holder == null || holder.shift == null) {
+            getActivity().getMenuInflater().inflate(R.menu.week_list_item_popup, menu);
+        } else {
+            getActivity().getMenuInflater().inflate(R.menu.week_list_item_context_menu, menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        final View view = (ViewGroup) info.targetView.findViewById(R.id.new_shift).getParent();
+        final WeekAdapter.ViewHolder holder = (WeekAdapter.ViewHolder) view.getTag();
+
+        final Intent intent = getIntentFor(holder);
+        switch(item.getItemId()) {
+            case R.id.template_shift:
+                showTemplateChooser(holder.julianDay);
+                break;
+            case R.id.new_shift:
+                startActivity(intent);
+                break;
+            case R.id.delete:
+                DbService.async_delete(getActivity(), Provider.SHIFTS_URI,
+                        DbField.ID + "=" + (holder.shift == null ? -1 : holder.shift.id));
+                break;
+        }
+
+        return true;
+    }
+
+    private void showTemplateChooser(final int julianDay) {
+        if(mTemplateList != null && mTemplateList.isResumed())
+            return; //Already showing
+
+        mTemplateList = TemplateListFragment.newInstance();
+        mTemplateList.setDismissOnItemClick(true);
+        mTemplateList.setOnItemClickListener(new TemplateListFragment.OnTemplateClickListener() {
+            @Override
+            public void onTemplateClicked(Shift shift) {
+                shift.id = -1;
+                shift.isTemplate = false;
+                shift.julianDay = julianDay;
+
+                DbService.async_insert(getActivity(), Provider.SHIFTS_URI, shift.toContentValues());
+            }
+        });
+        mTemplateList.show(getSherlockActivity().getSupportFragmentManager(), null);
+    }
+
+    private Intent getIntentFor(WeekAdapter.ViewHolder holder) {
+        final Intent intent = new Intent(getActivity(), EditShiftActivity.class);
+        if(holder != null && holder.shift != null) {
+            intent.putExtra(EditShiftActivity.EXTRA_SHIFT, holder.shift);
+            return intent;
+        } else if(holder != null){
+            intent.putExtra(EditShiftActivity.EXTRA_JULIAN_DAY, holder.julianDay);
+        }
+
+        return intent;
     }
 }

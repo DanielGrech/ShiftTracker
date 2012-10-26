@@ -29,6 +29,9 @@
     <string name="copyright">Copyright</string>
     <string name="copyright_summary">Copyright © Daniel Grech</string>
     <string name="save_shift_as_template">Save shift as template</string>
+    <string name="from_template">From Template</string>
+    <string name="create_new">Create New</string>
+    <string name="shift_templates">Shift Templates</string>
 
     <!-- Settings -->
     <string name="settings_category_display">Display</string>

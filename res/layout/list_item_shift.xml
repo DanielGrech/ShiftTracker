@@ -38,6 +38,7 @@
             android:gravity="left"
             android:textSize="20dip"
             android:duplicateParentState="true"
+            android:fontFamily="sans-serif-light"
             android:textColor="?android:attr/textColorPrimary"/>
 
         <TextView
@@ -47,6 +48,7 @@
             android:gravity="left"
             android:textSize="14sp"
             android:duplicateParentState="true"
+            android:fontFamily="sans-serif-light"
             android:textColor="?android:attr/textColorSecondary"/>
 
         <TextView
@@ -56,6 +58,7 @@
             android:gravity="left"
             android:textSize="14sp"
             android:duplicateParentState="true"
+            android:fontFamily="sans-serif-light"
             android:textColor="?android:attr/textColorSecondary"/>
     </LinearLayout>
 </RelativeLayout>
