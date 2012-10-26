@@ -71,13 +71,6 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
         mTotalText = (TextView) v.findViewById(R.id.total_text);
 
         mStatsWrapper = (ViewGroup) v.findViewById(R.id.stats_wrapper);
-        mStatsWrapper.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
         return v;
     }
 
