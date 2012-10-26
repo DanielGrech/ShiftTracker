@@ -8,7 +8,7 @@
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="16"/>
 
     <application
-        android:name=".StApp"
+        android:name=".StPaidApp"
         android:label="@string/app_name"
         android:icon="@drawable/ic_launcher"
         android:theme="@style/Theme.shift_tracker">
@@ -21,6 +21,26 @@
 
         <!-- Services -->
         <service android:name=".Service.DbService" />
+
+        <service android:name=".Service.ShiftListWidgetService"
+                 android:permission="android.permission.BIND_REMOTEVIEWS"
+                 android:exported="false"/>
+
+        <receiver
+            android:icon="@drawable/ic_launcher"
+            android:label="@string/app_name"
+            android:name=".Receiver.ShiftListWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="com.dgsd.android.ShiftTracker.action.list_app_widget_update" />
+            </intent-filter>
+
+            <meta-data android:name="android.appwidget.provider"
+                       android:resource="@xml/shift_list_widget_provider"/>
+        </receiver>
 
         <!-- Activities -->
         <activity
