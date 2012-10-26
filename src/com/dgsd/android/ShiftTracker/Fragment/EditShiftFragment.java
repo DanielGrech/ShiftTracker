@@ -168,10 +168,10 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
             if(mInitialShift.julianDay >= 0)
                 onDateSelected(mInitialShift.julianDay);
 
-            if(mInitialShift.startTime >= 0)
+            if(mInitialShift.startTime != -1)
                 setStartTime(mInitialShift.startTime);
 
-            if(mInitialShift.endTime >= 0)
+            if(mInitialShift.endTime != -1)
                 setEndTime(mInitialShift.endTime);
 
             if(mInitialShift.breakDuration >= 0)
