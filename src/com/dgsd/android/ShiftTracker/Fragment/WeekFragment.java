@@ -121,7 +121,7 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
                         mins += shift.getDurationInMinutes();
                     } while(cursor.moveToNext());
 
-                    String payText = mShowIncomePref ? NumberFormat.getCurrencyInstance().format(pay) : null;
+                    String payText = mShowIncomePref && pay > 0 ? NumberFormat.getCurrencyInstance().format(pay) : null;
                     String hoursText = mShowHoursPref ? UIUtils.getDurationAsHours(mins) + " Hrs" : null;
 
                     if(TextUtils.isEmpty(payText)) {
