@@ -34,7 +34,7 @@
             android:layout_toRightOf="@id/total_label"
             android:gravity="right"
             android:fontFamily="sans-serif-light"
-            android:textSize="25dip"
+            android:textSize="23dip"
             android:textColor="@color/blue"/>
     </RelativeLayout>
 
