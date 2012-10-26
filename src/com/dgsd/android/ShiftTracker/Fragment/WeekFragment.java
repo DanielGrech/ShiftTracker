@@ -25,6 +25,8 @@ import com.dgsd.android.ShiftTracker.Util.Api;
 import com.dgsd.android.ShiftTracker.Util.Prefs;
 import com.dgsd.android.ShiftTracker.Util.UIUtils;
 import com.emilsjolander.components.StickyListHeaders.StickyListHeadersListView;
+import de.neofonie.mobile.app.android.widget.crouton.Crouton;
+import de.neofonie.mobile.app.android.widget.crouton.Style;
 
 import java.text.NumberFormat;
 
@@ -244,6 +246,7 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
             case R.id.delete:
                 DbService.async_delete(getActivity(), Provider.SHIFTS_URI,
                         DbField.ID + "=" + (holder.shift == null ? -1 : holder.shift.id));
+                showMessage("Shift deleted");
                 break;
         }
 
@@ -264,6 +267,7 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
                 shift.julianDay = julianDay;
 
                 DbService.async_insert(getActivity(), Provider.SHIFTS_URI, shift.toContentValues());
+                showMessage("New shift created");
             }
         });
         mTemplateList.show(getSherlockActivity().getSupportFragmentManager(), null);
@@ -279,5 +283,10 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
         }
 
         return intent;
+    }
+
+    private void showMessage(String msg) {
+        if(getActivity() != null)
+            Crouton.showText(getActivity(), msg, Style.CONFIRM);
     }
 }

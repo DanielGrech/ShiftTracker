@@ -11,6 +11,8 @@ import com.dgsd.android.ShiftTracker.Adapter.WeekPagerAdapter;
 import com.dgsd.android.ShiftTracker.Fragment.DatePickerFragment;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
 import com.viewpagerindicator.TitlePageIndicator;
+import de.neofonie.mobile.app.android.widget.crouton.Crouton;
+import de.neofonie.mobile.app.android.widget.crouton.Style;
 
 public class MainActivity extends SherlockFragmentActivity implements DatePickerFragment.OnDateSelectedListener {
 
@@ -74,5 +76,11 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
     @Override
     public void onDateSelected(int julianDay) {
         mIndicator.setCurrentItem(mAdapter.getPositionForJulianDay(julianDay));
+    }
+
+    @Override
+    protected void onDestroy() {
+        Crouton.clearCroutonsForActivity(this);
+        super.onDestroy();
     }
 }
