@@ -20,6 +20,7 @@ import com.dgsd.android.ShiftTracker.Model.Shift;
 import com.dgsd.android.ShiftTracker.R;
 import com.dgsd.android.ShiftTracker.Util.Prefs;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
+import com.dgsd.android.ShiftTracker.Util.UIUtils;
 import com.emilsjolander.components.StickyListHeaders.StickyListHeadersCursorAdapter;
 
 import java.text.NumberFormat;
@@ -195,6 +196,7 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
             row[5] = NEW_ROW_KEY;                       // DbField.NAME
             row[6] = null;                              // DbField.NOTE
             row[7] = -1;                                // DbField.BREAK_DURATION
+            row[8] = 0;                                 // DbField.IS_TEMPLATE
 
             mc.addRow(row);
         }
@@ -215,7 +217,7 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
                 String.valueOf(mStartingJulianDay + 6)
         };
 
-        final String sort = DbField.JULIAN_DAY + " ASC," + DbField.START_TIME + " ASC";
+        final String sort = DbField.JULIAN_DAY + " ASC," + DbField.START_TIME + " ASC, " + DbField.NAME + " ASC";
 
         return new CursorLoader(context, Provider.SHIFTS_URI, null, sel, args, sort);
     }
@@ -231,6 +233,8 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
 
         mStringBuilder.setLength(0);
         time = DateUtils.formatDateRange(getContext(), mFormatter, shift.startTime, shift.endTime, flags).toString();
+
+        time += " (" + UIUtils.getDurationAsHours(shift.getDurationInMinutes()) + " Hrs)";
 
         mIdToTimeArray.put( (int) shift.id, time);
         return time;
