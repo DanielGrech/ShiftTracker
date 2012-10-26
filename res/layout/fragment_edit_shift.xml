@@ -14,13 +14,18 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!-- Focusable to stop edit texts taking focus! -->
         <TextView
             android:id="@+id/name_label"
             android:text="@string/name"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             style="@style/edit_shift_title"/>
 
         <com.dgsd.android.ShiftTracker.View.StatefulAutoCompleteTextView
             android:id="@+id/name"
+            android:nextFocusUp="@id/name"
+            android:nextFocusLeft="@id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionNext|flagNavigateNext"
