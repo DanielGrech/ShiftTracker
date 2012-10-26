@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import com.dgsd.android.ShiftTracker.Data.Provider;
 import com.dgsd.android.ShiftTracker.Util.DiagnosticUtils;
 
 /**
@@ -33,5 +34,8 @@ public class StApp extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+
+        Provider.setAuthority(getPackageName() + ".Data.Provider");
+
 	}
 }

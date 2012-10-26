@@ -21,18 +21,27 @@ public class Provider extends ContentProvider {
     public static final String QUERY_PARAMETER_LIMIT = "limit";
     public static final String QUERY_PARAMETER_DISTINCT = "distinct";
 
-    public static final String AUTHORITY = "com.dgsd.android.ShiftTracker.Data.Provider";
-    private static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
+    private static String AUTHORITY = "com.dgsd.android.ShiftTracker.Data.Provider";
+    private static Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
 
-    private static final UriMatcher mURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+    private static UriMatcher mURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     public static final int SHIFTS = 0x1;
 
-    public static final Uri SHIFTS_URI = Uri.withAppendedPath(BASE_URI, "shifts");
+    public static Uri SHIFTS_URI = Uri.withAppendedPath(BASE_URI, "shifts");
 
     private Db mDb;
 
     static {
+        mURIMatcher.addURI(AUTHORITY, "shifts", SHIFTS);
+    }
+
+    public static void setAuthority(String authority) {
+        AUTHORITY = authority;
+        BASE_URI = Uri.parse("content://" + AUTHORITY);
+        SHIFTS_URI = Uri.withAppendedPath(BASE_URI, "shifts");
+
+        mURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         mURIMatcher.addURI(AUTHORITY, "shifts", SHIFTS);
     }
 
