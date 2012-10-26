@@ -71,15 +71,14 @@ public class EditShiftActivity extends SherlockFragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.delete:
-                if(mEditShiftFragment.isEditing())
-                    DbService.async_delete(this, Provider.SHIFTS_URI, DbField.ID + "=" + mEditShiftFragment.getEditingId());
+        if(item.getItemId() == R.id.delete) {
+            if(mEditShiftFragment.isEditing())
+                DbService.async_delete(this, Provider.SHIFTS_URI, DbField.ID + "=" + mEditShiftFragment.getEditingId());
 
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+            finish();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 

@@ -197,13 +197,10 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    switch(item.getItemId()) {
-                        case R.id.template_shift:
-                            showTemplateChooser(jd);
-                            break;
-                        case R.id.new_shift:
-                            startActivity(intent);
-                            break;
+                    if(item.getItemId() == R.id.template_shift) {
+                        showTemplateChooser(jd);
+                    } else if(item.getItemId() == R.id.new_shift) {
+                        startActivity(intent);
                     }
                     return false;
                 }
@@ -236,18 +233,14 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
         final WeekAdapter.ViewHolder holder = (WeekAdapter.ViewHolder) view.getTag();
 
         final Intent intent = getIntentFor(holder);
-        switch(item.getItemId()) {
-            case R.id.template_shift:
-                showTemplateChooser(holder.julianDay);
-                break;
-            case R.id.new_shift:
-                startActivity(intent);
-                break;
-            case R.id.delete:
-                DbService.async_delete(getActivity(), Provider.SHIFTS_URI,
-                        DbField.ID + "=" + (holder.shift == null ? -1 : holder.shift.id));
-                showMessage("Shift deleted");
-                break;
+        if(item.getItemId() == R.id.template_shift) {
+            showTemplateChooser(holder.julianDay);
+        } else if(item.getItemId() == R.id.new_shift) {
+            startActivity(intent);
+        } else if(item.getItemId() == R.id.delete) {
+            DbService.async_delete(getActivity(), Provider.SHIFTS_URI,
+                    DbField.ID + "=" + (holder.shift == null ? -1 : holder.shift.id));
+            showMessage("Shift deleted");
         }
 
         return true;

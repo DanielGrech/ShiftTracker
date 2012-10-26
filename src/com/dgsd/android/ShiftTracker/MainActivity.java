@@ -43,31 +43,27 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.settings: {
-                startActivity(new Intent(this, SettingsActivity.class));
-                break;
+        if(item.getItemId() == R.id.settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+        } else if(item.getItemId() == R.id.go_to) {
+            if(mGoToFragment != null && mGoToFragment.isResumed()) {
+                //We're showing already!
+                return true;
             }
-            case R.id.go_to: {
-                if(mGoToFragment != null && mGoToFragment.isResumed()) {
-                    //We're showing already!
-                    return true;
-                }
 
-                final int centerJd = mAdapter.getJulianDayForPosition(mAdapter.getCenterPosition());
-                final int count = mAdapter.getCount() * 7;
+            final int centerJd = mAdapter.getJulianDayForPosition(mAdapter.getCenterPosition());
+            final int count = mAdapter.getCount() * 7;
 
-                final Time time = new Time();
-                time.setJulianDay(centerJd - (count / 2));
-                final long min = time.toMillis(true);
+            final Time time = new Time();
+            time.setJulianDay(centerJd - (count / 2));
+            final long min = time.toMillis(true);
 
-                time.setJulianDay(centerJd + (count / 2));
-                final long max = time.toMillis(true);
+            time.setJulianDay(centerJd + (count / 2));
+            final long max = time.toMillis(true);
 
-                mGoToFragment = DatePickerFragment.newInstance("Go to date..", "Go to date", min, max);
-                mGoToFragment.setOnDateSelectedListener(this);
-                mGoToFragment.show(getSupportFragmentManager(), null);
-            }
+            mGoToFragment = DatePickerFragment.newInstance("Go to date..", "Go to date", min, max);
+            mGoToFragment.setOnDateSelectedListener(this);
+            mGoToFragment.show(getSupportFragmentManager(), null);
         }
 
         return super.onOptionsItemSelected(item);

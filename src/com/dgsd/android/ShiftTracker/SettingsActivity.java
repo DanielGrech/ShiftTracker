@@ -110,16 +110,14 @@ public class SettingsActivity extends SherlockPreferenceActivity implements Shar
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
-        switch(item.getItemId()) {
-            case android.R.id.home:
-                StApp.doDefaultNavigateUp(this);
-                return true;
-            case R.id.contact:
-                startActivity(IntentUtils.newEmailIntent(getString(R.string.support_email),
-                        DiagnosticUtils.getApplicationName(this) + " support", null, "Contact support"));
-            default:
-                return super.onOptionsItemSelected(item);
+        if(item.getItemId() == android.R.id.home) {
+            StApp.doDefaultNavigateUp(this);
+        } else if(item.getItemId() == R.id.contact) {
+            startActivity(IntentUtils.newEmailIntent(getString(R.string.support_email),
+                    DiagnosticUtils.getApplicationName(this) + " support", null, "Contact support"));
         }
+
+        return true;
     }
 
     @Override

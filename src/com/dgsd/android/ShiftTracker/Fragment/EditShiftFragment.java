@@ -267,53 +267,44 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
 
     @Override
     public void onClick(View view) {
-        switch(view.getId()) {
-            case R.id.date :  {
-                if(mDateDialog != null && mDateDialog.isResumed())
-                    return; //We're showing already!
+        final int id = view.getId();
+        if(id == R.id.date) {
+            if(mDateDialog != null && mDateDialog.isResumed())
+                return; //We're showing already!
 
-                final int centerJd = TimeUtils.getCurrentJulianDay();
-                final int count = 104 * 7; // 2 years
+            final int centerJd = TimeUtils.getCurrentJulianDay();
+            final int count = 104 * 7; // 2 years
 
-                final Time time = new Time();
-                time.setJulianDay(centerJd - (count / 2));
-                final long min = time.toMillis(true);
+            final Time time = new Time();
+            time.setJulianDay(centerJd - (count / 2));
+            final long min = time.toMillis(true);
 
-                time.setJulianDay(centerJd + (count / 2));
-                final long max = time.toMillis(true);
+            time.setJulianDay(centerJd + (count / 2));
+            final long max = time.toMillis(true);
 
-                final Integer date = (Integer) mDate.getTag();
+            final Integer date = (Integer) mDate.getTag();
 
-                mDateDialog = DatePickerFragment.newInstance("Date of shift", "Set date", min, max, date == null ? -1 : date);
-                mDateDialog.setOnDateSelectedListener(this);
-                mDateDialog.show(getSherlockActivity().getSupportFragmentManager(), null);
+            mDateDialog = DatePickerFragment.newInstance("Date of shift", "Set date", min, max, date == null ? -1 : date);
+            mDateDialog.setOnDateSelectedListener(this);
+            mDateDialog.show(getSherlockActivity().getSupportFragmentManager(), null);
+        } else if(id == R.id.end_time) {
+            mLastTimeSelected = LastTimeSelected.END;
+            if(mTimeDialog != null && mTimeDialog.isResumed())
+                return; //We're showing already!
 
-                break;
-            }
-            case R.id.start_time: {
-                mLastTimeSelected = LastTimeSelected.START;
-                if(mTimeDialog != null && mTimeDialog.isResumed())
-                    return; //We're showing already!
+            long time = mEndTime.getTag() == null ? -1 : (Long) mEndTime.getTag();
+            mTimeDialog = TimePickerFragment.newInstance(time);
+            mTimeDialog.setOnTimeSelectedListener(this);
+            mTimeDialog.show(getSherlockActivity().getSupportFragmentManager(), null);
+        } else if(id == R.id.start_time) {
+            mLastTimeSelected = LastTimeSelected.START;
+            if(mTimeDialog != null && mTimeDialog.isResumed())
+                return; //We're showing already!
 
-                long time = mStartTime.getTag() == null ? -1 : (Long) mStartTime.getTag();
-                mTimeDialog = TimePickerFragment.newInstance(time);
-                mTimeDialog.setOnTimeSelectedListener(this);
-                mTimeDialog.show(getSherlockActivity().getSupportFragmentManager(), null);
-
-                break;
-            }
-            case R.id.end_time: {
-                mLastTimeSelected = LastTimeSelected.END;
-                if(mTimeDialog != null && mTimeDialog.isResumed())
-                    return; //We're showing already!
-
-                long time = mEndTime.getTag() == null ? -1 : (Long) mEndTime.getTag();
-                mTimeDialog = TimePickerFragment.newInstance(time);
-                mTimeDialog.setOnTimeSelectedListener(this);
-                mTimeDialog.show(getSherlockActivity().getSupportFragmentManager(), null);
-
-                break;
-            }
+            long time = mStartTime.getTag() == null ? -1 : (Long) mStartTime.getTag();
+            mTimeDialog = TimePickerFragment.newInstance(time);
+            mTimeDialog.setOnTimeSelectedListener(this);
+            mTimeDialog.show(getSherlockActivity().getSupportFragmentManager(), null);
         }
     }
 
