@@ -5,30 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:minHeight="?android:attr/listPreferredItemHeight"
-    android:layout_gravity="center"
-    android:background="@drawable/selectable_background_shift_tracker">
-
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="24dip"
-        android:layout_height="24dip"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/ic_action_add"
-        android:contentDescription="@string/add_shift"
-        android:scaleType="fitCenter"/>
+    android:layout_gravity="center">
 
     <TextView
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="right|center_vertical"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/image"
+        android:layout_alignParentRight="true"
         android:fontFamily="sans-serif-light"
+        android:duplicateParentState="true"
+        android:paddingRight="16dip"
+        android:paddingLeft="16dip"
+        android:background="@drawable/list_item_no_shift_background"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
         android:textColor="?android:attr/textColorSecondary"
-        android:paddingRight="8dip"
         android:text="@string/add_shift"/>
 
 </RelativeLayout>
