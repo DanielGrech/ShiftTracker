@@ -3,6 +3,7 @@ package com.dgsd.android.ShiftTracker.Adapter;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
+import android.graphics.Typeface;
 import android.support.v4.content.CursorLoader;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -45,6 +46,7 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
     private StringBuilder mStringBuilder;
 
     private NumberFormat mCurrencyFormatter;
+    private int mCurrentJulianDay;
 
     public WeekAdapter(Context context, Cursor c, int julianDay) {
         super(context, c, false);
@@ -64,6 +66,8 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
         mJdToTitleArray = new SparseArray<String>();
         mIdToTimeArray = new SparseArray<String>();
         mIdToPayArray = new SparseArray<String>();
+
+        mCurrentJulianDay = TimeUtils.getCurrentJulianDay();
 
         mShowIncomePref = Prefs.getInstance(context).get(context.getString(R.string.settings_key_show_income), true);
     }
@@ -90,6 +94,12 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
 
             mJdToTitleArray.put(jd, title);
         }
+
+        //Highlight the current day with a bold title
+        if(jd == mCurrentJulianDay)
+            holder.title.setTypeface(null, Typeface.BOLD);
+        else
+            holder.title.setTypeface(null, Typeface.NORMAL);
 
         holder.title.setText(title);
     }
