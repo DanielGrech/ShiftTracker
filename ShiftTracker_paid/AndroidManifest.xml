@@ -48,8 +48,38 @@
                 <action android:name="com.dgsd.android.ShiftTracker.action.list_app_widget_update" />
             </intent-filter>
 
+            <!-- Handle device time changes -->
+            <intent-filter>
+                <action android:name="android.intent.action.TIME_SET"/>
+                <action android:name="android.intent.action.DATE_CHANGED"/>
+                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
+                <action android:name="android.intent.action.LOCALE_CHANGED"/>
+            </intent-filter>
+
+
             <meta-data android:name="android.appwidget.provider"
                        android:resource="@xml/shift_list_widget_provider"/>
+        </receiver>
+
+        <receiver android:name=".Receiver.NextShiftWidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="com.dgsd.android.ShiftTracker.action.next_shift_app_widget_update" />
+            </intent-filter>
+
+            <!-- Handle device time changes -->
+            <intent-filter>
+                <action android:name="android.intent.action.TIME_SET"/>
+                <action android:name="android.intent.action.DATE_CHANGED"/>
+                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
+                <action android:name="android.intent.action.LOCALE_CHANGED"/>
+            </intent-filter>
+
+            <meta-data android:name="android.appwidget.provider"
+                       android:resource="@xml/next_shift_widget_provider" />
         </receiver>
 
         <!-- Activities -->

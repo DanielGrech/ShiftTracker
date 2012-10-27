@@ -2,6 +2,7 @@ package com.dgsd.android.ShiftTracker;
 
 import android.content.Context;
 import android.preference.*;
+import com.dgsd.android.ShiftTracker.Receiver.NextShiftWidgetProvider;
 import com.dgsd.android.ShiftTracker.Receiver.ShiftListWidgetProvider;
 import com.dgsd.android.ShiftTracker.Service.DbService;
 
@@ -17,16 +18,19 @@ public class StPaidApp extends StApp implements DbService.OnDbEventListener, Set
     @Override
     public void onInsert() {
         ShiftListWidgetProvider.triggerUpdate(StPaidApp.this);
+        NextShiftWidgetProvider.triggerUpdate(StPaidApp.this);
     }
 
     @Override
     public void onDelete() {
         ShiftListWidgetProvider.triggerUpdate(StPaidApp.this);
+        NextShiftWidgetProvider.triggerUpdate(StPaidApp.this);
     }
 
     @Override
     public void onUpdate() {
         ShiftListWidgetProvider.triggerUpdate(StPaidApp.this);
+        NextShiftWidgetProvider.triggerUpdate(StPaidApp.this);
     }
 
     @Override

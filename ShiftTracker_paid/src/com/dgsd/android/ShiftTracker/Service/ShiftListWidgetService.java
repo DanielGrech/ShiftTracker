@@ -19,7 +19,6 @@ import com.dgsd.android.ShiftTracker.BuildConfig;
 import com.dgsd.android.ShiftTracker.EditShiftActivity;
 import com.dgsd.android.ShiftTracker.Model.Shift;
 import com.dgsd.android.ShiftTracker.R;
-import com.dgsd.android.ShiftTracker.StApp;
 import com.dgsd.android.ShiftTracker.Util.Prefs;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
 import com.dgsd.android.ShiftTracker.Util.UIUtils;
@@ -238,10 +237,10 @@ public class ShiftListWidgetService extends RemoteViewsService {
         if(time.weekDay == startWeekday) {
             //Great, no adjustment needed
             return jd;
-        } else if(time.weekDay > startWeekday) {
-            return jd - (time.weekDay - startWeekday);
         } else {
-            return jd + (startWeekday - time.weekDay);
+            while(time.weekDay != startWeekday)
+                time.setJulianDay(jd--);
+            return TimeUtils.getJulianDay(time);
         }
     }
 }

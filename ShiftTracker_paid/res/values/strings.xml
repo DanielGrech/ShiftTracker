@@ -2,7 +2,10 @@
     <string name="loading">Loading</string>
     <string name="no_shifts">No shifts</string>
     <string name="action_update_list_widget">com.dgsd.android.ShiftTracker.action.list_app_widget_update</string>
+    <string name="action_update_next_shift_widget">com.dgsd.android.ShiftTracker.action.next_shift_app_widget_update</string>
     <string name="exporting_data">Exporting Data</string>
+    <string name="this_week">This Week</string>
+    <string name="next_shift">Next Shift</string>
 
 
     <string name="settings_category_data">Data</string>

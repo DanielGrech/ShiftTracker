@@ -63,7 +63,7 @@
             android:textColor="@android:color/white"
             android:textSize="25sp"
             android:textStyle="bold"
-            android:text="@string/app_name"
+            android:text="@string/this_week"
             android:fontFamily="sans-serif-light"
             android:shadowColor="#0dffffff"
             android:shadowRadius="3"
