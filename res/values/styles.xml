@@ -18,7 +18,7 @@
 
 <resources>
 
-    <style name="Theme.shift_tracker" parent="@style/Theme.Sherlock.Light">
+    <style name="Theme.shift_tracker" parent="@style/Holo.Theme.Sherlock.Light">
         <item name="android:windowBackground">@color/window_background</item>
 
         <item name="actionBarItemBackground">@drawable/selectable_background_shift_tracker</item>
@@ -36,6 +36,7 @@
         <item name="android:actionBarStyle">@style/shift_tracker_solid_ActionBar</item>
         <item name="android:panelBackground">@drawable/menu_hardkey_panel_shift_tracker</item>
 
+        <item name="android:autoCompleteTextViewStyle">?android:attr/editTextStyle</item>
 
     </style>
 
@@ -99,7 +100,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/blue</item>
         <item name="android:textSize">15sp</item>
-        <item name="android:paddingLeft">4dip</item>
+        <item name="android:paddingLeft">12dip</item>
         <item name="android:gravity">left|center_vertical</item>
         <item name="android:singleLine">true</item>
         <item name="android:textAllCaps">true</item>
