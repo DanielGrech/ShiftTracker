@@ -1,6 +1,7 @@
 package com.dgsd.android.ShiftTracker;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.format.Time;
@@ -68,6 +69,9 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
             mGoToFragment = DatePickerFragment.newInstance("Go to date..", "Go to date", min, max);
             mGoToFragment.setOnDateSelectedListener(this);
             mGoToFragment.show(getSupportFragmentManager(), null);
+        } else if(item.getItemId() == R.id.get_full_version) {
+            Uri uri = Uri.parse("market://details?id=com.dgsd.android.ShiftTracker");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
         }
 
         return super.onOptionsItemSelected(item);
