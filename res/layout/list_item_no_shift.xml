@@ -21,6 +21,7 @@
         android:paddingLeft="16dip"
         android:background="@drawable/list_item_no_shift_background"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:textSize="18sp"
         android:textColor="?android:attr/textColorSecondary"
         android:text="@string/add_shift"/>
 
