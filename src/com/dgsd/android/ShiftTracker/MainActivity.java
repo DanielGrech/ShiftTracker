@@ -9,6 +9,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.dgsd.android.ShiftTracker.Adapter.WeekPagerAdapter;
 import com.dgsd.android.ShiftTracker.Fragment.DatePickerFragment;
+import com.dgsd.android.ShiftTracker.Util.AppRating;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
 import com.viewpagerindicator.TitlePageIndicator;
 import de.neofonie.mobile.app.android.widget.crouton.Crouton;
@@ -24,6 +25,9 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Show our 'Rate in Market' dialog if needed
+        AppRating.app_launched(this);
 
         final int currentJd = TimeUtils.getCurrentJulianDay();
 
