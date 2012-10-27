@@ -1,10 +1,12 @@
 package com.dgsd.android.ShiftTracker;
 
+import android.app.backup.BackupManager;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
@@ -14,6 +16,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.dgsd.android.ShiftTracker.Util.DiagnosticUtils;
 import com.dgsd.android.ShiftTracker.Util.IntentUtils;
 import com.dgsd.android.ShiftTracker.Util.Prefs;
+import com.dgsd.android.ShiftTracker.View.ListPreference;
 
 import java.text.NumberFormat;
 
@@ -23,7 +26,7 @@ import java.text.NumberFormat;
  */
 public class SettingsActivity extends SherlockPreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private ListPreference mWeekStartDayPref;
+    private Preference mWeekStartDayPref;
     private Preference mStartTimePref;
     private Preference mEndTimePref;
     private Preference mBreakDurationPref;
@@ -31,9 +34,18 @@ public class SettingsActivity extends SherlockPreferenceActivity implements Shar
 
     private Prefs mPrefs;
 
+    private BackupManager mBackupManager;
+
+    /**
+     * Give each application a chance to set some custom preferences of their own
+     */
+    private static OnCreateSettingsListener mOnCreateSettingsListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mBackupManager = new BackupManager(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.settings);
@@ -50,17 +62,21 @@ public class SettingsActivity extends SherlockPreferenceActivity implements Shar
         Preference p = prefMgr.findPreference(getString(R.string.settings_key_version));
         p.setSummary(DiagnosticUtils.getApplicationVersionString(this));
 
-        mWeekStartDayPref = (ListPreference) prefMgr.findPreference(getString(R.string.settings_key_start_day));
+        mWeekStartDayPref = prefMgr.findPreference(getString(R.string.settings_key_start_day));
         mStartTimePref = prefMgr.findPreference(getString(R.string.settings_key_default_start_time));
         mEndTimePref = prefMgr.findPreference(getString(R.string.settings_key_default_end_time));
         mBreakDurationPref = prefMgr.findPreference(getString(R.string.settings_key_default_break_duration));
         mPayratePref = prefMgr.findPreference(getString(R.string.settings_key_default_pay_rate));
+
+        if(mOnCreateSettingsListener != null)
+            mOnCreateSettingsListener.onSettingsCreated(this, prefMgr, getPreferenceScreen());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mWeekStartDayPref.setSummary(mWeekStartDayPref.getEntry());
+
+        mWeekStartDayPref.setSummary(getListPreferenceEntry(mWeekStartDayPref));
 
         String breakDuration = mPrefs.get(getString(R.string.settings_key_default_break_duration), null);
         if(!TextUtils.isEmpty(breakDuration))
@@ -123,7 +139,7 @@ public class SettingsActivity extends SherlockPreferenceActivity implements Shar
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         if(TextUtils.equals(key, getString(R.string.settings_key_start_day))) {
-            mWeekStartDayPref.setSummary(mWeekStartDayPref.getEntry());
+            mWeekStartDayPref.setSummary(getListPreferenceEntry(mWeekStartDayPref));
         } else if(TextUtils.equals(key, getString(R.string.settings_key_default_break_duration))) {
             String val = mPrefs.get(key, null);
             if(TextUtils.isEmpty(val)) {
@@ -143,5 +159,24 @@ public class SettingsActivity extends SherlockPreferenceActivity implements Shar
         } else if(TextUtils.equals(key, getString(R.string.settings_key_default_end_time))) {
             setTimePreference(mEndTimePref, mPrefs.get(key, 0L));
         }
+
+        mBackupManager.dataChanged();
+    }
+
+    private CharSequence getListPreferenceEntry(Preference p) {
+        if(p instanceof ListPreference)
+            return ((ListPreference) p).getEntry();
+        else if(p instanceof android.preference.ListPreference)
+            return ((android.preference.ListPreference) p).getEntry();
+        else
+            return null;
+    }
+
+    public static void setOnCreateSettingsListener(OnCreateSettingsListener listener) {
+        mOnCreateSettingsListener = listener;
+    }
+
+    public static interface OnCreateSettingsListener {
+        public void onSettingsCreated(PreferenceActivity activity, PreferenceManager prefsManager, PreferenceScreen screen);
     }
 }

@@ -2,4 +2,11 @@
     <string name="loading">Loading</string>
     <string name="no_shifts">No shifts</string>
     <string name="action_update_list_widget">com.dgsd.android.ShiftTracker.action.list_app_widget_update</string>
+    <string name="exporting_data">Exporting Data</string>
+
+
+    <string name="settings_category_data">Data</string>
+    <string name="settings_key_export">export</string>
+    <string name="settings_title_export">Export</string>
+    <string name="settings_summary_export">Export all your data to a csv file</string>
 </resources>

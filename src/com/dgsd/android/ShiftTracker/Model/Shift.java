@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import com.dgsd.android.ShiftTracker.Data.DbField;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
 
@@ -107,6 +108,43 @@ public class Shift implements Parcelable {
         values.put(DbField.IS_TEMPLATE.name, isTemplate ? 1 : 0);
 
         return values;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Shift shift = (Shift) o;
+
+        if (breakDuration != shift.breakDuration)
+            return false;
+        if (endTime != shift.endTime)
+            return false;
+        if (julianDay != shift.julianDay)
+            return false;
+        if (Float.compare(shift.payRate, payRate) != 0)
+            return false;
+        if (startTime != shift.startTime)
+            return false;
+        if (!TextUtils.equals(name, shift.name))
+            return false;
+        if (!TextUtils.equals(note, shift.note))
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (note != null ? note.hashCode() : 0);
+        result = 31 * result + (int) (startTime ^ (startTime >>> 32));
+        result = 31 * result + (int) (endTime ^ (endTime >>> 32));
+        result = 31 * result + julianDay;
+        result = 31 * result + (payRate != +0.0f ? Float.floatToIntBits(payRate) : 0);
+        result = 31 * result + breakDuration;
+        return result;
     }
 
     @Override

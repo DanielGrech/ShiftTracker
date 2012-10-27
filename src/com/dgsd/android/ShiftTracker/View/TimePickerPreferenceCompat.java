@@ -6,14 +6,14 @@ import android.text.format.Time;
 import android.util.AttributeSet;
 import android.view.ContextThemeWrapper;
 import android.view.View;
-import android.widget.TimePicker;
+import com.WazaBe.HoloEverywhere.widget.TimePicker;
 import com.dgsd.android.ShiftTracker.R;
 
 /**
  * A preference type that allows a user to choose a time
 
  */
-public class TimePickerPreference extends android.preference.DialogPreference implements
+public class TimePickerPreferenceCompat extends DialogPreference implements
         TimePicker.OnTimeChangedListener {
 
     private long mCurrentValue;
@@ -26,7 +26,7 @@ public class TimePickerPreference extends android.preference.DialogPreference im
      * @param context
      * @param attrs
      */
-    public TimePickerPreference(Context context, AttributeSet attrs) {
+    public TimePickerPreferenceCompat(Context context, AttributeSet attrs) {
         super(new ContextThemeWrapper(context, R.style.Holo_Theme_Dialog_Alert_Light), attrs);
         initialize();
     }
@@ -36,8 +36,8 @@ public class TimePickerPreference extends android.preference.DialogPreference im
      * @param attrs
      * @param defStyle
      */
-    public TimePickerPreference(Context context, AttributeSet attrs,
-                                int defStyle) {
+    public TimePickerPreferenceCompat(Context context, AttributeSet attrs,
+                                      int defStyle) {
         super(context, attrs, defStyle);
         initialize();
     }
