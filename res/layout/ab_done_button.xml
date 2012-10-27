@@ -15,7 +15,7 @@
   -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="?android:actionButtonStyle"
+    style="?actionButtonStyle"
     android:id="@+id/actionbar_done"
     android:layout_width="0dp"
     android:layout_height="match_parent"
