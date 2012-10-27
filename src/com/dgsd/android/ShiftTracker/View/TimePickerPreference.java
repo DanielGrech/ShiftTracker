@@ -8,8 +8,6 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TimePicker;
 
-import java.util.TimeZone;
-
 /**
  * A preference type that allows a user to choose a time
 
@@ -68,6 +66,11 @@ public class TimePickerPreference extends DialogPreference implements
         if (h >= 0 && m >= 0) {
             mTimePicker.setCurrentHour(h);
             mTimePicker.setCurrentMinute(m);
+
+            mTime.hour = h;
+            mTime.minute = m;
+            mTime.normalize(true);
+            mCurrentValue = mTime.toMillis(true);
         }
 
         return mTimePicker;
