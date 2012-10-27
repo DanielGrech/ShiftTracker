@@ -33,6 +33,12 @@
     <string name="create_new">Create New</string>
     <string name="shift_templates">Shift Templates</string>
     <string name="no_templates">No templates saved</string>
+    <string name="month">Month</string>
+    <string name="three_months">3 Months</string>
+    <string name="six_months">6 Months</string>
+    <string name="nine_months">9 Months</string>
+    <string name="year">Year</string>
+    <string name="hour_and_income_summary">Income earned and hours worked over the past:</string>
 
     <!-- Settings -->
     <string name="settings_category_display">Display</string>

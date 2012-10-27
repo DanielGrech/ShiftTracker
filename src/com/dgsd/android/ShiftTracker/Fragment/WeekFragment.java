@@ -12,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.dgsd.android.ShiftTracker.Adapter.TemplateAdapter;
 import com.dgsd.android.ShiftTracker.Adapter.WeekAdapter;
 import com.dgsd.android.ShiftTracker.Data.DbField;
 import com.dgsd.android.ShiftTracker.Data.Provider;
@@ -30,7 +29,9 @@ import de.neofonie.mobile.app.android.widget.crouton.Style;
 
 import java.text.NumberFormat;
 
-public class WeekFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<Cursor>,AdapterView.OnItemClickListener {
+import static com.dgsd.android.ShiftTracker.Fragment.HoursAndIncomeSummaryFragment.PayAndDuration;
+
+public class WeekFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
     private static final String KEY_JD = "_julian_day";
     private static final String BLANK_TOTAL_TEXT = "0 Hrs";
 
@@ -44,6 +45,7 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
     private ViewGroup mStatsWrapper;
 
     private TemplateListFragment mTemplateList;
+    private HoursAndIncomeSummaryFragment mHoursAndIncomeFragment;
 
     private int mStartJulianDay = -1;
 
@@ -87,6 +89,16 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
         mTotalText = (TextView) v.findViewById(R.id.total_text);
 
         mStatsWrapper = (ViewGroup) v.findViewById(R.id.stats_wrapper);
+        mStatsWrapper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mHoursAndIncomeFragment != null && mHoursAndIncomeFragment.isResumed())
+                    return; //Already showing!
+
+                mHoursAndIncomeFragment = HoursAndIncomeSummaryFragment.newInstance(mStartJulianDay + 6);
+                mHoursAndIncomeFragment.show(getSherlockActivity().getSupportFragmentManager(), null);
+            }
+        });
         return v;
     }
 
@@ -135,17 +147,10 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
                 break;
             case LOADER_ID_TOTAL:
                 if((mShowHoursPref || mShowIncomePref) && cursor != null && cursor.moveToFirst()) {
-                    float pay = 0.0f;
-                    long mins = 0;
-                    do {
-                        Shift shift = Shift.fromCursor(cursor);
+                    PayAndDuration pad = PayAndDuration.from(cursor);
 
-                        pay += shift.getIncome();
-                        mins += shift.getDurationInMinutes();
-                    } while(cursor.moveToNext());
-
-                    String payText = mShowIncomePref && pay > 0 ? NumberFormat.getCurrencyInstance().format(pay) : null;
-                    String hoursText = mShowHoursPref ? UIUtils.getDurationAsHours(mins) + " Hrs" : null;
+                    String payText = mShowIncomePref && pad.pay > 0 ? NumberFormat.getCurrencyInstance().format(pad.pay) : null;
+                    String hoursText = mShowHoursPref ? UIUtils.getDurationAsHours(pad.mins) + " Hrs" : null;
 
                     if(TextUtils.isEmpty(payText)) {
                         if(TextUtils.isEmpty(hoursText)) {
