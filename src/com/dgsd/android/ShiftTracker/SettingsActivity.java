@@ -1,7 +1,9 @@
 package com.dgsd.android.ShiftTracker;
 
 import android.app.backup.BackupManager;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -67,6 +69,15 @@ public class SettingsActivity extends SherlockPreferenceActivity implements Shar
         mEndTimePref = prefMgr.findPreference(getString(R.string.settings_key_default_end_time));
         mBreakDurationPref = prefMgr.findPreference(getString(R.string.settings_key_default_break_duration));
         mPayratePref = prefMgr.findPreference(getString(R.string.settings_key_default_pay_rate));
+
+        prefMgr.findPreference(getString(R.string.settings_key_rate)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Uri uri = Uri.parse("market://details?id=" + DiagnosticUtils.getApplicationPackage(SettingsActivity.this)) ;
+                startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                return true;
+            }
+        });
 
         if(mOnCreateSettingsListener != null)
             mOnCreateSettingsListener.onSettingsCreated(this, prefMgr, getPreferenceScreen());
