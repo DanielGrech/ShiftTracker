@@ -81,9 +81,9 @@ public class TemplateAdapter extends SimpleCursorAdapter implements SimpleCursor
             flags |= DateUtils.FORMAT_24HOUR;
 
         mStringBuilder.setLength(0);
-        time = DateUtils.formatDateRange(mContext, mFormatter, shift.startTime, shift.endTime, flags).toString();
+        time = DateUtils.formatDateRange(mContext, mFormatter, shift.getStartTime(), shift.getEndTime(), flags).toString();
 
-        time += " (" + UIUtils.getDurationAsHours(shift.getDurationInMinutes()) + " Hrs)";
+        time += " (" + UIUtils.getDurationAsHours(shift.getDurationInMinutes()) + ")";
 
         mIdToTimeArray.put( (int) shift.id, time);
         return time;

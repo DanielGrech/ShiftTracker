@@ -218,8 +218,8 @@ public class ShiftListWidgetService extends RemoteViewsService {
                 flags |= DateUtils.FORMAT_24HOUR;
 
             mStringBuilder.setLength(0);
-            String time = DateUtils.formatDateRange(mContext, mFormatter, shift.startTime, shift.endTime, flags).toString();
-            time += " (" + UIUtils.getDurationAsHours(shift.getDurationInMinutes()) + " Hrs)";
+            String time = DateUtils.formatDateRange(mContext, mFormatter, shift.getStartTime(), shift.getEndTime(), flags).toString();
+            time += " (" + UIUtils.getDurationAsHours(shift.getDurationInMinutes()) + ")";
             return time;
         }
 

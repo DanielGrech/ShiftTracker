@@ -21,13 +21,25 @@ public class UIUtils {
     }
 
     public static String getDurationAsHours(long minutes) {
+        String text = null;
         if(minutes < 60) {
-            return ((minutes < 10) ? "0:0" : "0:") + minutes;
+            if(minutes < 10)
+                text = "0" + minutes;
+            else
+                text = "" + minutes;
+
+            return text + "m";
         }
 
-        final int hours = (int) Math.floor(minutes / 60);
+        text = (int) Math.floor(minutes / 60) + "h";
 
         final long mins = minutes % 60;
-        return hours + (mins < 10 ? ":0" : ":")  + mins;
+
+        if(mins > 0 && mins < 10)
+            text += " 0" + mins + "m";
+        else if(mins >= 10)
+            text += " " + mins + "m";
+
+        return text;
     }
 }

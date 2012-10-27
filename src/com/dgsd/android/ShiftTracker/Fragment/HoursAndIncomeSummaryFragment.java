@@ -152,7 +152,7 @@ public class HoursAndIncomeSummaryFragment extends SherlockDialogFragment implem
             return;
 
         String payText = NumberFormat.getCurrencyInstance().format(pad.pay);
-        String hoursText = UIUtils.getDurationAsHours(pad.mins) + " Hrs";
+        String hoursText = UIUtils.getDurationAsHours(pad.mins);
 
         view.setText(payText + "\n" + hoursText);
     }

@@ -33,7 +33,7 @@ import static com.dgsd.android.ShiftTracker.Fragment.HoursAndIncomeSummaryFragme
 
 public class WeekFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
     private static final String KEY_JD = "_julian_day";
-    private static final String BLANK_TOTAL_TEXT = "0 Hrs";
+    private static final String BLANK_TOTAL_TEXT = "0h";
 
     private static final int LOADER_ID_SHIFTS = 0x01;
     private static final int LOADER_ID_TOTAL = 0x02;
@@ -159,7 +159,7 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
                     PayAndDuration pad = PayAndDuration.from(cursor);
 
                     String payText = mShowIncomePref && pad.pay > 0 ? NumberFormat.getCurrencyInstance().format(pad.pay) : null;
-                    String hoursText = mShowHoursPref ? UIUtils.getDurationAsHours(pad.mins) + " Hrs" : null;
+                    String hoursText = mShowHoursPref ? UIUtils.getDurationAsHours(pad.mins): null;
 
                     if(TextUtils.isEmpty(payText)) {
                         if(TextUtils.isEmpty(hoursText)) {
