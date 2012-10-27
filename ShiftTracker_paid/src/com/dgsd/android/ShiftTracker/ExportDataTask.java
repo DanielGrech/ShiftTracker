@@ -84,8 +84,8 @@ public class ExportDataTask extends AsyncTask<Void, Integer, String> {
                 String[] values = {
                     shift.name,
                     shift.note,
-                    shift.startTime == -1 ? null : String.valueOf(shift.startTime),
-                    shift.endTime == -1 ? null : String.valueOf(shift.endTime),
+                    shift.getStartTime() == -1 ? null : String.valueOf(shift.getStartTime()),
+                    shift.getEndTime() == -1 ? null : String.valueOf(shift.getEndTime()),
                     shift.julianDay == -1 ? null : String.valueOf(shift.julianDay),
                     shift.payRate == -1 ? null : String.valueOf(shift.payRate),
                     shift.breakDuration == -1 ? null : String.valueOf(shift.breakDuration)

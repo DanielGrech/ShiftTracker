@@ -12,12 +12,13 @@ public class Shift implements Parcelable {
     public long id;
     public String name;
     public String note;
-    public long startTime;
-    public long endTime;
+    private long startTime;
+    private long endTime;
     public int julianDay;
     public float payRate;
     public int breakDuration;
     public boolean isTemplate;
+    public int reminder;
 
     public Shift() {
         id = -1;
@@ -29,6 +30,7 @@ public class Shift implements Parcelable {
         payRate = -1;
         breakDuration = -1;
         isTemplate = false;
+        reminder = -1;
     }
 
     public static Shift fromParcel(Parcel in) {
@@ -43,6 +45,7 @@ public class Shift implements Parcelable {
         s.payRate = in.readFloat();
         s.breakDuration = in.readInt();
         s.isTemplate = in.readInt() == 1;
+        s.reminder = in.readInt();
 
         return s;
     }
@@ -92,6 +95,35 @@ public class Shift implements Parcelable {
         return duration / TimeUtils.InMillis.MINUTE;
     }
 
+    public long getReminderTime() {
+        if(reminder == -1)
+            return -1;
+
+        return getStartTime() - (reminder * TimeUtils.InMillis.MINUTE);
+    }
+
+    public long getStartTime() {
+        if(julianDay == -1 || startTime == -1)
+            return -1;
+        else
+            return TimeUtils.getMillisFrom(julianDay, startTime);
+    }
+
+    public void setStartTime(long timeOfDay) {
+        startTime = TimeUtils.getMillisFrom(julianDay, timeOfDay);
+    }
+
+    public long getEndTime() {
+        if(julianDay == -1 || endTime == -1)
+            return -1;
+        else
+            return TimeUtils.getMillisFrom(julianDay, endTime);
+    }
+
+    public void setEndTime(long timeOfDay) {
+        endTime = TimeUtils.getMillisFrom(julianDay, timeOfDay);
+    }
+
     public ContentValues toContentValues() {
         ContentValues values = new ContentValues();
 
@@ -106,6 +138,7 @@ public class Shift implements Parcelable {
         values.put(DbField.NOTE.name, note);
         values.put(DbField.BREAK_DURATION.name, breakDuration);
         values.put(DbField.IS_TEMPLATE.name, isTemplate ? 1 : 0);
+        values.put(DbField.REMINDER.name, reminder);
 
         return values;
     }
@@ -163,6 +196,7 @@ public class Shift implements Parcelable {
         dest.writeFloat(payRate);
         dest.writeInt(breakDuration);
         dest.writeInt(isTemplate ? 1 : 0);
+        dest.writeInt(reminder);
     }
 
     public static final Creator<Shift> CREATOR = new Creator<Shift>() {
