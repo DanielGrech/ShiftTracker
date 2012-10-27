@@ -10,6 +10,7 @@ import android.text.format.Time;
 import com.dgsd.android.ShiftTracker.Const;
 import com.dgsd.android.ShiftTracker.Fragment.WeekFragment;
 import com.dgsd.android.ShiftTracker.R;
+import com.dgsd.android.ShiftTracker.Util.TimeUtils;
 
 import java.util.Formatter;
 import java.util.HashMap;
@@ -38,10 +39,9 @@ public class WeekPagerAdapter extends FragmentStatePagerAdapter {
         mFormatter = new Formatter(mStringBuilder);
 
         SharedPreferences p = context.getSharedPreferences(Const.SHARED_PREFS_NAME, Context.MODE_PRIVATE);
-        String startDayAsStr = p.getString(context.getString(R.string.settings_key_start_day), "0");
+        String startDayAsStr = p.getString(context.getString(R.string.settings_key_start_day), "1");
         mWeekStartDay = Integer.valueOf(startDayAsStr);
 
-        //TODO: This assumes week starts on Monday. Should be configurable
         mCenterJulianDay = adjustJulianDay(mWeekStartDay, weekContainingJulianDay);
     }
 
@@ -115,11 +115,10 @@ public class WeekPagerAdapter extends FragmentStatePagerAdapter {
         if(mTime.weekDay == startWeekday) {
             //Great, no adjustment needed
             return jd;
-        } else if(mTime.weekDay > startWeekday) {
-            return jd - (mTime.weekDay - startWeekday);
         } else {
-            return jd + (startWeekday - mTime.weekDay);
+            while(mTime.weekDay != startWeekday)
+                mTime.setJulianDay(jd--);
+            return TimeUtils.getJulianDay(mTime);
         }
     }
-
 }
