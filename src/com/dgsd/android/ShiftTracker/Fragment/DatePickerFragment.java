@@ -5,13 +5,15 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.format.Time;
 import android.widget.DatePicker;
+import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.dgsd.android.ShiftTracker.Util.Api;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
 
-public class DatePickerFragment extends SherlockDialogFragment {
+public class DatePickerFragment extends SherlockDialogFragment implements DatePickerDialog.OnDateSetListener {
     private static final String KEY_DATE = "_date";
     private static final String KEY_MIN_DATE = "_min";
     private static final String KEY_MAX_DATE = "_max";
@@ -23,6 +25,9 @@ public class DatePickerFragment extends SherlockDialogFragment {
     private long mMaxDate = Long.MAX_VALUE;
     private String mTitle;
     private String mPositiveBtnText;
+    private Time mTime = new Time();
+
+    private int mLastSelectedJd;
 
     private OnDateSelectedListener mOnDateSelectedListener;
 
@@ -67,43 +72,59 @@ public class DatePickerFragment extends SherlockDialogFragment {
         else
             time.setJulianDay(mDate);
 
-        DatePickerDialog dpd = new DatePickerDialog(getActivity(), null, time.year, time.month, time.monthDay);
+
+        mLastSelectedJd = TimeUtils.getJulianDay(time);
+        final DatePickerDialog dpd = new DatePickerDialog(getActivity(), this, time.year, time.month, time.monthDay);
         dpd.setTitle(mTitle);
 
-        final DatePicker dp = dpd.getDatePicker();
-        dp.setMaxDate(mMaxDate);
-        dp.setMinDate(mMinDate);
-        if(Api.isMin(Api.HONEYCOMB))
+        if(Api.isMin(Api.HONEYCOMB)) {
+            final DatePicker dp = dpd.getDatePicker();
+            dp.setMaxDate(mMaxDate);
+            dp.setMinDate(mMinDate);
             dp.setCalendarViewShown(false);
-
-        dpd.setButton(DialogInterface.BUTTON_POSITIVE, mPositiveBtnText, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(mOnDateSelectedListener != null) {
-                    time.year = dp.getYear();
-                    time.month = dp.getMonth();
-                    time.monthDay = dp.getDayOfMonth();
-                    time.normalize(true);
-
-                    mOnDateSelectedListener.onDateSelected(TimeUtils.getJulianDay(time));
-                }
-
-                dismiss();
-            }
-        });
-
-        dpd.setButton(DialogInterface.BUTTON_NEGATIVE, getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dismiss();
-            }
-        });
+        }
 
         return dpd;
     }
 
     public void setOnDateSelectedListener(OnDateSelectedListener listener) {
         this.mOnDateSelectedListener = listener;
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int monthDay) {
+        //If we're below honeycomb, need to validate the date input
+        if(!Api.isMin(Api.HONEYCOMB)) {
+            String error = null;
+            mTime.set(mMinDate);
+            if(mTime.year > year ||
+                (mTime.year >= year && mTime.month > month) ||
+                    (mTime.year >= year && mTime.month >= month && mTime.monthDay > monthDay)) {
+                datePicker.updateDate(mTime.year, mTime.month, mTime.monthDay);
+                error = "Date selected is to far in the past";
+            }
+
+            mTime.set(mMaxDate);
+            if(mTime.year < year ||
+                (mTime.year <= year && mTime.month < month) ||
+                    (mTime.year <= year && mTime.month <= month && mTime.monthDay < monthDay)) {
+                datePicker.updateDate(mTime.year, mTime.month, mTime.monthDay);
+                error = "Date selected is to far in the future";
+            }
+
+            if(!TextUtils.isEmpty(error) && getActivity() != null) {
+                Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if(mOnDateSelectedListener != null) {
+            mTime.year = datePicker.getYear();
+            mTime.month = datePicker.getMonth();
+            mTime.monthDay = datePicker.getDayOfMonth();
+            mTime.normalize(true);
+
+            mOnDateSelectedListener.onDateSelected(TimeUtils.getJulianDay(mTime));
+        }
     }
 
     public static interface OnDateSelectedListener {
