@@ -46,6 +46,7 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
 
     private TemplateListFragment mTemplateList;
     private HoursAndIncomeSummaryFragment mHoursAndIncomeFragment;
+    private LinkToPaidAppFragment mLinkToPaidAppFragment;
 
     private int mStartJulianDay = -1;
 
@@ -92,11 +93,19 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
         mStatsWrapper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mHoursAndIncomeFragment != null && mHoursAndIncomeFragment.isResumed())
-                    return; //Already showing!
+                if(getActivity().getPackageName().equals("com.dgsd.android.ShiftTrackerFree")) {
+                    if(mLinkToPaidAppFragment != null && mLinkToPaidAppFragment.isResumed())
+                        return; //Already showing
 
-                mHoursAndIncomeFragment = HoursAndIncomeSummaryFragment.newInstance(mStartJulianDay + 6);
-                mHoursAndIncomeFragment.show(getSherlockActivity().getSupportFragmentManager(), null);
+                    mLinkToPaidAppFragment = LinkToPaidAppFragment.newInstance();
+                    mLinkToPaidAppFragment.show(getSherlockActivity().getSupportFragmentManager(), null);
+                } else {
+                    if(mHoursAndIncomeFragment != null && mHoursAndIncomeFragment.isResumed())
+                        return; //Already showing!
+
+                    mHoursAndIncomeFragment = HoursAndIncomeSummaryFragment.newInstance(mStartJulianDay + 6);
+                    mHoursAndIncomeFragment.show(getSherlockActivity().getSupportFragmentManager(), null);
+                }
             }
         });
         return v;
