@@ -25,6 +25,10 @@
             android:multiprocess="false"
             android:name=".Data.Provider"/>
 
+        <provider
+            android:authorities="com.dgsd.android.ShiftTracker.Data.Provider.internal_file_provider"
+            android:name=".Data.InternalFileProvider" />
+
         <!-- Services -->
         <service android:name=".Service.DbService" />
 
