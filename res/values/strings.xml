@@ -41,7 +41,7 @@
     <string name="hour_and_income_summary">Income earned and hours worked over the past:</string>
     <string name="get_full_version">Get full version</string>
     <string name="feature_unavailable">Feature Unavailable</string>
-    <string name="summary_unavailable_message">View a summary of your earnings over different time spans. Only available in the full version of this app</string>
+    <string name="summary_unavailable_message">View a summary of your earnings over different time spans.\nThis, as well as other great features are only available in the full version of this app</string>
 
     <!-- Settings -->
     <string name="settings_category_display">Display</string>
