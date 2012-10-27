@@ -12,6 +12,8 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.dgsd.android.ShiftTracker.Util.Api;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
+import de.neofonie.mobile.app.android.widget.crouton.Crouton;
+import de.neofonie.mobile.app.android.widget.crouton.Style;
 
 public class DatePickerFragment extends SherlockDialogFragment implements DatePickerDialog.OnDateSetListener {
     private static final String KEY_DATE = "_date";
@@ -113,7 +115,7 @@ public class DatePickerFragment extends SherlockDialogFragment implements DatePi
             }
 
             if(!TextUtils.isEmpty(error) && getActivity() != null) {
-                Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+                Crouton.showText(getActivity(), error, Style.INFO);
             }
         }
 
