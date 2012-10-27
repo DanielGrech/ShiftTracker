@@ -12,6 +12,8 @@ public class Db extends SQLiteOpenHelper {
 
     private static Db mInstance;
 
+    public static final Object[] LOCK = new Object[0];
+
     public static Db getInstance(Context c) {
         if(mInstance == null)
             mInstance = new Db(c);
@@ -31,6 +33,20 @@ public class Db extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(DbTable.SHIFTS.dropSql());
+    }
+
+    @Override
+    public SQLiteDatabase getReadableDatabase() {
+        synchronized (LOCK) {
+            return super.getReadableDatabase();
+        }
+    }
+
+    @Override
+    public SQLiteDatabase getWritableDatabase() {
+        synchronized (LOCK) {
+            return super.getWritableDatabase();
+        }
     }
 }
 

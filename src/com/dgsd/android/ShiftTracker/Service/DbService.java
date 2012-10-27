@@ -1,6 +1,7 @@
 package com.dgsd.android.ShiftTracker.Service;
 
 import android.app.IntentService;
+import android.app.backup.BackupManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +22,8 @@ public class DbService extends IntentService {
 
 	public static final String EXTRA_REQUEST_TYPE = "com.dgsd.android.ShiftTracker.extra._request_type_id";
 
+    private static OnDbEventListener mOnDbEventListener;
+
 	public DbService() {
 		super(TAG);
 	}
@@ -35,6 +38,9 @@ public class DbService extends IntentService {
 					final Uri uri = inIntent.getParcelableExtra(EXTRA_URI);
                     final String sel = inIntent.getStringExtra(EXTRA_SELECTION);
                     ProviderUtils.doDelete(this, uri, sel);
+
+                    if(mOnDbEventListener != null)
+                        mOnDbEventListener.onDelete();
 					break;
 				}
 
@@ -44,6 +50,9 @@ public class DbService extends IntentService {
                     final String sel = inIntent.getStringExtra(EXTRA_SELECTION);
                     ProviderUtils.doUpdate(this, uri, values, sel, null);
 
+                    if(mOnDbEventListener != null)
+                        mOnDbEventListener.onUpdate();
+
 					break;
 				}
 
@@ -52,9 +61,14 @@ public class DbService extends IntentService {
 					final ContentValues values = inIntent.getParcelableExtra(EXTRA_CONTENT_VALUES);
                     ProviderUtils.doInsert(this, uri, values);
 
+                    if(mOnDbEventListener != null)
+                        mOnDbEventListener.onInsert();
+
 					break;
 				}
 			}
+
+            new BackupManager(this).dataChanged();
 		} catch (Exception e) {
 			if(BuildConfig.DEBUG)
 				Log.e(TAG, "Error in DbService", e);
@@ -89,10 +103,20 @@ public class DbService extends IntentService {
         c.startService(intent);
     }
 
+    public static void setOnDbEventListener(OnDbEventListener listener) {
+        mOnDbEventListener = listener;
+    }
+
 	public static final class RequestType {
 		public static final int INSERT = 0x101;
 		public static final int DELETE = 0x202;
 		public static final int UPDATE = 0x303;
 	}
+
+    public static interface OnDbEventListener {
+        public void onInsert();
+        public void onDelete();
+        public void onUpdate();
+    }
 
 }
