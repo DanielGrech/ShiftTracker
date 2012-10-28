@@ -46,7 +46,6 @@
         </activity>
 
         <activity android:name="com.dgsd.android.ShiftTracker.MainActivity"/>
-        <activity android:name="com.dgsd.android.ShiftTracker.AllInOneActivity"/>
         <activity android:name="com.dgsd.android.ShiftTracker.LicensesActivity" />
         <activity android:name="com.dgsd.android.ShiftTracker.SettingsActivity"/>
         <activity android:name="com.dgsd.android.ShiftTracker.EditShiftActivity" android:windowSoftInputMode="stateHidden"/>
