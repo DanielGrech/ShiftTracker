@@ -19,19 +19,6 @@ public class StartupActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final Intent intent;
-
-        ComponentName allInOne = new ComponentName(this, AllInOneActivity.class);
-        ComponentName main = new ComponentName(this, MainActivity.class);
-
-        if (DiagnosticUtils.isTablet(this)) {
-            intent = new Intent(this, AllInOneActivity.class);
-            getPackageManager().setComponentEnabledSetting(main, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-        } else {
-            intent = new Intent(this, MainActivity.class);
-            getPackageManager().setComponentEnabledSetting(allInOne, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-        }
-
         //If we're using the paid app, we want to import data from free app on first run
         if (!StApp.isFreeApp(this)) {
             Prefs p = Prefs.getInstance(this);
@@ -45,6 +32,7 @@ public class StartupActivity extends Activity {
         }
 
         //Pass on any extras we've already received
+        final Intent intent = new Intent(this, MainActivity.class);
         intent.putExtras(getIntent());
 
         //Make our choice!

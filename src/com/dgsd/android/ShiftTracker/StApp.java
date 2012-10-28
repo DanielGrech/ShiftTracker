@@ -14,11 +14,7 @@ import com.dgsd.android.ShiftTracker.Util.DiagnosticUtils;
  */
 public class StApp extends Application {
     public static Class getHomeClass(Context c) {
-        //if(DiagnosticUtils.isTable(c) ...
-        if(DiagnosticUtils.isTablet(c))
-            return AllInOneActivity.class;
-        else
-            return MainActivity.class;
+        return MainActivity.class;
     }
 
     public static boolean isFreeApp(Context context) {
