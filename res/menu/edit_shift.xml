@@ -5,4 +5,9 @@
         android:id="@+id/delete"
         android:showAsAction="never"
         android:title="@string/delete" />
+
+    <item
+        android:id="@+id/export_to_calendar"
+        android:showAsAction="never"
+        android:title="@string/export_to_calendar" />
 </menu>

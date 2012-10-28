@@ -176,8 +176,6 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
             }
         });
 
-        prepopulate();
-
         return v;
     }
 
@@ -188,6 +186,8 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
             getLoaderManager().initLoader(LOADER_ID_SHIFT, null, this);
 
         getLoaderManager().initLoader(LOADER_ID_NAMES, null, this);
+
+        prepopulate();
     }
 
     @Override
@@ -274,6 +274,7 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
                 }
             }
 
+            getActivity().invalidateOptionsMenu();
         } else {
             //No initial shift, just set up our date/time values
             onDateSelected(mInitialJulianDay < 0 ? TimeUtils.getCurrentJulianDay() : mInitialJulianDay);

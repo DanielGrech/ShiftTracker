@@ -3,7 +3,9 @@ package com.dgsd.android.ShiftTracker;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -19,12 +21,15 @@ import com.dgsd.android.ShiftTracker.Fragment.EditShiftFragment;
 import com.dgsd.android.ShiftTracker.Model.Shift;
 import com.dgsd.android.ShiftTracker.Service.DbService;
 import com.dgsd.android.ShiftTracker.Util.AlarmUtils;
+import com.dgsd.android.ShiftTracker.Util.Api;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
 import de.neofonie.mobile.app.android.widget.crouton.Crouton;
 import de.neofonie.mobile.app.android.widget.crouton.Style;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+
+import static android.provider.CalendarContract.Events;
 
 public class EditShiftActivity extends SherlockFragmentActivity {
     private static final String KEY_FRAGMENT = "_key_fragment";
@@ -77,6 +82,17 @@ public class EditShiftActivity extends SherlockFragmentActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem exportItem = menu.findItem(R.id.export_to_calendar);
+
+        boolean enabled = Api.isMin(Api.ICS) && mEditShiftFragment != null && mEditShiftFragment.isEditing();
+        exportItem.setEnabled(enabled);
+        exportItem.setVisible(enabled);
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.delete) {
             if(mEditShiftFragment.isEditing()) {
@@ -86,6 +102,22 @@ public class EditShiftActivity extends SherlockFragmentActivity {
             }
 
             finish();
+            return true;
+        } else if(item.getItemId() == R.id.export_to_calendar) {
+            final Shift shift = mEditShiftFragment == null ? null : mEditShiftFragment.getShift();
+            if(!Api.isMin(Api.ICS) || shift == null)
+                return true;
+
+            Intent intent = new Intent(Intent.ACTION_INSERT);
+            intent.setData(Events.CONTENT_URI);
+            intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, shift.getStartTime());
+            intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, shift.getEndTime());
+            intent.putExtra(Events.TITLE, shift.name);
+            intent.putExtra(Events.DESCRIPTION, shift.note);
+            intent.putExtra(Events.AVAILABILITY, Events.AVAILABILITY_BUSY);
+
+            startActivity(intent);
+
             return true;
         } else {
             return super.onOptionsItemSelected(item);
