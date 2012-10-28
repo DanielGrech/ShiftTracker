@@ -17,7 +17,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ListAdapter;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import com.WazaBe.HoloEverywhere.ArrayAdapter;
 import com.WazaBe.HoloEverywhere.widget.Spinner;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.dgsd.android.ShiftTracker.Data.DbField;
@@ -29,8 +32,6 @@ import com.dgsd.android.ShiftTracker.Util.Prefs;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
 import com.dgsd.android.ShiftTracker.View.StatefulAutoCompleteTextView;
 import com.dgsd.android.ShiftTracker.View.StatefulEditText;
-
-import java.util.Arrays;
 
 public class EditShiftFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<Cursor>,
         View.OnClickListener,
@@ -53,7 +54,7 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
     private TextView mDate;
     private TextView mStartTime;
     private TextView mEndTime;
-    private Spinner mReminders;
+    private View mReminders;
     private CheckBox mSaveAsTemplate;
 
     private SimpleCursorAdapter mNameAdapter;
@@ -119,7 +120,11 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
         mStartTime = (TextView) v.findViewById(R.id.start_time);
         mEndTime = (TextView) v.findViewById(R.id.end_time);
         mSaveAsTemplate = (CheckBox) v.findViewById(R.id.is_template);
-        mReminders = (Spinner) v.findViewById(R.id.reminders);
+        mReminders = v.findViewById(R.id.reminders);
+
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(getActivity(), R.layout.reminders_spinner_item, mRemindersLabels);
+        adapter.setDropDownViewResource(R.layout.reminders_spinner_dropdown_item);
+        setAdapter(mReminders, adapter);
 
         if(StApp.isFreeApp(getActivity())) {
             mReminders.setEnabled(false);
@@ -264,7 +269,7 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
 
             for(int i = 0, len = mRemindersValues.length; i < len; i++) {
                 if(String.valueOf(mInitialShift.reminder).equals(mRemindersValues[i])) {
-                    mReminders.setSelection(i);
+                    setSelection(mReminders, i);
                     break;
                 }
             }
@@ -301,7 +306,7 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
                 }
             }
 
-            mReminders.setSelection(index);
+            setSelection(mReminders, index);
         }
     }
 
@@ -405,7 +410,7 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
         shift.setStartTime(mDate.getTag() == null ? -1 : (Long) mStartTime.getTag());
         shift.setEndTime(mDate.getTag() == null ? -1 : (Long) mEndTime.getTag());
         shift.isTemplate = mSaveAsTemplate.isChecked();
-        shift.reminder = Integer.valueOf(mRemindersValues[mReminders.getSelectedItemPosition()]);
+        shift.reminder = Integer.valueOf(mRemindersValues[getSelectedPosition(mReminders)]);
 
         Time time = new Time();
 
@@ -514,5 +519,28 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
 
     public long getEditingId() {
         return mInitialShift != null ? mInitialShift.id : -1;
+    }
+
+    private void setSelection(View view, int index) {
+        if(view instanceof Spinner)
+            ((Spinner) view).setSelection(index);
+        else if(view instanceof android.widget.Spinner)
+            ((android.widget.Spinner) view).setSelection(index);
+    }
+
+    private int getSelectedPosition(View view) {
+        if(view instanceof Spinner)
+            return ((Spinner) view).getSelectedItemPosition();
+        else if(view instanceof android.widget.Spinner)
+            return ((android.widget.Spinner) view).getSelectedItemPosition();
+        else
+            return 0;
+    }
+
+    private void setAdapter(View view, SpinnerAdapter adapter) {
+        if(view instanceof Spinner)
+            ((Spinner) view).setAdapter(adapter);
+        else if(view instanceof android.widget.Spinner)
+            ((android.widget.Spinner) view).setAdapter(adapter);
     }
 }

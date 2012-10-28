@@ -189,12 +189,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/selectable_background_shift_tracker"
             android:layout_marginBottom="16dip">
-            <com.WazaBe.HoloEverywhere.widget.Spinner
-                android:id="@+id/reminders"
-                android:layout_width="match_parent"
-                android:layout_height="45dip"
-                android:entries="@array/reminder_minutes_labels"
-                android:spinnerMode="dropdown"/>
+
+            <include layout="@layout/reminders_spinner" />
         </FrameLayout>
 
         <CheckBox
