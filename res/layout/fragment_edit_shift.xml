@@ -180,7 +180,7 @@
 
         <TextView
             android:id="@+id/reminders_label"
-            android:text="@string/reminders"
+            android:text="@string/reminder"
             style="@style/edit_shift_title"/>
 
         <Spinner
