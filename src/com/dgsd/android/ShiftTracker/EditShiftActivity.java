@@ -85,7 +85,8 @@ public class EditShiftActivity extends SherlockFragmentActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem exportItem = menu.findItem(R.id.export_to_calendar);
 
-        boolean enabled = Api.isMin(Api.ICS) && mEditShiftFragment != null && mEditShiftFragment.isEditing();
+        boolean enabled = !StApp.isFreeApp(this) &&
+                Api.isMin(Api.ICS) && mEditShiftFragment != null && mEditShiftFragment.isEditing();
         exportItem.setEnabled(enabled);
         exportItem.setVisible(enabled);
 
