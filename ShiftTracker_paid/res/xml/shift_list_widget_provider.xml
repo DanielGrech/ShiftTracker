@@ -7,5 +7,5 @@
     android:updatePeriodMillis="0"
     android:initialLayout="@layout/shift_list_widget_layout"
     android:autoAdvanceViewId="@+id/list"
-    android:previewImage="@drawable/ic_launcher"
+    android:previewImage="@drawable/widget_preview_list"
     android:resizeMode="vertical|horizontal" />

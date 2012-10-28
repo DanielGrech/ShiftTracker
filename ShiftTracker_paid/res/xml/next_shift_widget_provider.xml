@@ -7,5 +7,5 @@
     android:minResizeHeight="40dip"
     android:updatePeriodMillis="0"
     android:initialLayout="@layout/next_shift_widget_layout"
-    android:previewImage="@drawable/ic_launcher"
+    android:previewImage="@drawable/widget_preview_next_shift"
     android:resizeMode="vertical|horizontal" />
