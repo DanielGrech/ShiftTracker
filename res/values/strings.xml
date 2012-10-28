@@ -43,6 +43,7 @@
     <string name="feature_unavailable">Feature Unavailable</string>
     <string name="summary_unavailable_message">View a summary of your earnings over different time spans.\n\nThis and other great features are available in the full version of this app!</string>
     <string name="reminder">Reminder</string>
+    <string name="reminders_unavailable_message">Set a reminder alert for this shift.\n\nThis and other great features are available in the full version of this app!</string>
 
     <!-- Settings -->
     <string name="settings_category_display">Display</string>

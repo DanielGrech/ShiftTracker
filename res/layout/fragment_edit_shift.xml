@@ -183,13 +183,19 @@
             android:text="@string/reminder"
             style="@style/edit_shift_title"/>
 
-        <Spinner
-            android:id="@+id/reminders"
+        <FrameLayout
+            android:id="@+id/reminders_parent"
             android:layout_width="match_parent"
-            android:layout_height="45dip"
-            android:entries="@array/reminder_minutes_labels"
-            android:spinnerMode="dropdown"
-            android:layout_marginBottom="16dip"/>
+            android:layout_height="wrap_content"
+            android:background="@drawable/selectable_background_shift_tracker"
+            android:layout_marginBottom="16dip">
+            <Spinner
+                android:id="@+id/reminders"
+                android:layout_width="match_parent"
+                android:layout_height="45dip"
+                android:entries="@array/reminder_minutes_labels"
+                android:spinnerMode="dropdown"/>
+        </FrameLayout>
 
         <CheckBox
             android:id="@+id/is_template"

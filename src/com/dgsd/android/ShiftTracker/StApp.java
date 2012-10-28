@@ -21,6 +21,10 @@ public class StApp extends Application {
             return MainActivity.class;
     }
 
+    public static boolean isFreeApp(Context context) {
+        return context.getPackageName().equals("com.dgsd.android.ShiftTrackerFree");
+    }
+
     public static void doDefaultNavigateUp(Activity a) {
         Intent upIntent = new Intent(a, StApp.getHomeClass(a));
         if (NavUtils.shouldUpRecreateTask(a, upIntent)) {

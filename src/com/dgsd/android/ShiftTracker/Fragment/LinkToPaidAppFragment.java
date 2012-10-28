@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.view.LayoutInflater;
@@ -28,17 +29,32 @@ import java.text.NumberFormat;
 
 public class LinkToPaidAppFragment extends SherlockDialogFragment{
 
+    public static final String KEY_MESSAGE = "_message";
 
-    public static LinkToPaidAppFragment newInstance() {
+    private String mMessage;
+
+    public static LinkToPaidAppFragment newInstance(String message) {
         LinkToPaidAppFragment frag = new LinkToPaidAppFragment();
+
+        if(!TextUtils.isEmpty(message)) {
+            Bundle args = new Bundle();
+            args.putString(KEY_MESSAGE, message);
+            frag.setArguments(args);
+        }
         return frag;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mMessage = getArguments() == null ? null : getArguments().getString(KEY_MESSAGE);
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
         b.setTitle(R.string.feature_unavailable);
-        b.setMessage(R.string.summary_unavailable_message);
+        b.setMessage(mMessage);
         b.setPositiveButton(R.string.get_full_version, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

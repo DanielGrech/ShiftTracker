@@ -16,14 +16,13 @@ import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.*;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.dgsd.android.ShiftTracker.Data.DbField;
 import com.dgsd.android.ShiftTracker.Data.Provider;
 import com.dgsd.android.ShiftTracker.Model.Shift;
 import com.dgsd.android.ShiftTracker.R;
+import com.dgsd.android.ShiftTracker.StApp;
 import com.dgsd.android.ShiftTracker.Util.Prefs;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
 import com.dgsd.android.ShiftTracker.View.StatefulAutoCompleteTextView;
@@ -62,6 +61,8 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
     private String mLastNameFilter;
 
     private String[] mRemindersValues;
+
+    private LinkToPaidAppFragment mLinkToPaidAppFragment;
 
     private static enum LastTimeSelected {START, END};
 
@@ -113,6 +114,24 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
         mEndTime = (TextView) v.findViewById(R.id.end_time);
         mSaveAsTemplate = (CheckBox) v.findViewById(R.id.is_template);
         mReminders = (Spinner) v.findViewById(R.id.reminders);
+
+        if(StApp.isFreeApp(getActivity())) {
+            mReminders.setEnabled(false);
+            mReminders.setClickable(false);
+            ViewGroup parent = ((ViewGroup) mReminders.getParent());
+            parent.setClickable(true);
+            parent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(mLinkToPaidAppFragment != null && mLinkToPaidAppFragment.isResumed())
+                        return; //Already showing
+
+                    mLinkToPaidAppFragment = LinkToPaidAppFragment.newInstance(getString(R.string.reminders_unavailable_message));
+                    mLinkToPaidAppFragment.show(getSherlockActivity().getSupportFragmentManager(), null);
+                }
+            });
+        }
+
 
         mDate.setOnClickListener(this);
         mStartTime.setOnClickListener(this);

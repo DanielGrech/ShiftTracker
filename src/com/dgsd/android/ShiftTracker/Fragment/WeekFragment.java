@@ -19,6 +19,7 @@ import com.dgsd.android.ShiftTracker.EditShiftActivity;
 import com.dgsd.android.ShiftTracker.Model.Shift;
 import com.dgsd.android.ShiftTracker.R;
 import com.dgsd.android.ShiftTracker.Service.DbService;
+import com.dgsd.android.ShiftTracker.StApp;
 import com.dgsd.android.ShiftTracker.Util.*;
 import com.emilsjolander.components.StickyListHeaders.StickyListHeadersListView;
 import de.neofonie.mobile.app.android.widget.crouton.Crouton;
@@ -90,11 +91,11 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
         mStatsWrapper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(getActivity().getPackageName().equals("com.dgsd.android.ShiftTrackerFree")) {
+                if(StApp.isFreeApp(getActivity())) {
                     if(mLinkToPaidAppFragment != null && mLinkToPaidAppFragment.isResumed())
                         return; //Already showing
 
-                    mLinkToPaidAppFragment = LinkToPaidAppFragment.newInstance();
+                    mLinkToPaidAppFragment = LinkToPaidAppFragment.newInstance(getString(R.string.summary_unavailable_message));
                     mLinkToPaidAppFragment.show(getSherlockActivity().getSupportFragmentManager(), null);
                 } else {
                     if(mHoursAndIncomeFragment != null && mHoursAndIncomeFragment.isResumed())
