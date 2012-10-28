@@ -23,7 +23,7 @@ public class UIUtils {
     public static String getDurationAsHours(long minutes) {
         String text = null;
         if(minutes < 60) {
-            if(minutes < 10)
+            if(minutes > 0 && minutes < 10)
                 text = "0" + minutes;
             else
                 text = "" + minutes;
