@@ -1,30 +1,22 @@
 package com.dgsd.android.ShiftTracker.Fragment;
 
-import android.content.Intent;
+import android.app.Dialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.view.*;
-import android.widget.AdapterView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
+import com.WazaBe.HoloEverywhere.app.AlertDialog;
 import com.actionbarsherlock.app.SherlockDialogFragment;
-import com.dgsd.android.ShiftTracker.Adapter.WeekAdapter;
 import com.dgsd.android.ShiftTracker.Data.DbField;
 import com.dgsd.android.ShiftTracker.Data.Provider;
-import com.dgsd.android.ShiftTracker.EditShiftActivity;
 import com.dgsd.android.ShiftTracker.Model.Shift;
 import com.dgsd.android.ShiftTracker.R;
-import com.dgsd.android.ShiftTracker.Service.DbService;
 import com.dgsd.android.ShiftTracker.Util.*;
-import com.emilsjolander.components.StickyListHeaders.StickyListHeadersListView;
-import de.neofonie.mobile.app.android.widget.crouton.Crouton;
-import de.neofonie.mobile.app.android.widget.crouton.Style;
 
 import java.text.NumberFormat;
 
@@ -65,8 +57,8 @@ public class HoursAndIncomeSummaryFragment extends SherlockDialogFragment implem
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_hour_and_income_summary, container, false);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        View v = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_hour_and_income_summary, null);
 
         mMonth = (TextView) v.findViewById(R.id.month);
         mThreeMonth = (TextView) v.findViewById(R.id.three_months);
@@ -74,13 +66,18 @@ public class HoursAndIncomeSummaryFragment extends SherlockDialogFragment implem
         mNineMonth = (TextView) v.findViewById(R.id.nine_months);
         mThisYear = (TextView) v.findViewById(R.id.year);
 
+        AlertDialog.Builder b = new AlertDialog.Builder(getActivity());
+        b.setView(v);
+
         Time time = new Time();
         time.setJulianDay(mJulianDay);
 
-        getDialog().setTitle(DateFormat.getDateFormat(getActivity()).format(time.toMillis(true)));
-        getDialog().setCanceledOnTouchOutside(true);
+        b.setTitle(DateFormat.getDateFormat(getActivity()).format(time.toMillis(true)));
 
-        return v;
+        Dialog d = b.create();
+        d.setCanceledOnTouchOutside(true);
+
+        return d;
     }
 
     @Override
