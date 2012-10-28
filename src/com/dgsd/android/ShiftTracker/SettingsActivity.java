@@ -64,6 +64,9 @@ public class SettingsActivity extends SherlockPreferenceActivity implements Shar
         Preference p = prefMgr.findPreference(getString(R.string.settings_key_version));
         p.setSummary(DiagnosticUtils.getApplicationVersionString(this));
 
+        Preference licensePrefs = prefMgr.findPreference(getString(R.string.licenses));
+        licensePrefs.setIntent(new Intent(this, LicensesActivity.class));
+
         mWeekStartDayPref = prefMgr.findPreference(getString(R.string.settings_key_start_day));
         mStartTimePref = prefMgr.findPreference(getString(R.string.settings_key_default_start_time));
         mEndTimePref = prefMgr.findPreference(getString(R.string.settings_key_default_end_time));
