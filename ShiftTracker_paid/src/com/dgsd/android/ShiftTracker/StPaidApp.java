@@ -1,6 +1,5 @@
 package com.dgsd.android.ShiftTracker;
 
-import android.content.Context;
 import android.preference.*;
 import android.text.TextUtils;
 import com.dgsd.android.ShiftTracker.Receiver.NextShiftWidgetProvider;
@@ -8,7 +7,6 @@ import com.dgsd.android.ShiftTracker.Receiver.ShiftListWidgetProvider;
 import com.dgsd.android.ShiftTracker.Service.DbService;
 import com.dgsd.android.ShiftTracker.Util.Api;
 import com.dgsd.android.ShiftTracker.Util.Prefs;
-import com.dgsd.android.ShiftTracker.View.*;
 import com.dgsd.android.ShiftTracker.View.ListPreference;
 
 public class StPaidApp extends StApp implements DbService.OnDbEventListener, SettingsActivity.OnCreateSettingsListener {
