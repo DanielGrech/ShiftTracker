@@ -366,7 +366,8 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
         final long millis = TimeUtils.getStartMillisForJulianDay(julianDay);
         mDate.setTag(julianDay);
         mDate.setText(DateUtils.formatDateRange(getActivity(), millis, millis,
-                DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR));
+                DateUtils.FORMAT_ABBREV_ALL |
+                        DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR));
     }
 
     @Override
