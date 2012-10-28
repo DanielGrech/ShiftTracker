@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Shift Tracker Free</string>
 
+    <string name="read_permission_label">Read application data</string>
+    <string name="read_permission_description">Allows applications to read internal app data</string>
+
     <string name="settings_title_full_app">Full version</string>
     <string name="settings_summary_full_app">View full version of app in the store</string>
     <string name="settings_key_full_app">full_app</string>

@@ -36,6 +36,10 @@ public class Provider extends ContentProvider {
         mURIMatcher.addURI(AUTHORITY, "shifts", SHIFTS);
     }
 
+    public static String getAuthority() {
+        return AUTHORITY;
+    }
+
     public static void setAuthority(String authority) {
         AUTHORITY = authority;
         BASE_URI = Uri.parse("content://" + AUTHORITY);
