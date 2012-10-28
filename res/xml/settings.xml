@@ -94,7 +94,7 @@
             android:title="@string/licenses">
             <intent
                 android:targetClass="com.dgsd.android.ShiftTracker.LicensesActivity"
-                android:targetPackage="com.dgsd.android.ShiftTracker"/>
+                android:targetPackage="com.dgsd.android.ShiftTrackerFree"/>
         </Preference>
 
     </PreferenceCategory>
