@@ -3,34 +3,37 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/new_shift_container"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:background="@drawable/appwidget_bg_clickable"
     android:padding="8dip">
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="match_parent"
+    <LinearLayout
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        android:scaleType="fitCenter"
-        android:contentDescription="@string/add_shift"
-        android:src="@drawable/ic_add_selector" />
+        android:layout_width="match_parent"
+        android:layout_centerVertical="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@id/image"
-        android:singleLine="false"
-        android:gravity="center"
-        android:text="@string/add_shift_newline"
-        android:textSize="15dip"
-        android:duplicateParentState="true"
-        android:fontFamily="sans-serif-light"
-        android:textColor="@color/primary_text_disable_only_holo_light"/>
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            android:contentDescription="@string/add_shift"
+            android:src="@drawable/ic_add_selector"/>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="false"
+            android:gravity="center"
+            android:text="@string/shift"
+            android:textSize="15dip"
+            android:duplicateParentState="true"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/primary_text_disable_only_holo_light"/>
+    </LinearLayout>
 </RelativeLayout>
