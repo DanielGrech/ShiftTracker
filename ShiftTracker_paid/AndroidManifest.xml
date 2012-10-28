@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="dgsd.permission.READ"/>
 
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="16"/>
+    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="16"/>
 
     <application
         android:name="com.dgsd.android.ShiftTracker.StPaidApp"
