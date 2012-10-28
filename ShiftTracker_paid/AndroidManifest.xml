@@ -95,6 +95,15 @@
                        android:resource="@xml/next_shift_widget_provider" />
         </receiver>
 
+        <receiver android:name=".Receiver.NewShiftWidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data android:name="android.appwidget.provider"
+                       android:resource="@xml/new_shift_widget_provider" />
+        </receiver>
+
         <!-- Activities -->
         <activity
             android:name="StartupActivity"

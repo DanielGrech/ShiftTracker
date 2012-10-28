@@ -6,6 +6,7 @@
     <string name="exporting_data">Exporting Data</string>
     <string name="this_week">This Week</string>
     <string name="next_shift">Next Shift</string>
+    <string name="add_shift_newline">Add\nShift</string>
 
 
     <string name="settings_category_data">Data</string>
