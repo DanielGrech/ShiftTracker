@@ -160,7 +160,7 @@ public class HoursAndIncomeSummaryFragment extends SherlockDialogFragment implem
     }
 
     private CursorLoader getLoaderBetween(int fromJd, int toJd) {
-        final String sel = DbField.JULIAN_DAY + " >= ? AND " + DbField.JULIAN_DAY + " < ?";
+        final String sel = DbField.JULIAN_DAY + " >= ? AND " + DbField.JULIAN_DAY + " <= ?";
         final String[] args = new String[] {
             String.valueOf(fromJd),
             String.valueOf(toJd)
