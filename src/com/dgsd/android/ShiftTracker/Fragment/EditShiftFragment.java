@@ -28,6 +28,8 @@ import com.dgsd.android.ShiftTracker.Util.TimeUtils;
 import com.dgsd.android.ShiftTracker.View.StatefulAutoCompleteTextView;
 import com.dgsd.android.ShiftTracker.View.StatefulEditText;
 
+import java.util.Arrays;
+
 public class EditShiftFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<Cursor>,
         View.OnClickListener,
         DatePickerFragment.OnDateSelectedListener,
@@ -60,6 +62,7 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
     private LastTimeSelected mLastTimeSelected;
     private String mLastNameFilter;
 
+    private String[] mRemindersLabels;
     private String[] mRemindersValues;
 
     private LinkToPaidAppFragment mLinkToPaidAppFragment;
@@ -93,6 +96,7 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
         super.onCreate(savedInstanceState);
 
         mRemindersValues = getResources().getStringArray(R.array.reminder_minutes_values);
+        mRemindersLabels = getResources().getStringArray(R.array.reminder_minutes_labels);
 
         mInitialJulianDay = -1;
         if(getArguments() != null) {
@@ -123,7 +127,7 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
             parent.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(mLinkToPaidAppFragment != null && mLinkToPaidAppFragment.isResumed())
+                    if (mLinkToPaidAppFragment != null && mLinkToPaidAppFragment.isResumed())
                         return; //Already showing
 
                     mLinkToPaidAppFragment = LinkToPaidAppFragment.newInstance(getString(R.string.reminders_unavailable_message));
@@ -275,7 +279,6 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
             t.second = 0;
             t.normalize(true);
 
-
             final Prefs p = Prefs.getInstance(getActivity());
             setStartTime(p.get(getString(R.string.settings_key_default_start_time), t.toMillis(true)));
 
@@ -286,6 +289,17 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
 
             mUnpaidBreak.setText(p.get(getString(R.string.settings_key_default_break_duration), null));
             mPayRate.setText(p.get(getString(R.string.settings_key_default_pay_rate), null));
+
+            String remindersVal = p.get(getString(R.string.settings_key_default_reminder), "None");
+            int index = 0;
+            for(int i = 0, len = mRemindersLabels.length; i < len; i++) {
+                if(TextUtils.equals(remindersVal, mRemindersLabels[i])) {
+                    index = i;
+                    break;
+                }
+            }
+
+            mReminders.setSelection(index);
         }
     }
 

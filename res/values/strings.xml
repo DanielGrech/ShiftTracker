@@ -61,6 +61,7 @@
     <string name="settings_key_default_break_duration">default_break_duration</string>
     <string name="settings_key_default_pay_rate">default_pay_rate</string>
     <string name="settings_key_rate">rate</string>
+    <string name="settings_key_default_reminder">default_reminder</string>
 
     <string name="settings_title_start_day">Week Start Day</string>
     <string name="settings_title_show_total_hours">Show Total Hours</string>
@@ -69,6 +70,7 @@
     <string name="settings_title_default_end_time">Default End Time</string>
     <string name="settings_title_default_break_duration">Default Unpaid Break Duration</string>
     <string name="settings_title_default_pay_rate">Default Payrate</string>
+    <string name="settings_title_default_reminder">Default Reminder</string>
     <string name="settings_title_rate">Rate</string>
 
     <string name="settings_summary_start_day">The first day of your week</string>
@@ -78,6 +80,7 @@
     <string name="settings_summary_default_end_time">The default end time to use when creating a new shift</string>
     <string name="settings_summary_default_break_duration">Default duration for unpaid breaks</string>
     <string name="settings_summary_default_pay_rate">Default payrate ($/hour)</string>
+    <string name="settings_summary_default_reminder">Default reminder for new shifts</string>
     <string name="settings_summary_rate">Rate the app in the store!</string>
 
     <string-array name="days_of_week">

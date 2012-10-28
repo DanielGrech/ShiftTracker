@@ -28,7 +28,9 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/settings_category_defaults">
+    <PreferenceCategory
+        android:key="@string/settings_category_defaults"
+        android:title="@string/settings_category_defaults">
         <com.dgsd.android.ShiftTracker.View.TimePickerPreferenceCompat
             android:key="@string/settings_key_default_start_time"
             android:title="@string/settings_title_default_start_time"

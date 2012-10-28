@@ -2,9 +2,14 @@ package com.dgsd.android.ShiftTracker;
 
 import android.content.Context;
 import android.preference.*;
+import android.text.TextUtils;
 import com.dgsd.android.ShiftTracker.Receiver.NextShiftWidgetProvider;
 import com.dgsd.android.ShiftTracker.Receiver.ShiftListWidgetProvider;
 import com.dgsd.android.ShiftTracker.Service.DbService;
+import com.dgsd.android.ShiftTracker.Util.Api;
+import com.dgsd.android.ShiftTracker.Util.Prefs;
+import com.dgsd.android.ShiftTracker.View.*;
+import com.dgsd.android.ShiftTracker.View.ListPreference;
 
 public class StPaidApp extends StApp implements DbService.OnDbEventListener, SettingsActivity.OnCreateSettingsListener {
 
@@ -52,7 +57,43 @@ public class StPaidApp extends StApp implements DbService.OnDbEventListener, Set
                 return true;
             }
         });
-
         dataCategory.addPreference(exportPref);
+
+        PreferenceCategory defaultsCateogry = (PreferenceCategory) screen.findPreference(getString(R.string.settings_category_defaults));
+        Preference remindersPref = null;
+        if(Api.isMin(Api.HONEYCOMB)) {
+            remindersPref = new android.preference.ListPreference(activity);
+            ((android.preference.ListPreference)remindersPref).setEntries(R.array.reminder_minutes_labels);
+            ((android.preference.ListPreference)remindersPref).setEntryValues(R.array.reminder_minutes_labels);
+        } else {
+            remindersPref = new ListPreference(activity);
+            ((ListPreference)remindersPref).setEntries(R.array.reminder_minutes_labels);
+            ((ListPreference)remindersPref).setEntryValues(R.array.reminder_minutes_labels);
+        }
+
+        CharSequence val = Prefs.getInstance(this).get(getString(R.string.settings_key_default_reminder), null);
+        remindersPref.setDefaultValue("None");
+        remindersPref.setTitle(R.string.settings_title_default_reminder);
+        remindersPref.setSummary(TextUtils.isEmpty(val) ? "None" : val);
+        remindersPref.setKey(getString(R.string.settings_key_default_reminder));
+        remindersPref.setOrder(4);
+        remindersPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newVal) {
+                preference.setSummary(newVal.toString());
+                return true;
+            }
+        });
+
+        defaultsCateogry.addPreference(remindersPref);
+    }
+
+    private CharSequence getListPreferenceEntry(Preference p) {
+        if(p instanceof ListPreference)
+            return ((ListPreference) p).getEntry();
+        else if(p instanceof android.preference.ListPreference)
+            return ((android.preference.ListPreference) p).getEntry();
+        else
+            return null;
     }
 }
