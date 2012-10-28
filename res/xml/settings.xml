@@ -9,8 +9,8 @@
         <com.dgsd.android.ShiftTracker.View.ListPreference
             android:key="@string/settings_key_start_day"
             android:title="@string/settings_title_start_day"
+            android:defaultValue="1"
             dg:summary="@string/settings_summary_start_day"
-            dg:defaultValue="1"
             dg:entries="@array/days_of_week"
             dg:entryValues="@array/days_of_week_values" />
 
