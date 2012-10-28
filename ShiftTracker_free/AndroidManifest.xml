@@ -10,7 +10,7 @@
         android:permissionGroup="android.permission-group.PERSONAL_INFO"
         android:label="@string/read_permission_label"
         android:description="@string/read_permission_description"
-        android:protectionLevel="signature"/>
+        android:protectionLevel="normal"/>
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
