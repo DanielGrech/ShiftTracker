@@ -1,18 +1,12 @@
 package com.dgsd.android.ShiftTracker.Fragment;
 
-import android.R;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.text.format.Time;
-import android.widget.DatePicker;
-import android.widget.TimePicker;
+import com.WazaBe.HoloEverywhere.app.TimePickerDialog;
+import com.WazaBe.HoloEverywhere.widget.TimePicker;
 import com.actionbarsherlock.app.SherlockDialogFragment;
-import com.dgsd.android.ShiftTracker.Util.Api;
-import com.dgsd.android.ShiftTracker.Util.TimeUtils;
 
 public class TimePickerFragment extends SherlockDialogFragment implements TimePickerDialog.OnTimeSetListener {
     private static final String KEY_TIME = "_time";

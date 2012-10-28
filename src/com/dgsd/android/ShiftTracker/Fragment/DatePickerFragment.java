@@ -1,14 +1,11 @@
 package com.dgsd.android.ShiftTracker.Fragment;
 
-import android.R;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.format.Time;
-import android.widget.DatePicker;
-import android.widget.Toast;
+import com.WazaBe.HoloEverywhere.app.DatePickerDialog;
+import com.WazaBe.HoloEverywhere.widget.DatePicker;
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.dgsd.android.ShiftTracker.Util.Api;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
