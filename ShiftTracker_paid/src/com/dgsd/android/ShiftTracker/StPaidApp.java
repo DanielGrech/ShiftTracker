@@ -87,13 +87,4 @@ public class StPaidApp extends StApp implements DbService.OnDbEventListener, Set
 
         defaultsCateogry.addPreference(remindersPref);
     }
-
-    private CharSequence getListPreferenceEntry(Preference p) {
-        if(p instanceof ListPreference)
-            return ((ListPreference) p).getEntry();
-        else if(p instanceof android.preference.ListPreference)
-            return ((android.preference.ListPreference) p).getEntry();
-        else
-            return null;
-    }
 }
