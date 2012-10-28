@@ -253,7 +253,22 @@ public abstract class DialogPreference extends Preference implements
 		setPositiveButtonText(getContext().getString(positiveButtonTextResId));
 	}
 
-	protected void showDialog(Bundle state) {
+    @Override
+    public void setTitle(int titleResId) {
+        super.setTitle(titleResId);
+        if(mDialogTitle == null)
+            setDialogTitle(titleResId);
+
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        super.setTitle(title);
+        if(mDialogTitle == null)
+            setDialogTitle(title);
+    }
+
+    protected void showDialog(Bundle state) {
 		Context context = getContext();
 		mWhichButtonClicked = DialogInterface.BUTTON_NEGATIVE;
 		mBuilder = new AlertDialog.Builder(context);
