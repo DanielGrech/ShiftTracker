@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.Spinner;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.dgsd.android.ShiftTracker.Data.DbField;
@@ -49,6 +50,7 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
     private TextView mDate;
     private TextView mStartTime;
     private TextView mEndTime;
+    private Spinner mReminders;
     private CheckBox mSaveAsTemplate;
 
     private SimpleCursorAdapter mNameAdapter;
@@ -58,6 +60,8 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
 
     private LastTimeSelected mLastTimeSelected;
     private String mLastNameFilter;
+
+    private String[] mRemindersValues;
 
     private static enum LastTimeSelected {START, END};
 
@@ -87,6 +91,8 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mRemindersValues = getResources().getStringArray(R.array.reminder_minutes_values);
+
         mInitialJulianDay = -1;
         if(getArguments() != null) {
             mInitialShift = getArguments().getParcelable(KEY_SHIFT);
@@ -106,6 +112,7 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
         mStartTime = (TextView) v.findViewById(R.id.start_time);
         mEndTime = (TextView) v.findViewById(R.id.end_time);
         mSaveAsTemplate = (CheckBox) v.findViewById(R.id.is_template);
+        mReminders = (Spinner) v.findViewById(R.id.reminders);
 
         mDate.setOnClickListener(this);
         mStartTime.setOnClickListener(this);
@@ -218,17 +225,25 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
             if(mInitialShift.julianDay >= 0)
                 onDateSelected(mInitialShift.julianDay);
 
-            if(mInitialShift.startTime != -1)
-                setStartTime(mInitialShift.startTime);
+            if(mInitialShift.getStartTime() != -1)
+                setStartTime(mInitialShift.getStartTime());
 
-            if(mInitialShift.endTime != -1)
-                setEndTime(mInitialShift.endTime);
+            if(mInitialShift.getEndTime() != -1)
+                setEndTime(mInitialShift.getEndTime());
 
             if(mInitialShift.breakDuration >= 0)
                 mUnpaidBreak.setText(String.valueOf(mInitialShift.breakDuration));
 
             if(mInitialShift.payRate >= 0)
                 mPayRate.setText(String.valueOf(mInitialShift.payRate));
+
+            for(int i = 0, len = mRemindersValues.length; i < len; i++) {
+                if(String.valueOf(mInitialShift.reminder).equals(mRemindersValues[i])) {
+                    mReminders.setSelection(i);
+                    break;
+                }
+            }
+
         } else {
             //No initial shift, just set up our date/time values
             onDateSelected(mInitialJulianDay < 0 ? TimeUtils.getCurrentJulianDay() : mInitialJulianDay);
@@ -351,29 +366,12 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
         shift.name = mName.getText() == null ? null : mName.getText().toString();
         shift.note = mNotes.getText() == null ? null : mNotes.getText().toString();
         shift.julianDay = mDate.getTag() == null ? -1 : (Integer) mDate.getTag();
-        shift.startTime = mDate.getTag() == null ? -1 : (Long) mStartTime.getTag();
-        shift.endTime = mDate.getTag() == null ? -1 : (Long) mEndTime.getTag();
+        shift.setStartTime(mDate.getTag() == null ? -1 : (Long) mStartTime.getTag());
+        shift.setEndTime(mDate.getTag() == null ? -1 : (Long) mEndTime.getTag());
         shift.isTemplate = mSaveAsTemplate.isChecked();
+        shift.reminder = Integer.valueOf(mRemindersValues[mReminders.getSelectedItemPosition()]);
 
         Time time = new Time();
-
-        time.set(shift.startTime);
-        int hour = time.hour;
-        int min = time.minute;
-        time.setToNow();
-        time.hour = hour;
-        time.minute = min;
-        time.normalize(true);
-        shift.startTime = time.toMillis(true);
-
-        time.set(shift.endTime);
-        hour = time.hour;
-        min = time.minute;
-        time.setToNow();
-        time.hour = hour;
-        time.minute = min;
-        time.normalize(true);
-        shift.endTime = time.toMillis(true);
 
         try {
             CharSequence breakDuration = mUnpaidBreak.getText();

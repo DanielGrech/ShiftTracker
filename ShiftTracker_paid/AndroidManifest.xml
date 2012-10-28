@@ -6,6 +6,8 @@
     android:versionName="1.0">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="16"/>
 
@@ -31,10 +33,20 @@
 
         <!-- Services -->
         <service android:name=".Service.DbService" />
+        <service android:name=".Service.NotificationService"/>
+        <service android:name=".Service.AlarmScheduleService"/>
 
         <service android:name=".Service.ShiftListWidgetService"
                  android:permission="android.permission.BIND_REMOTEVIEWS"
                  android:exported="false"/>
+
+
+        <!-- Receviers -->
+        <receiver android:name=".Receiver.AlarmReceiver" android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
 
         <receiver
             android:icon="@drawable/ic_launcher"

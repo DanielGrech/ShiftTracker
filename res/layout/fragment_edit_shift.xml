@@ -176,6 +176,19 @@
             android:gravity="left|bottom"
             android:nextFocusUp="@id/unpaid_break"
             android:fontFamily="sans-serif-light"
+            android:layout_marginBottom="8dip"/>
+
+        <TextView
+            android:id="@+id/reminders_label"
+            android:text="@string/reminders"
+            style="@style/edit_shift_title"/>
+
+        <Spinner
+            android:id="@+id/reminders"
+            android:layout_width="match_parent"
+            android:layout_height="45dip"
+            android:entries="@array/reminder_minutes_labels"
+            android:spinnerMode="dropdown"
             android:layout_marginBottom="16dip"/>
 
         <CheckBox

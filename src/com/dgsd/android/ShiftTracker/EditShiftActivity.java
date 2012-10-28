@@ -1,6 +1,8 @@
 package com.dgsd.android.ShiftTracker;
 
+import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
@@ -16,8 +18,13 @@ import com.dgsd.android.ShiftTracker.Data.Provider;
 import com.dgsd.android.ShiftTracker.Fragment.EditShiftFragment;
 import com.dgsd.android.ShiftTracker.Model.Shift;
 import com.dgsd.android.ShiftTracker.Service.DbService;
+import com.dgsd.android.ShiftTracker.Util.AlarmUtils;
+import com.dgsd.android.ShiftTracker.Util.TimeUtils;
 import de.neofonie.mobile.app.android.widget.crouton.Crouton;
 import de.neofonie.mobile.app.android.widget.crouton.Style;
+
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class EditShiftActivity extends SherlockFragmentActivity {
     private static final String KEY_FRAGMENT = "_key_fragment";
@@ -72,8 +79,11 @@ public class EditShiftActivity extends SherlockFragmentActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.delete) {
-            if(mEditShiftFragment.isEditing())
+            if(mEditShiftFragment.isEditing()) {
+                //Remove any alarms
+                AlarmUtils.get(this).cancel(mEditShiftFragment.getShift());
                 DbService.async_delete(this, Provider.SHIFTS_URI, DbField.ID + "=" + mEditShiftFragment.getEditingId());
+            }
 
             finish();
             return true;
@@ -91,22 +101,26 @@ public class EditShiftActivity extends SherlockFragmentActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        final Activity cxt = EditShiftActivity.this;
                         String error = mEditShiftFragment.validate();
                         if(TextUtils.isEmpty(error)) {
                             Shift shift = mEditShiftFragment.getShift();
 
-                            final ContentValues values = shift.toContentValues();
                             if(mEditShiftFragment.isEditing()) {
-                                DbService.async_update(EditShiftActivity.this, Provider.SHIFTS_URI,
-                                        DbField.ID + "=" + mEditShiftFragment.getEditingId(), values);
+                                DbService.async_update(cxt, Provider.SHIFTS_URI, DbField.ID + "=" + mEditShiftFragment.getEditingId(), shift.toContentValues());
                             } else {
-                                DbService.async_insert(EditShiftActivity.this, Provider.SHIFTS_URI, values);
+                                shift.id = new Random().nextInt();
+                                DbService.async_insert(cxt, Provider.SHIFTS_URI, shift.toContentValues());
                             }
+
+                            AlarmUtils.get(cxt).cancel(shift);
+                            if(shift.getReminderTime() > TimeUtils.getCurrentMillis())
+                                AlarmUtils.get(cxt).createAt(shift.getReminderTime(), AlarmUtils.newIntent(cxt, shift));
 
                             finish();
                         } else {
-                            Crouton.clearCroutonsForActivity(EditShiftActivity.this);
-                            Crouton.showText(EditShiftActivity.this, error, Style.ALERT);
+                            Crouton.clearCroutonsForActivity(cxt);
+                            Crouton.showText(cxt, error, Style.ALERT);
                         }
                     }
                 });

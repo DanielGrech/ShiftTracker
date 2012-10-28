@@ -15,7 +15,8 @@ public class DbTable {
         DbField.NAME,
         DbField.NOTE,
         DbField.BREAK_DURATION,
-        DbField.IS_TEMPLATE
+        DbField.IS_TEMPLATE,
+        DbField.REMINDER
     });
 
 	public String name;

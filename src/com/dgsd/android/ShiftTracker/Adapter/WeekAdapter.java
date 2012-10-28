@@ -207,6 +207,7 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
             row[6] = null;                              // DbField.NOTE
             row[7] = -1;                                // DbField.BREAK_DURATION
             row[8] = 0;                                 // DbField.IS_TEMPLATE
+            row[9] = -1;                                // DbField.REMINDER
 
             mc.addRow(row);
         }
@@ -242,9 +243,9 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
             flags |= DateUtils.FORMAT_24HOUR;
 
         mStringBuilder.setLength(0);
-        time = DateUtils.formatDateRange(getContext(), mFormatter, shift.startTime, shift.endTime, flags).toString();
+        time = DateUtils.formatDateRange(getContext(), mFormatter, shift.getStartTime(), shift.getEndTime(), flags).toString();
 
-        time += " (" + UIUtils.getDurationAsHours(shift.getDurationInMinutes()) + " Hrs)";
+        time += " (" + UIUtils.getDurationAsHours(shift.getDurationInMinutes()) + ")";
 
         mIdToTimeArray.put( (int) shift.id, time);
         return time;

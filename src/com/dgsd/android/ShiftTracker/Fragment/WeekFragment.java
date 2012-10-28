@@ -19,10 +19,7 @@ import com.dgsd.android.ShiftTracker.EditShiftActivity;
 import com.dgsd.android.ShiftTracker.Model.Shift;
 import com.dgsd.android.ShiftTracker.R;
 import com.dgsd.android.ShiftTracker.Service.DbService;
-import com.dgsd.android.ShiftTracker.Util.Anim;
-import com.dgsd.android.ShiftTracker.Util.Api;
-import com.dgsd.android.ShiftTracker.Util.Prefs;
-import com.dgsd.android.ShiftTracker.Util.UIUtils;
+import com.dgsd.android.ShiftTracker.Util.*;
 import com.emilsjolander.components.StickyListHeaders.StickyListHeadersListView;
 import de.neofonie.mobile.app.android.widget.crouton.Crouton;
 import de.neofonie.mobile.app.android.widget.crouton.Style;
@@ -254,6 +251,7 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
         } else if(item.getItemId() == R.id.delete) {
             DbService.async_delete(getActivity(), Provider.SHIFTS_URI,
                     DbField.ID + "=" + (holder.shift == null ? -1 : holder.shift.id));
+            AlarmUtils.get(getActivity()).cancel(holder.shift);
             showMessage("Shift deleted");
         }
 

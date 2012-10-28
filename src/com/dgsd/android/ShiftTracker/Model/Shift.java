@@ -63,6 +63,7 @@ public class Shift implements Parcelable {
         final int dayCol = cursor.getColumnIndex(DbField.JULIAN_DAY.name);
         final int breakCol = cursor.getColumnIndex(DbField.BREAK_DURATION.name);
         final int isTemplateCol = cursor.getColumnIndex(DbField.IS_TEMPLATE.name);
+        final int reminderCol = cursor.getColumnIndex(DbField.REMINDER.name);
 
         Shift s = new Shift();
         s.id = cursor.getLong(idCol);
@@ -74,6 +75,7 @@ public class Shift implements Parcelable {
         s.payRate = cursor.getFloat(payCol);
         s.breakDuration = cursor.getInt(breakCol);
         s.isTemplate = cursor.getInt(isTemplateCol) == 1;
+        s.reminder = cursor.getInt(reminderCol);
         return s;
     }
 
@@ -141,6 +143,11 @@ public class Shift implements Parcelable {
         values.put(DbField.REMINDER.name, reminder);
 
         return values;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 
     @Override
