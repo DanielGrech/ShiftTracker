@@ -18,7 +18,7 @@
 
 <resources>
 
-    <style name="Theme.shift_tracker" parent="@style/Holo.Theme.Sherlock.Light">
+    <style name="Theme.shift_tracker" parent="@style/Holo.Theme.Light">
         <item name="android:windowBackground">@color/window_background</item>
 
         <item name="actionBarItemBackground">@drawable/selectable_background_shift_tracker</item>

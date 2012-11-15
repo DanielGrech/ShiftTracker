@@ -4,13 +4,13 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.format.Time;
-import com.WazaBe.HoloEverywhere.app.DatePickerDialog;
-import com.WazaBe.HoloEverywhere.widget.DatePicker;
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.dgsd.android.ShiftTracker.Util.Api;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
 import de.neofonie.mobile.app.android.widget.crouton.Crouton;
 import de.neofonie.mobile.app.android.widget.crouton.Style;
+import org.holoeverywhere.app.DatePickerDialog;
+import org.holoeverywhere.widget.DatePicker;
 
 public class DatePickerFragment extends SherlockDialogFragment implements DatePickerDialog.OnDateSetListener {
     private static final String KEY_DATE = "_date";

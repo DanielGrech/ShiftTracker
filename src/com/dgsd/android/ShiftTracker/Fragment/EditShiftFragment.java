@@ -17,11 +17,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.ListAdapter;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-import com.WazaBe.HoloEverywhere.ArrayAdapter;
-import com.WazaBe.HoloEverywhere.widget.Spinner;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.dgsd.android.ShiftTracker.Data.DbField;
 import com.dgsd.android.ShiftTracker.Data.Provider;
@@ -32,6 +29,8 @@ import com.dgsd.android.ShiftTracker.Util.Prefs;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
 import com.dgsd.android.ShiftTracker.View.StatefulAutoCompleteTextView;
 import com.dgsd.android.ShiftTracker.View.StatefulEditText;
+import org.holoeverywhere.ArrayAdapter;
+import org.holoeverywhere.widget.Spinner;
 
 public class EditShiftFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<Cursor>,
         View.OnClickListener,

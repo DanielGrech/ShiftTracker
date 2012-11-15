@@ -4,9 +4,9 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.text.format.Time;
-import com.WazaBe.HoloEverywhere.app.TimePickerDialog;
-import com.WazaBe.HoloEverywhere.widget.TimePicker;
 import com.actionbarsherlock.app.SherlockDialogFragment;
+import org.holoeverywhere.app.TimePickerDialog;
+import org.holoeverywhere.widget.TimePicker;
 
 public class TimePickerFragment extends SherlockDialogFragment implements TimePickerDialog.OnTimeSetListener {
     private static final String KEY_TIME = "_time";

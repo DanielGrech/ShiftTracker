@@ -8,7 +8,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.SparseArray;
-import com.WazaBe.HoloEverywhere.widget.AutoCompleteTextView;
+import org.holoeverywhere.widget.AutoCompleteTextView;
 
 /**
  * Extension of the EditText Spinner which is responsible for saving its own

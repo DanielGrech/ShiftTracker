@@ -6,8 +6,8 @@ import android.content.res.TypedArray;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
-import com.WazaBe.HoloEverywhere.app.AlertDialog;
 import com.dgsd.android.ShiftTracker.R;
+import org.holoeverywhere.app.AlertDialog;
 
 public class ListPreference extends DialogPreference {
 	private static class SavedState extends BaseSavedState {

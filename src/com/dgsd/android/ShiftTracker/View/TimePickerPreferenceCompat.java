@@ -6,8 +6,8 @@ import android.text.format.Time;
 import android.util.AttributeSet;
 import android.view.ContextThemeWrapper;
 import android.view.View;
-import com.WazaBe.HoloEverywhere.widget.TimePicker;
 import com.dgsd.android.ShiftTracker.R;
+import org.holoeverywhere.widget.TimePicker;
 
 /**
  * A preference type that allows a user to choose a time

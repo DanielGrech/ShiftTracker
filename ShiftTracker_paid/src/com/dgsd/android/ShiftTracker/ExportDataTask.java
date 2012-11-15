@@ -8,17 +8,14 @@ import android.os.AsyncTask;
 import android.preference.PreferenceActivity;
 import android.text.TextUtils;
 import android.text.format.Time;
+import android.widget.Toast;
 import au.com.bytecode.opencsv.CSVWriter;
-import com.WazaBe.HoloEverywhere.widget.Toast;
 import com.dgsd.android.ShiftTracker.Data.DbField;
 import com.dgsd.android.ShiftTracker.Data.InternalFileProvider;
 import com.dgsd.android.ShiftTracker.Data.Provider;
 import com.dgsd.android.ShiftTracker.Model.Shift;
-import com.dgsd.android.ShiftTracker.Util.IntentUtils;
 import com.dgsd.android.ShiftTracker.Util.ProviderUtils;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
-import de.neofonie.mobile.app.android.widget.crouton.Crouton;
-import de.neofonie.mobile.app.android.widget.crouton.Style;
 
 import java.io.File;
 import java.io.FileWriter;

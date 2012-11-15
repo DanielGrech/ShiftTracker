@@ -5,8 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import com.WazaBe.HoloEverywhere.app.AlertDialog;
 import com.dgsd.android.ShiftTracker.R;
+import org.holoeverywhere.app.AlertDialog;
 
 /**
  * Helper class which creates a dialog prompting the user to

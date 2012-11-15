@@ -10,13 +10,13 @@ import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.view.*;
 import android.widget.TextView;
-import com.WazaBe.HoloEverywhere.app.AlertDialog;
 import com.actionbarsherlock.app.SherlockDialogFragment;
 import com.dgsd.android.ShiftTracker.Data.DbField;
 import com.dgsd.android.ShiftTracker.Data.Provider;
 import com.dgsd.android.ShiftTracker.Model.Shift;
 import com.dgsd.android.ShiftTracker.R;
 import com.dgsd.android.ShiftTracker.Util.*;
+import org.holoeverywhere.app.AlertDialog;
 
 import java.text.NumberFormat;
 
