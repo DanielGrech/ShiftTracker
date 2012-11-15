@@ -60,7 +60,7 @@ public class ExportDataTask extends AsyncTask<Void, Integer, String> {
             return null;
 
         try {
-            Time time = new Time();
+            final Time time = new Time();
             time.setToNow();
 
             String filename = mActivity.getString(R.string.app_name) + " export - " + time.format2445() + ".csv";
@@ -71,19 +71,32 @@ public class ExportDataTask extends AsyncTask<Void, Integer, String> {
                 "notes",
                 "start_time",
                 "end_time",
-                "julian_day",
                 "pay_rate",
                 "break_duration"
             });
 
             for (int i = 0, size = shifts.size(); i < size; i++) {
                 final Shift shift = shifts.get(i);
+
+                String start = null, end = null;
+
+                final long startMillis = shift.getStartTime();
+                if(startMillis != -1) {
+                    time.set(startMillis);
+                    start = time.format2445();
+                }
+
+                final long endMillis = shift.getEndTime();
+                if(endMillis != -1) {
+                    time.set(endMillis);
+                    end = time.format2445();
+                }
+
                 String[] values = {
                     shift.name,
                     shift.note,
-                    shift.getStartTime() == -1 ? null : String.valueOf(shift.getStartTime()),
-                    shift.getEndTime() == -1 ? null : String.valueOf(shift.getEndTime()),
-                    shift.julianDay == -1 ? null : String.valueOf(shift.julianDay),
+                    start,
+                    end,
                     shift.payRate == -1 ? null : String.valueOf(shift.payRate),
                     shift.breakDuration == -1 ? null : String.valueOf(shift.breakDuration)
                 };
