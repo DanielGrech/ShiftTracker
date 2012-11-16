@@ -17,24 +17,22 @@ public class DatePickerFragment extends SherlockDialogFragment implements DatePi
     private static final String KEY_MIN_DATE = "_min";
     private static final String KEY_MAX_DATE = "_max";
     private static final String KEY_TITLE = "_title";
-    private static final String KEY_POS_BTN = "_pos_btn";
+    private static final String KEY_TYPE_CODE = "_type_code";
 
     private int mDate = -1;
     private long mMinDate = Long.MIN_VALUE;
     private long mMaxDate = Long.MAX_VALUE;
     private String mTitle;
-    private String mPositiveBtnText;
+    private int mTypeCode;
     private Time mTime = new Time();
-
-    private int mLastSelectedJd;
 
     private OnDateSelectedListener mOnDateSelectedListener;
 
-    public static DatePickerFragment newInstance(String title, String postiveButton, long min, long max) {
-        return newInstance(title, postiveButton, min, max, -1);
+    public static DatePickerFragment newInstance(String title, long min, long max, int typeCode) {
+        return newInstance(title, min, max, -1, typeCode);
     }
 
-    public static DatePickerFragment newInstance(String title, String postiveButton, long min, long max, int date) {
+    public static DatePickerFragment newInstance(String title, long min, long max, int date, int typeCode) {
         DatePickerFragment frag = new DatePickerFragment();
 
         Bundle args = new Bundle();
@@ -42,7 +40,7 @@ public class DatePickerFragment extends SherlockDialogFragment implements DatePi
         args.putLong(KEY_MIN_DATE, min);
         args.putLong(KEY_MAX_DATE, max);
         args.putString(KEY_TITLE, title);
-        args.putString(KEY_POS_BTN, postiveButton);
+        args.putInt(KEY_TYPE_CODE, typeCode);
         frag.setArguments(args);
 
         return frag;
@@ -58,7 +56,7 @@ public class DatePickerFragment extends SherlockDialogFragment implements DatePi
             mMinDate = args.getLong(KEY_MIN_DATE, mMinDate);
             mMaxDate = args.getLong(KEY_MAX_DATE, mMaxDate);
             mTitle = args.getString(KEY_TITLE);
-            mPositiveBtnText = args.getString(KEY_POS_BTN);
+            mTypeCode = args.getInt(KEY_TYPE_CODE, -1);
         }
     }
 
@@ -71,8 +69,6 @@ public class DatePickerFragment extends SherlockDialogFragment implements DatePi
         else
             time.setJulianDay(mDate);
 
-
-        mLastSelectedJd = TimeUtils.getJulianDay(time);
         final DatePickerDialog dpd = new DatePickerDialog(getActivity(), this, time.year, time.month, time.monthDay);
         dpd.setTitle(mTitle);
 
@@ -122,12 +118,12 @@ public class DatePickerFragment extends SherlockDialogFragment implements DatePi
             mTime.monthDay = datePicker.getDayOfMonth();
             mTime.normalize(true);
 
-            mOnDateSelectedListener.onDateSelected(TimeUtils.getJulianDay(mTime));
+            mOnDateSelectedListener.onDateSelected(mTypeCode, TimeUtils.getJulianDay(mTime));
         }
     }
 
     public static interface OnDateSelectedListener {
-        public void onDateSelected(int julianDay);
+        public void onDateSelected(int typeCode, int julianDay);
     }
 
 }

@@ -15,6 +15,7 @@ public class Shift implements Parcelable {
     private long startTime;
     private long endTime;
     public int julianDay;
+    public int endJulianDay;
     public float payRate;
     public int breakDuration;
     public boolean isTemplate;
@@ -27,6 +28,7 @@ public class Shift implements Parcelable {
         startTime = -1;
         endTime = -1;
         julianDay = -1;
+        endJulianDay = -1;
         payRate = -1;
         breakDuration = -1;
         isTemplate = false;
@@ -42,6 +44,7 @@ public class Shift implements Parcelable {
         s.startTime = in.readLong();
         s.endTime = in.readLong();
         s.julianDay = in.readInt();
+        s.endJulianDay = in.readInt();
         s.payRate = in.readFloat();
         s.breakDuration = in.readInt();
         s.isTemplate = in.readInt() == 1;
@@ -61,6 +64,7 @@ public class Shift implements Parcelable {
         final int startCol = cursor.getColumnIndex(DbField.START_TIME.name);
         final int endCol = cursor.getColumnIndex(DbField.END_TIME.name);
         final int dayCol = cursor.getColumnIndex(DbField.JULIAN_DAY.name);
+        final int endDayCol = cursor.getColumnIndex(DbField.END_JULIAN_DAY.name);
         final int breakCol = cursor.getColumnIndex(DbField.BREAK_DURATION.name);
         final int isTemplateCol = cursor.getColumnIndex(DbField.IS_TEMPLATE.name);
         final int reminderCol = cursor.getColumnIndex(DbField.REMINDER.name);
@@ -72,6 +76,7 @@ public class Shift implements Parcelable {
         s.startTime = cursor.getLong(startCol);
         s.endTime = cursor.getLong(endCol);
         s.julianDay = cursor.getInt(dayCol);
+        s.endJulianDay = cursor.getInt(endDayCol);
         s.payRate = cursor.getFloat(payCol);
         s.breakDuration = cursor.getInt(breakCol);
         s.isTemplate = cursor.getInt(isTemplateCol) == 1;
@@ -119,11 +124,11 @@ public class Shift implements Parcelable {
         if(julianDay == -1 || endTime == -1)
             return -1;
         else
-            return TimeUtils.getMillisFrom(julianDay, endTime);
+            return TimeUtils.getMillisFrom(endJulianDay, endTime);
     }
 
     public void setEndTime(long timeOfDay) {
-        endTime = TimeUtils.getMillisFrom(julianDay, timeOfDay);
+        endTime = TimeUtils.getMillisFrom(endJulianDay, timeOfDay);
     }
 
     public ContentValues toContentValues() {
@@ -133,6 +138,7 @@ public class Shift implements Parcelable {
             values.put(DbField.ID.name, id);
 
         values.put(DbField.JULIAN_DAY.name, julianDay);
+        values.put(DbField.END_JULIAN_DAY.name, endJulianDay);
         values.put(DbField.START_TIME.name, startTime);
         values.put(DbField.END_TIME.name, endTime);
         values.put(DbField.PAY_RATE.name, payRate);
@@ -163,6 +169,8 @@ public class Shift implements Parcelable {
             return false;
         if (julianDay != shift.julianDay)
             return false;
+        if (endJulianDay != shift.endJulianDay)
+            return false;
         if (Float.compare(shift.payRate, payRate) != 0)
             return false;
         if (startTime != shift.startTime)
@@ -182,6 +190,7 @@ public class Shift implements Parcelable {
         result = 31 * result + (int) (startTime ^ (startTime >>> 32));
         result = 31 * result + (int) (endTime ^ (endTime >>> 32));
         result = 31 * result + julianDay;
+        result = 31 * result + endJulianDay;
         result = 31 * result + (payRate != +0.0f ? Float.floatToIntBits(payRate) : 0);
         result = 31 * result + breakDuration;
         return result;
@@ -200,6 +209,7 @@ public class Shift implements Parcelable {
         dest.writeLong(startTime);
         dest.writeLong(endTime);
         dest.writeInt(julianDay);
+        dest.writeInt(endJulianDay);
         dest.writeFloat(payRate);
         dest.writeInt(breakDuration);
         dest.writeInt(isTemplate ? 1 : 0);

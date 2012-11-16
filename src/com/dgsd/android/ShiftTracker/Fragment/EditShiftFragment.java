@@ -42,6 +42,10 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
     private static final int LOADER_ID_SHIFT = 0x01;
     private static final int LOADER_ID_NAMES = 0x02;
 
+    private static final int TYPE_CODE_START = 0;
+    private static final int TYPE_CODE_END = 1;
+
+
     private Shift mInitialShift;
     private int mInitialJulianDay;
     private boolean mHasLoadedShift = false;
@@ -50,7 +54,8 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
     private StatefulEditText mNotes;
     private StatefulEditText mPayRate;
     private StatefulEditText mUnpaidBreak;
-    private TextView mDate;
+    private TextView mStartDate;
+    private TextView mEndDate;
     private TextView mStartTime;
     private TextView mEndTime;
     private View mReminders;
@@ -115,7 +120,8 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
         mNotes = (StatefulEditText) v.findViewById(R.id.notes);
         mPayRate = (StatefulEditText) v.findViewById(R.id.pay_rate);
         mUnpaidBreak = (StatefulEditText) v.findViewById(R.id.unpaid_break);
-        mDate = (TextView) v.findViewById(R.id.date);
+        mStartDate = (TextView) v.findViewById(R.id.start_date);
+        mEndDate = (TextView) v.findViewById(R.id.end_date);
         mStartTime = (TextView) v.findViewById(R.id.start_time);
         mEndTime = (TextView) v.findViewById(R.id.end_time);
         mSaveAsTemplate = (CheckBox) v.findViewById(R.id.is_template);
@@ -143,7 +149,8 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
         }
 
 
-        mDate.setOnClickListener(this);
+        mStartDate.setOnClickListener(this);
+        mEndDate.setOnClickListener(this);
         mStartTime.setOnClickListener(this);
         mEndTime.setOnClickListener(this);
 
@@ -252,7 +259,10 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
             mNotes.setText(mInitialShift.note);
             mSaveAsTemplate.setChecked(mInitialShift.isTemplate);
             if(mInitialShift.julianDay >= 0)
-                onDateSelected(mInitialShift.julianDay);
+                onDateSelected(TYPE_CODE_START, mInitialShift.julianDay);
+
+            if(mInitialShift.endJulianDay >= 0)
+                onDateSelected(TYPE_CODE_END, mInitialShift.endJulianDay);
 
             if(mInitialShift.getStartTime() != -1)
                 setStartTime(mInitialShift.getStartTime());
@@ -276,7 +286,9 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
             getActivity().invalidateOptionsMenu();
         } else {
             //No initial shift, just set up our date/time values
-            onDateSelected(mInitialJulianDay < 0 ? TimeUtils.getCurrentJulianDay() : mInitialJulianDay);
+            final int jd = mInitialJulianDay < 0 ? TimeUtils.getCurrentJulianDay() : mInitialJulianDay;
+            onDateSelected(TYPE_CODE_START, jd);
+            onDateSelected(TYPE_CODE_END, jd);
 
             //Default 9 - 5 shift
             Time t = new Time();
@@ -323,7 +335,7 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
     @Override
     public void onClick(View view) {
         final int id = view.getId();
-        if(id == R.id.date) {
+        if(id == R.id.start_date || id == R.id.end_date) {
             if(mDateDialog != null && mDateDialog.isResumed())
                 return; //We're showing already!
 
@@ -337,9 +349,17 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
             time.setJulianDay(centerJd + (count / 2));
             final long max = time.toMillis(true);
 
-            final Integer date = (Integer) mDate.getTag();
+            final Integer date;
+            final int type;
+            if(id == R.id.start_date) {
+                date = (Integer) mStartDate.getTag();
+                type = TYPE_CODE_START;
+            } else {
+                date = (Integer) mEndDate.getTag();
+                type = TYPE_CODE_END;
+            }
 
-            mDateDialog = DatePickerFragment.newInstance("Date of shift", "Set date", min, max, date == null ? -1 : date);
+            mDateDialog = DatePickerFragment.newInstance("Date of shift", min, max, date == null ? -1 : date, type);
             mDateDialog.setOnDateSelectedListener(this);
             mDateDialog.show(getSherlockActivity().getSupportFragmentManager(), null);
         } else if(id == R.id.end_time) {
@@ -364,15 +384,22 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
     }
 
     @Override
-    public void onDateSelected(int julianDay) {
+    public void onDateSelected(int typeCode, int julianDay) {
         if(getActivity() == null)
             return;
 
         final long millis = TimeUtils.getStartMillisForJulianDay(julianDay);
-        mDate.setTag(julianDay);
-        mDate.setText(DateUtils.formatDateRange(getActivity(), millis, millis,
+        String formatted = DateUtils.formatDateRange(getActivity(), millis, millis,
                 DateUtils.FORMAT_ABBREV_ALL |
-                        DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR));
+                        DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_SHOW_DATE);
+
+        if(typeCode == TYPE_CODE_START) {
+            mStartDate.setTag(julianDay);
+            mStartDate.setText(formatted);
+        } else {
+            mEndDate.setTag(julianDay);
+            mEndDate.setText(formatted);
+        }
     }
 
     @Override
@@ -406,9 +433,10 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
         shift.id = mInitialShift == null ? -1 : mInitialShift.id;
         shift.name = mName.getText() == null ? null : mName.getText().toString();
         shift.note = mNotes.getText() == null ? null : mNotes.getText().toString();
-        shift.julianDay = mDate.getTag() == null ? -1 : (Integer) mDate.getTag();
-        shift.setStartTime(mDate.getTag() == null ? -1 : (Long) mStartTime.getTag());
-        shift.setEndTime(mDate.getTag() == null ? -1 : (Long) mEndTime.getTag());
+        shift.julianDay = mStartDate.getTag() == null ? -1 : (Integer) mStartDate.getTag();
+        shift.endJulianDay = mEndDate.getTag() == null ? shift.julianDay : (Integer) mEndDate.getTag();
+        shift.setStartTime(mStartTime.getTag() == null ? -1 : (Long) mStartTime.getTag());
+        shift.setEndTime(mEndTime.getTag() == null ? -1 : (Long) mEndTime.getTag());
         shift.isTemplate = mSaveAsTemplate.isChecked();
         shift.reminder = Integer.valueOf(mRemindersValues[getSelectedPosition(mReminders)]);
 
@@ -481,9 +509,11 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
     }
 
     private String validateTime() {
-        //Validate that starttime is after endtime
         Long startMillis = (Long) mStartTime.getTag();
         Long endMillis = (Long) mEndTime.getTag();
+
+        Integer startDay = (Integer) mStartDate.getTag();
+        Integer endDay = (Integer) mEndDate.getTag();
 
         if(startMillis == null) {
             String error = "Please select a start time";
@@ -497,14 +527,32 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
             return error;
         }
 
+        if(startDay == null) {
+            String error = "Please select a start day";
+            mStartDate.setError(error);
+            return error;
+        }
+
+        if(endDay == null) {
+            String error = "Please select an end day";
+            mEndDate.setError(error);
+            return error;
+        }
+
+        if(endDay < startDay) {
+            String error = "End date must be after start date";
+            mEndDate.setError(error);
+            return error;
+        }
+
         Time start = new Time();
         Time end = new Time();
 
         start.set(startMillis);
         end.set(endMillis);
 
-        if(start.hour > end.hour ||
-                (start.hour == end.hour && start.minute > end.minute)) {
+        if(startDay.equals(endDay) && (start.hour > end.hour ||
+                (start.hour == end.hour && start.minute > end.minute))) {
             String error = "End time is before start time";
             mEndTime.setError(error);
             return error;

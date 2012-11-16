@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.format.Time;
+import android.view.View;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -12,6 +13,7 @@ import com.dgsd.android.ShiftTracker.Adapter.WeekPagerAdapter;
 import com.dgsd.android.ShiftTracker.Fragment.DatePickerFragment;
 import com.dgsd.android.ShiftTracker.Util.AppRating;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
+import com.nineoldandroids.view.ViewHelper;
 import com.viewpagerindicator.TitlePageIndicator;
 import de.neofonie.mobile.app.android.widget.crouton.Crouton;
 import de.neofonie.mobile.app.android.widget.crouton.Style;
@@ -34,6 +36,14 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
 
         mIndicator = (TitlePageIndicator) findViewById(R.id.indicator);
         mPager = (ViewPager) findViewById(R.id.pager);
+//        mPager.setPageTransformer(false, new ViewPager.PageTransformer(){
+//            @Override
+//            public void transformPage(View view, float position) {
+//                final float distFromZero = Math.abs(position);
+//                ViewHelper.setAlpha(view, 1.0f - distFromZero);
+//                ViewHelper.setRotationY(view, -45 * position);
+//            }
+//        });
 
         mAdapter = new WeekPagerAdapter(this, getSupportFragmentManager(), currentJd);
         mPager.setAdapter(mAdapter);
@@ -66,7 +76,7 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
             time.setJulianDay(centerJd + (count / 2));
             final long max = time.toMillis(true);
 
-            mGoToFragment = DatePickerFragment.newInstance("Go to date..", "Go to date", min, max);
+            mGoToFragment = DatePickerFragment.newInstance("Go to date..", min, max, -1);
             mGoToFragment.setOnDateSelectedListener(this);
             mGoToFragment.show(getSupportFragmentManager(), null);
         } else if(item.getItemId() == R.id.get_full_version) {
@@ -78,7 +88,7 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
     }
 
     @Override
-    public void onDateSelected(int julianDay) {
+    public void onDateSelected(int typeCode, int julianDay) {
         mIndicator.setCurrentItem(mAdapter.getPositionForJulianDay(julianDay));
     }
 

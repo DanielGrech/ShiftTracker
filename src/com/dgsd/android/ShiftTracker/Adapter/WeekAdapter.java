@@ -223,8 +223,10 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
     }
 
     public CursorLoader getWeeklyLoader(Context context) {
-        final String sel = DbField.JULIAN_DAY + " >= ? AND " + DbField.JULIAN_DAY + " < ?";
+        final String sel = "(" + DbField.JULIAN_DAY + " >= ? AND " + DbField.JULIAN_DAY + " < ?) OR (" + DbField.END_JULIAN_DAY + " >= ? AND " + DbField.END_JULIAN_DAY + " < ?)";
         final String[] args = new String[] {
+                String.valueOf(mStartingJulianDay),
+                String.valueOf(mStartingJulianDay + 7),
                 String.valueOf(mStartingJulianDay),
                 String.valueOf(mStartingJulianDay + 7)
         };
