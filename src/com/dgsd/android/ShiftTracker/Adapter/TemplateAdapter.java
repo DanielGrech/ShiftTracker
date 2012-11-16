@@ -18,24 +18,18 @@ import com.dgsd.android.ShiftTracker.R;
 import com.dgsd.android.ShiftTracker.Service.DbService;
 import com.dgsd.android.ShiftTracker.Util.UIUtils;
 
-import java.util.Formatter;
+import java.util.Date;
 
 public class TemplateAdapter extends SimpleCursorAdapter implements SimpleCursorAdapter.ViewBinder {
-    private boolean mIs24Hour;
-    private Formatter mFormatter;
-    private StringBuilder mStringBuilder;
     private SparseArray<String> mIdToTimeArray;
+    private java.text.DateFormat mTimeFormat;
 
     public TemplateAdapter(Context context) {
         super(context, R.layout.list_item_template, null,
                 new String[]{DbField.ID.name}, new int[]{R.id.container}, 0);
 
         this.setViewBinder(this);
-
-        mIs24Hour = DateFormat.is24HourFormat(context);
-
-        mStringBuilder = new StringBuilder();
-        mFormatter = new Formatter((mStringBuilder));
+        mTimeFormat = DateFormat.getTimeFormat(context);
 
         //Caching
         mIdToTimeArray = new SparseArray<String>();
@@ -76,12 +70,8 @@ public class TemplateAdapter extends SimpleCursorAdapter implements SimpleCursor
         if(!TextUtils.isEmpty(time))
             return time;
 
-        int flags = DateUtils.FORMAT_SHOW_TIME;
-        if(mIs24Hour)
-            flags |= DateUtils.FORMAT_24HOUR;
 
-        mStringBuilder.setLength(0);
-        time = DateUtils.formatDateRange(mContext, mFormatter, shift.getStartTime(), shift.getEndTime(), flags).toString();
+        time = mTimeFormat.format(new Date(shift.getStartTime())) + " - " + mTimeFormat.format(new Date(shift.getEndTime()));
 
         time += " (" + UIUtils.getDurationAsHours(shift.getDurationInMinutes()) + ")";
 

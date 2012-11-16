@@ -270,6 +270,7 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
             public void onTemplateClicked(Shift shift) {
                 shift.id = -1;
                 shift.isTemplate = false;
+                shift.endJulianDay = julianDay + (shift.endJulianDay - shift.julianDay);
                 shift.julianDay = julianDay;
 
                 DbService.async_insert(getActivity(), Provider.SHIFTS_URI, shift.toContentValues());
