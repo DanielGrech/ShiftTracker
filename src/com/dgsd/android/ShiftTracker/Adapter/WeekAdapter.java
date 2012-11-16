@@ -200,14 +200,15 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
             Object[] row = new Object[colCount];
             row[0] = mRand.nextInt(Integer.MAX_VALUE);  // DbField.ID
             row[1] = i;                                 // DbField.JULIAN_DAY
-            row[2] = -1;                                // DbField.START_TIME
-            row[3] = -1;                                // DbField.END_TIME
-            row[4] = -1;                                // DbField.PAY_RATE
-            row[5] = NEW_ROW_KEY;                       // DbField.NAME
-            row[6] = null;                              // DbField.NOTE
-            row[7] = -1;                                // DbField.BREAK_DURATION
-            row[8] = 0;                                 // DbField.IS_TEMPLATE
-            row[9] = -1;                                // DbField.REMINDER
+            row[2] = i;                                 // DbField.END_JULIAN_DAY
+            row[3] = -1;                                // DbField.START_TIME
+            row[4] = -1;                                // DbField.END_TIME
+            row[5] = -1;                                // DbField.PAY_RATE
+            row[6] = NEW_ROW_KEY;                       // DbField.NAME
+            row[7] = null;                              // DbField.NOTE
+            row[8] = -1;                                // DbField.BREAK_DURATION
+            row[9] = 0;                                 // DbField.IS_TEMPLATE
+            row[10] = -1;                               // DbField.REMINDER
 
             mc.addRow(row);
         }
@@ -230,7 +231,7 @@ public class WeekAdapter extends StickyListHeadersCursorAdapter {
 
         final String sort = DbField.JULIAN_DAY + " ASC," + DbField.START_TIME + " ASC, " + DbField.NAME + " ASC";
 
-        return new CursorLoader(context, Provider.SHIFTS_URI, null, sel, args, sort);
+        return new CursorLoader(context, Provider.SHIFTS_URI, DbTable.SHIFTS.getFieldNames(), sel, args, sort);
     }
 
     private String getTimeText(Shift shift) {

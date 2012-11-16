@@ -6,6 +6,7 @@ package com.dgsd.android.ShiftTracker.Data;
 public class DbField {
     public static final DbField ID = new DbField("_id", "integer", "primary key");
     public static final DbField JULIAN_DAY = new DbField("day", "integer");
+    public static final DbField END_JULIAN_DAY = new DbField("end_day", "integer");
     public static final DbField START_TIME = new DbField("start", "integer");
     public static final DbField END_TIME = new DbField("end", "integer");
     public static final DbField PAY_RATE = new DbField("payrate", "real");

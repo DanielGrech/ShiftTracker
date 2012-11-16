@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class Db extends SQLiteOpenHelper {
     private static final String TAG = Db.class.getSimpleName();
 
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
     public static final String DB_NAME ="shift_tracker.db";
 
     private static Db mInstance;
@@ -32,7 +32,12 @@ public class Db extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(DbTable.SHIFTS.dropSql());
+        if(newVersion == 2)
+            handleVersion2Changes(db);
+        else {
+            db.execSQL(DbTable.SHIFTS.dropSql());
+            onCreate(db);
+        }
     }
 
     @Override
@@ -47,6 +52,10 @@ public class Db extends SQLiteOpenHelper {
         synchronized (LOCK) {
             return super.getWritableDatabase();
         }
+    }
+
+    private void handleVersion2Changes(SQLiteDatabase db) {
+        db.execSQL("ALTER TABLE " + DbTable.SHIFTS.name + " ADD COLUMN " + DbField.END_JULIAN_DAY.name + " " + DbField.END_JULIAN_DAY.type);
     }
 }
 

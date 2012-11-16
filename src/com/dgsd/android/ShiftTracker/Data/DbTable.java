@@ -9,6 +9,7 @@ public class DbTable {
     public static final DbTable SHIFTS = new DbTable("shifts", new DbField[] {
         DbField.ID,
         DbField.JULIAN_DAY,
+        DbField.END_JULIAN_DAY,
         DbField.START_TIME,
         DbField.END_TIME,
         DbField.PAY_RATE,
