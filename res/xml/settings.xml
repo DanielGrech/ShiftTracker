@@ -69,6 +69,13 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/settings_category_data">
+        <Preference
+            android:key="@string/settings_key_export"
+            android:title="@string/settings_title_export"
+            android:summary="@string/settings_summary_export" />
+    </PreferenceCategory>
 
     <PreferenceCategory
         android:key="@string/settings_category_about"

@@ -44,13 +44,16 @@
     <string name="summary_unavailable_message">View a summary of your earnings over different time spans.\n\nThis and other great features are available in the full version of this app!</string>
     <string name="reminder">Reminder</string>
     <string name="reminders_unavailable_message">Set a reminder alert for this shift.\n\nThis and other great features are available in the full version of this app!</string>
+    <string name="export_unavailable_message">Export your data for easy analysis and backup.\n\nThis and other great features are available in the full version of this app!</string>
+    <string name="animation_unavailable_message">Set a different animation when moving between weeks.\n\nThis and other great features are available in the full version of this app!</string>
     <string name="export_to_calendar">Export to calendar</string>
+    <string name="exporting_data">Exporting Data</string>
 
     <!-- Settings -->
     <string name="settings_category_display">Display</string>
     <string name="settings_category_about">@string/about</string>
     <string name="settings_category_defaults">Defaults</string>
-    <string name="settings_category_"></string>
+    <string name="settings_category_data">Data</string>
     <string name="settings_category_"></string>
 
     <string name="settings_key_start_day">start_day</string>
@@ -63,6 +66,8 @@
     <string name="settings_key_default_pay_rate">default_pay_rate</string>
     <string name="settings_key_rate">rate</string>
     <string name="settings_key_default_reminder">default_reminder</string>
+    <string name="settings_key_export">export</string>
+    <string name="settings_key_animation">pager_animation</string>
 
     <string name="settings_title_start_day">Week Start Day</string>
     <string name="settings_title_show_total_hours">Show Total Hours</string>
@@ -73,6 +78,8 @@
     <string name="settings_title_default_pay_rate">Default Payrate</string>
     <string name="settings_title_default_reminder">Default Reminder</string>
     <string name="settings_title_rate">Rate</string>
+    <string name="settings_title_export">Export</string>
+    <string name="settings_title_animation">Pager Animation</string>
 
     <string name="settings_summary_start_day">The first day of your week</string>
     <string name="settings_summary_show_total_hours">Show the total number of hours worked in a week</string>
@@ -83,6 +90,8 @@
     <string name="settings_summary_default_pay_rate">Default payrate ($/hour)</string>
     <string name="settings_summary_default_reminder">Default reminder for new shifts</string>
     <string name="settings_summary_rate">Rate the app in the store!</string>
+    <string name="settings_summary_export">Export all your data to a csv file</string>
+    <string name="settings_summary_animation">The animation to use when paging between weeks</string>
 
     <string-array name="days_of_week">
         <item>Monday</item>
@@ -142,6 +151,22 @@
         <item>"1440"</item>
         <item>"2880"</item>
         <item>"10080"</item>
+    </string-array>
+
+    <string-array name="animation_types">
+        <item>Plain</item>
+        <item>Inner cube</item>
+        <item>Outer cube</item>
+        <item>Twist</item>
+        <item>Compress</item>
+    </string-array>
+
+    <string-array name="animation_types_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
     </string-array>
 
 </resources>

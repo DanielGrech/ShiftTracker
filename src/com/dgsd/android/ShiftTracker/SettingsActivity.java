@@ -1,6 +1,8 @@
 package com.dgsd.android.ShiftTracker;
 
+import android.app.Dialog;
 import android.app.backup.BackupManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -15,10 +17,14 @@ import android.text.format.DateUtils;
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.dgsd.android.ShiftTracker.Data.ExportDataTask;
+import com.dgsd.android.ShiftTracker.Fragment.LinkToPaidAppFragment;
+import com.dgsd.android.ShiftTracker.Util.Api;
 import com.dgsd.android.ShiftTracker.Util.DiagnosticUtils;
 import com.dgsd.android.ShiftTracker.Util.IntentUtils;
 import com.dgsd.android.ShiftTracker.Util.Prefs;
 import com.dgsd.android.ShiftTracker.View.ListPreference;
+import org.holoeverywhere.app.AlertDialog;
 
 import java.text.NumberFormat;
 
@@ -28,15 +34,21 @@ import java.text.NumberFormat;
  */
 public class SettingsActivity extends SherlockPreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private static final int DIALOG_FEATURE_UNAVAILABLE = 0x0;
+    private static final String KEY_MESSAGE = "_message";
+
     private Preference mWeekStartDayPref;
     private Preference mStartTimePref;
     private Preference mEndTimePref;
     private Preference mBreakDurationPref;
     private Preference mPayratePref;
+    private Preference mAnimationPref;
 
     private Prefs mPrefs;
 
     private BackupManager mBackupManager;
+
+    private LinkToPaidAppFragment mLinkToPaidAppFragment;
 
     /**
      * Give each application a chance to set some custom preferences of their own
@@ -82,6 +94,40 @@ public class SettingsActivity extends SherlockPreferenceActivity implements Shar
             }
         });
 
+        prefMgr.findPreference(getString(R.string.settings_key_export)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                if(StApp.isFreeApp(SettingsActivity.this)) {
+                    Bundle args = new Bundle();
+                    args.putString(KEY_MESSAGE, getString(R.string.export_unavailable_message));
+                    showDialog(DIALOG_FEATURE_UNAVAILABLE, args);
+                } else {
+                    ExportDataTask.start(SettingsActivity.this);
+                }
+                return true;
+            }
+        });
+
+        if(Api.isMin(Api.HONEYCOMB)) {
+            mAnimationPref = prefMgr.findPreference(getString(R.string.settings_key_animation));
+            mAnimationPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    boolean isFreeApp = StApp.isFreeApp(SettingsActivity.this);
+                    if(isFreeApp) {
+                        Bundle args = new Bundle();
+                        args.putString(KEY_MESSAGE, getString(R.string.animation_unavailable_message));
+                        showDialog(DIALOG_FEATURE_UNAVAILABLE, args);
+                        Dialog d =((android.preference.ListPreference) mAnimationPref).getDialog();
+                        if(d != null)
+                            d.dismiss();
+                    }
+
+                    return isFreeApp;
+                }
+            });
+        }
+
         if(mOnCreateSettingsListener != null)
             mOnCreateSettingsListener.onSettingsCreated(this, prefMgr, getPreferenceScreen());
     }
@@ -107,6 +153,11 @@ public class SettingsActivity extends SherlockPreferenceActivity implements Shar
         long endTime = mPrefs.get(getString(R.string.settings_key_default_end_time), -1L);
         if(startTime != -1)
             setTimePreference(mEndTimePref, endTime);
+
+        if(mAnimationPref != null) {
+            int animTypeVal = Integer.valueOf(mPrefs.get(getString(R.string.settings_key_animation), "0"));
+            mAnimationPref.setSummary(getResources().getStringArray(R.array.animation_types)[animTypeVal]);
+        }
 
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
@@ -136,6 +187,27 @@ public class SettingsActivity extends SherlockPreferenceActivity implements Shar
     @Override
     public void onBackPressed() {
         StApp.doDefaultNavigateUp(this);
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id, Bundle args) {
+        if (id == DIALOG_FEATURE_UNAVAILABLE) {
+            AlertDialog.Builder b = new AlertDialog.Builder(this);
+            b.setTitle(R.string.feature_unavailable);
+            b.setMessage(args.getString(KEY_MESSAGE));
+            b.setPositiveButton(R.string.get_full_version, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Uri uri = Uri.parse("market://details?id=com.dgsd.android.ShiftTracker");
+                    startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                    dialog.dismiss();
+                }
+            });
+
+            return b.create();
+        }
+
+        return null;
     }
 
     @Override
@@ -172,6 +244,11 @@ public class SettingsActivity extends SherlockPreferenceActivity implements Shar
             setTimePreference(mStartTimePref, mPrefs.get(key, 0L));
         } else if(TextUtils.equals(key, getString(R.string.settings_key_default_end_time))) {
             setTimePreference(mEndTimePref, mPrefs.get(key, 0L));
+        } else if(TextUtils.equals(key, getString(R.string.settings_key_animation))) {
+            if(mAnimationPref != null) {
+                int animTypeVal = Integer.valueOf(mPrefs.get(getString(R.string.settings_key_animation), "0"));
+                mAnimationPref.setSummary(getResources().getStringArray(R.array.animation_types)[animTypeVal]);
+            }
         }
 
         mBackupManager.dataChanged();
