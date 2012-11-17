@@ -34,7 +34,8 @@ import java.text.NumberFormat;
  */
 public class SettingsActivity extends SherlockPreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private static final int DIALOG_FEATURE_UNAVAILABLE = 0x0;
+    private static final int DIALOG_ANIM_FEATURE_UNAVAILABLE = 0x0;
+    private static final int DIALOG_EXPORT_FEATURE_UNAVAILABLE = 0x1;
     private static final String KEY_MESSAGE = "_message";
 
     private Preference mWeekStartDayPref;
@@ -100,7 +101,7 @@ public class SettingsActivity extends SherlockPreferenceActivity implements Shar
                 if(StApp.isFreeApp(SettingsActivity.this)) {
                     Bundle args = new Bundle();
                     args.putString(KEY_MESSAGE, getString(R.string.export_unavailable_message));
-                    showDialog(DIALOG_FEATURE_UNAVAILABLE, args);
+                    showDialog(DIALOG_EXPORT_FEATURE_UNAVAILABLE, args);
                 } else {
                     ExportDataTask.start(SettingsActivity.this);
                 }
@@ -117,7 +118,7 @@ public class SettingsActivity extends SherlockPreferenceActivity implements Shar
                     if(isFreeApp) {
                         Bundle args = new Bundle();
                         args.putString(KEY_MESSAGE, getString(R.string.animation_unavailable_message));
-                        showDialog(DIALOG_FEATURE_UNAVAILABLE, args);
+                        showDialog(DIALOG_ANIM_FEATURE_UNAVAILABLE, args);
                         Dialog d =((android.preference.ListPreference) mAnimationPref).getDialog();
                         if(d != null)
                             d.dismiss();
@@ -191,7 +192,7 @@ public class SettingsActivity extends SherlockPreferenceActivity implements Shar
 
     @Override
     protected Dialog onCreateDialog(int id, Bundle args) {
-        if (id == DIALOG_FEATURE_UNAVAILABLE) {
+        if (id == DIALOG_ANIM_FEATURE_UNAVAILABLE || id == DIALOG_EXPORT_FEATURE_UNAVAILABLE) {
             AlertDialog.Builder b = new AlertDialog.Builder(this);
             b.setTitle(R.string.feature_unavailable);
             b.setMessage(args.getString(KEY_MESSAGE));
