@@ -76,7 +76,7 @@ public class Shift implements Parcelable {
         s.startTime = cursor.getLong(startCol);
         s.endTime = cursor.getLong(endCol);
         s.julianDay = cursor.getInt(dayCol);
-        s.endJulianDay = cursor.getInt(endDayCol);
+        s.endJulianDay = cursor.isNull(endDayCol) ? s.julianDay : cursor.getInt(endDayCol); //For compatability
         s.payRate = cursor.getFloat(payCol);
         s.breakDuration = cursor.getInt(breakCol);
         s.isTemplate = cursor.getInt(isTemplateCol) == 1;
