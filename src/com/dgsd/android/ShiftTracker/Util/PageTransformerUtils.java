@@ -18,8 +18,7 @@ public class PageTransformerUtils {
                         return;
 
                     final float distFromZero = Math.abs(position);
-                    view.setAlpha(1.0f - distFromZero);
-                    view.setRotationY(-45 * position);
+                    view.animate().alpha(1.0f - distFromZero).rotationY(-45 * position).setDuration(0).start();
                 }
             };
         }
@@ -36,8 +35,7 @@ public class PageTransformerUtils {
                         return;
 
                     final float distFromZero = Math.abs(position);
-                    view.setAlpha(1.0f - distFromZero);
-                    view.setRotationY(45 * position);
+                    view.animate().alpha(1.0f - distFromZero).rotationY(45 * position).setDuration(0).start();
                 }
             };
         }
@@ -53,11 +51,14 @@ public class PageTransformerUtils {
                     if(!Api.isMin(Api.HONEYCOMB))
                         return;
 
-                    final float distFromZero = Math.abs(position);
-                    view.setAlpha(1.0f - distFromZero);
                     view.setPivotX(0);
                     view.setPivotY(0);
-                    view.setRotation(90 * position);
+
+                    final float distFromZero = Math.abs(position);
+                    view.animate().alpha(1.0f - distFromZero)
+                                  .rotation(90 * position)
+                                  .setDuration(0)
+                                  .start();
                 }
             };
         }
@@ -74,9 +75,11 @@ public class PageTransformerUtils {
                         return;
 
                     final float distFromZero = Math.abs(position);
-                    view.setAlpha(1.0f - distFromZero);
-                    view.setScaleX(1.0f - distFromZero);
-                    view.setScaleY(1.0f - distFromZero);
+                    view.animate().alpha(1.0f - distFromZero)
+                                  .scaleX(1.0f - distFromZero)
+                                  .scaleY(1.0f - distFromZero)
+                                  .setDuration(0)
+                                  .start();
                 }
             };
         }
