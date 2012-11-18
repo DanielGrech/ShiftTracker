@@ -283,7 +283,7 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
                 }
             }
 
-            getActivity().invalidateOptionsMenu();
+            getSherlockActivity().invalidateOptionsMenu();
         } else {
             //No initial shift, just set up our date/time values
             final int jd = mInitialJulianDay < 0 ? TimeUtils.getCurrentJulianDay() : mInitialJulianDay;
