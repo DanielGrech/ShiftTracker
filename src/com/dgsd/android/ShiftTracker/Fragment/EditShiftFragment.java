@@ -485,11 +485,8 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
     }
 
     private String validateBreakDuration() {
-        Long startMillis = (Long) mStartTime.getTag();
-        Long endMillis = (Long) mEndTime.getTag();
-
         final CharSequence breakDurationAsStr = mUnpaidBreak.getText();
-        if(startMillis == null || endMillis == null || TextUtils.isEmpty(breakDurationAsStr))
+        if(TextUtils.isEmpty(breakDurationAsStr))
             return null;
 
         if(!TextUtils.isDigitsOnly(breakDurationAsStr)) {
@@ -498,8 +495,8 @@ public class EditShiftFragment extends SherlockFragment implements LoaderManager
             return error;
         }
 
-        long duration = (endMillis - startMillis) / TimeUtils.InMillis.MINUTE;
-        if(duration < Long.valueOf(breakDurationAsStr.toString())) {
+        final Shift shift = getShift();
+        if(((shift.getEndTime() - shift.getStartTime()) / TimeUtils.InMillis.MINUTE) < shift.breakDuration) {
             String error = "Break duration longer than shift";
             mUnpaidBreak.setError(error);
             return error;
