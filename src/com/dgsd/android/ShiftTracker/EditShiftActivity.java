@@ -23,8 +23,8 @@ import com.dgsd.android.ShiftTracker.Service.DbService;
 import com.dgsd.android.ShiftTracker.Util.AlarmUtils;
 import com.dgsd.android.ShiftTracker.Util.Api;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
-import de.neofonie.mobile.app.android.widget.crouton.Crouton;
-import de.neofonie.mobile.app.android.widget.crouton.Style;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;

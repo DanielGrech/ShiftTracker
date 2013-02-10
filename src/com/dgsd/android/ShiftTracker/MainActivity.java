@@ -12,7 +12,7 @@ import com.dgsd.android.ShiftTracker.Adapter.WeekPagerAdapter;
 import com.dgsd.android.ShiftTracker.Fragment.DatePickerFragment;
 import com.dgsd.android.ShiftTracker.Util.*;
 import com.viewpagerindicator.TitlePageIndicator;
-import de.neofonie.mobile.app.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
 
 public class MainActivity extends SherlockFragmentActivity implements DatePickerFragment.OnDateSelectedListener {
     private static final int ANIM_TYPE_PLAIN = 0;

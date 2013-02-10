@@ -22,8 +22,8 @@ import com.dgsd.android.ShiftTracker.Service.DbService;
 import com.dgsd.android.ShiftTracker.StApp;
 import com.dgsd.android.ShiftTracker.Util.*;
 import com.emilsjolander.components.StickyListHeaders.StickyListHeadersListView;
-import de.neofonie.mobile.app.android.widget.crouton.Crouton;
-import de.neofonie.mobile.app.android.widget.crouton.Style;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 import java.text.NumberFormat;
 
