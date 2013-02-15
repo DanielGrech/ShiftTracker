@@ -16,6 +16,7 @@
 
 package com.dgsd.android.ShiftTracker.Fragment;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -266,8 +267,22 @@ public class WeekFragment extends SherlockFragment implements LoaderManager.Load
         } else if(item.getItemId() == R.id.new_shift) {
             startActivity(intent);
         } else if(item.getItemId() == R.id.delete) {
-            DbService.async_delete(getActivity(), Provider.SHIFTS_URI,
-                    DbField.ID + "=" + (holder.shift == null ? -1 : holder.shift.id));
+            if(holder.shift.isTemplate) {
+                /**
+                 * We dont want to delete templates, just remove them from view. Do this by giving them bogus dates
+                 */
+                final ContentValues values = new ContentValues();
+                values.put(DbField.JULIAN_DAY.name, -1);
+                values.put(DbField.END_JULIAN_DAY.name, -1);
+
+                DbService.async_update(getActivity(), Provider.SHIFTS_URI,
+                        DbField.ID + "=" + (holder.shift == null ? -1 : holder.shift.id),
+                        values);
+            } else {
+                DbService.async_delete(getActivity(), Provider.SHIFTS_URI,
+                        DbField.ID + "=" + (holder.shift == null ? -1 : holder.shift.id));
+            }
+
             AlarmUtils.get(getActivity()).cancel(holder.shift);
             showMessage("Shift deleted");
         }
