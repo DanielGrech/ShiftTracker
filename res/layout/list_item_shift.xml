@@ -43,7 +43,7 @@
         android:layout_centerVertical="true"
         android:paddingTop="4dip"
         android:paddingBottom="4dip"
-        android:paddingRight="4dip"
+        android:paddingRight="8dip"
         android:orientation="vertical">
 
         <TextView
@@ -75,6 +75,7 @@
             android:textSize="14sp"
             android:duplicateParentState="true"
             android:fontFamily="sans-serif-light"
+            android:textStyle="italic"
             android:textColor="?android:attr/textColorSecondary"/>
     </LinearLayout>
 </RelativeLayout>
