@@ -62,7 +62,6 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
         ab.setListNavigationCallbacks(ArrayAdapter.createFromResource(this, R.array.nav_items,
                 android.R.layout.simple_spinner_dropdown_item), this);
 
-
         mPrefs = Prefs.getInstance(this);
 
         //Show our 'Rate in Market' dialog if needed
@@ -141,7 +140,17 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
 
     @Override
     public void onDateSelected(int typeCode, int julianDay) {
-        mIndicator.setCurrentItem(mWeekPagerAdapter.getPositionForJulianDay(julianDay));
+        final PagerAdapter adapter = mPager.getAdapter();
+
+        final int page;
+        if(adapter == mWeekPagerAdapter)
+            page = mWeekPagerAdapter.getPositionForJulianDay(julianDay);
+        else if(adapter == mMonthPagerAdapter)
+            page = mMonthPagerAdapter.getPositionForJulianDay(julianDay);
+        else
+            page = 0;
+
+        mIndicator.setCurrentItem(page);
     }
 
     @Override
@@ -162,17 +171,9 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
             case NAV_INDEX_MONTH:
                 mPager.setAdapter(mMonthPagerAdapter);
                 mIndicator.setViewPager(mPager, mMonthPagerAdapter.getPositionForJulianDay(currentJd));
-
-                for(int i = 0; i < mMonthPagerAdapter.getCount(); i++) {
-                    System.err.print("========= " + mMonthPagerAdapter.getPageTitle(i));
-                    if(i == mMonthPagerAdapter.getCenterPosition())
-                        System.err.print(" <-----");
-
-                    System.err.print("\n");
-                }
-
                 break;
         }
+
         return true;
     }
 
@@ -182,7 +183,7 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
         if(adapter == mWeekPagerAdapter)
             return mWeekPagerAdapter.getJulianDayForPosition(mPager.getCurrentItem());
         else if(adapter == mMonthPagerAdapter)
-            return mMonthPagerAdapter.getSelectedJulianDay();
+            return mMonthPagerAdapter.getSelectedJulianDay(mPager.getCurrentItem());
         else
             return TimeUtils.getCurrentJulianDay();
     }

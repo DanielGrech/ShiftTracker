@@ -23,11 +23,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.text.format.DateUtils;
 import android.text.format.Time;
+import android.util.SparseArray;
 import com.dgsd.android.ShiftTracker.Const;
+import com.dgsd.android.ShiftTracker.Fragment.MonthFragment;
 import com.dgsd.android.ShiftTracker.Fragment.WeekFragment;
 import com.dgsd.android.ShiftTracker.R;
 import com.dgsd.android.ShiftTracker.Util.TimeUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.*;
 
 public class MonthPagerAdapter extends FragmentStatePagerAdapter {
@@ -36,9 +39,13 @@ public class MonthPagerAdapter extends FragmentStatePagerAdapter {
     private Map<Integer, String> posToTitleMap = new HashMap<Integer, String>();
     private Context mContext;
 
+    private static final int COUNT = 25;
+
     private int mCenterJulianDay = -1;
 
     private Time mTime;
+
+    private SparseArray<WeakReference<MonthFragment>> mPosToFragRef = new SparseArray<WeakReference<MonthFragment>>(COUNT);
 
     public MonthPagerAdapter(Context context, FragmentManager fm, int monthContainingJulianDay) {
         super(fm);
@@ -60,16 +67,26 @@ public class MonthPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 25;
+        return COUNT;
     }
 
     public int getCenterPosition() {
-        return (getCount() / 2);
+        return COUNT / 2;
     }
 
     @Override
     public Fragment getItem(int pos) {
-        return WeekFragment.newInstance(mCenterJulianDay);
+        final YearAndMonth ym = getYearAndMonthForPosition(pos);
+        final MonthFragment frag = MonthFragment.newInstance(ym.month, ym.year);
+
+        mPosToFragRef.put(pos, new WeakReference<MonthFragment>(frag));
+        return frag;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+        mPosToFragRef.clear();
     }
 
     protected String getTitleForPosition(int pos) {
@@ -94,9 +111,16 @@ public class MonthPagerAdapter extends FragmentStatePagerAdapter {
         return getCenterPosition() + diff - 1;
     }
 
-    public int getSelectedJulianDay() {
-        //TODO: Find selected date from fragment!
-        return mCenterJulianDay;
+    public int getSelectedJulianDay(int pos) {
+        int jd = mCenterJulianDay;
+
+        WeakReference<MonthFragment> fragRes = mPosToFragRef.get(pos);
+        MonthFragment frag = fragRes.get();
+
+        if(frag != null)
+            jd = frag.getSelectedJulianDay();
+
+        return jd;
     }
 
     private YearAndMonth getYearAndMonthForPosition(int pos) {
