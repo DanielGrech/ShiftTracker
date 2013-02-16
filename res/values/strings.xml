@@ -185,5 +185,10 @@
         <item>4</item>
     </string-array>
 
+    <string-array name="nav_items">
+        <item>Week</item>
+        <item>Month</item>
+    </string-array>
+
 </resources>
 
