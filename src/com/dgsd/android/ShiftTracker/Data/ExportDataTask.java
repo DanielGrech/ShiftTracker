@@ -183,6 +183,7 @@ public class ExportDataTask extends AsyncTask<Void, Integer, String> {
 
         final Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("plain/text");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
         intent.putExtra(Intent.EXTRA_TEXT, msg);
         intent.putExtra(Intent.EXTRA_STREAM, fileUri);
