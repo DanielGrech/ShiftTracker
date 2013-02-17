@@ -85,6 +85,7 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
 
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setAdapter(mWeekPagerAdapter);
+        mPager.setOffscreenPageLimit(1);
 
         if(Api.isMin(Api.HONEYCOMB) && !StApp.isFreeApp(this)) {
             final int animType = Integer.valueOf(mPrefs.get(getString(R.string.settings_key_animation), "0"));
