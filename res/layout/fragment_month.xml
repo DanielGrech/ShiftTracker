@@ -16,4 +16,8 @@
             android:background="@android:color/transparent"
             android:cacheColorHint="@android:color/transparent"/>
 
+    <include
+        layout="@layout/month_view_day_list" />
+
+
 </LinearLayout>
