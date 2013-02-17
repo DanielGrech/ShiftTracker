@@ -134,10 +134,16 @@ public class MonthFragment extends SherlockFragment implements LoaderManager.Loa
         if (v == mEventList)  {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 
-            if(info.targetView == mAddShiftBtn)
+            if(info.targetView == mAddShiftBtn) {
                 getActivity().getMenuInflater().inflate(R.menu.week_list_item_popup, menu);
-            else
+                if(!mHasTemplates) {
+                    MenuItem item = menu.findItem(R.id.template_shift);
+                    item.setEnabled(false);
+                    item.setVisible(false);
+                }
+            } else {
                 getActivity().getMenuInflater().inflate(R.menu.week_list_item_context_menu, menu);
+            }
         }
     }
 
