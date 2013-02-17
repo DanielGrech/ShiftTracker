@@ -182,7 +182,7 @@ public class ExportDataTask extends AsyncTask<Void, Integer, String> {
         final Uri fileUri = Uri.parse("content://" + InternalFileProvider.AUTHORITY + "/" + fileName);
 
         final Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("plain/text");
+        intent.setType("text/csv");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(Intent.EXTRA_SUBJECT, subject);
         intent.putExtra(Intent.EXTRA_TEXT, msg);
