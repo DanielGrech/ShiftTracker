@@ -16,14 +16,25 @@
   ~    limitations under the License.
   -->
 
-<ListView
+
+<TextView
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/list"
+        android:id="@+id/add_shift"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:dividerHeight="0dp"
-        android:divider="@android:color/transparent"
-        android:paddingRight="16dip"
-        android:paddingLeft="16dip"
-        android:cacheColorHint="@android:color/transparent"/>
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:minHeight="?android:attr/listPreferredItemHeight"
+        android:gravity="center"
+        android:fontFamily="sans-serif-light"
+        android:background="@drawable/list_item_shift_background"
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        android:textColor="@color/blue"
+        android:text="@string/add_shift_plus"/>
+
+
+
+<!--<View-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="1px"-->
+<!--android:background="@color/border_color"/>-->

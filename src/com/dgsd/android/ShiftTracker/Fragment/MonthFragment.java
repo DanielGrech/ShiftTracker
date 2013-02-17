@@ -15,7 +15,6 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.dgsd.android.ShiftTracker.Adapter.DayAdapter;
-import com.dgsd.android.ShiftTracker.Adapter.WeekAdapter;
 import com.dgsd.android.ShiftTracker.Data.DbField;
 import com.dgsd.android.ShiftTracker.Data.Provider;
 import com.dgsd.android.ShiftTracker.EditShiftActivity;
@@ -36,7 +35,7 @@ import java.util.Date;
 /**
  * Created: 16/02/13 10:36 PM
  */
-public class MonthFragment extends SherlockFragment implements View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor>,CalendarPickerView.OnDateSelectedListener, AdapterView.OnItemClickListener {
+public class MonthFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<Cursor>,CalendarPickerView.OnDateSelectedListener, AdapterView.OnItemClickListener {
     public static final String TAG = MonthFragment.class.getSimpleName();
 
     private static final String KEY_MONTH = "_month";
@@ -101,15 +100,18 @@ public class MonthFragment extends SherlockFragment implements View.OnClickListe
         mCalendar.init(selected.getTime(), min.getTime(), max.getTime());
         mCalendar.setOnDateSelectedListener(this);
 
-        mAddShiftBtn = (TextView) v.findViewById(R.id.add_shift);
-        mAddShiftBtn.setOnClickListener(this);
-        registerForContextMenu(mAddShiftBtn);
+        mAddShiftBtn = (TextView) LayoutInflater.from(getActivity())
+                .inflate(R.layout.month_view_add_shift, mEventList, false);
 
         mAdapter = new DayAdapter(getActivity(), null, getSelectedJulianDay());
         mEventList = (ListView) v.findViewById(R.id.list);
         mEventList.setLayoutAnimation(Anim.getListViewDealAnimator());
         mEventList.setOnItemClickListener(this);
+        mEventList.addHeaderView(mAddShiftBtn);
+        mEventList.setHeaderDividersEnabled(true);
         mEventList.setAdapter(mAdapter);
+
+
         registerForContextMenu(mEventList);
 
         return v;
@@ -127,45 +129,15 @@ public class MonthFragment extends SherlockFragment implements View.OnClickListe
     }
 
     @Override
-    public void onClick(final View v) {
-        final int jd = getSelectedJulianDay();
-
-        if(mHasTemplates) {
-            if(Api.isMin(Api.HONEYCOMB)) {
-                final PopupMenu popup = new PopupMenu(getActivity(), v);
-                popup.getMenuInflater().inflate(R.menu.week_list_item_popup, popup.getMenu());
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if(item.getItemId() == R.id.template_shift) {
-                            showTemplateChooser(jd);
-                        } else if(item.getItemId() == R.id.new_shift) {
-                            final Intent intent = new Intent(getActivity(), EditShiftActivity.class);
-                            intent.putExtra(EditShiftActivity.EXTRA_JULIAN_DAY, jd);
-                            startActivity(intent);
-                        }
-                        return false;
-                    }
-                });
-
-                popup.show();
-            } else {
-                v.showContextMenu();
-            }
-        } else {
-            final Intent intent = new Intent(getActivity(), EditShiftActivity.class);
-            intent.putExtra(EditShiftActivity.EXTRA_JULIAN_DAY, jd);
-            startActivity(intent);
-        }
-    }
-
-    @Override
     public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        if(v == mAddShiftBtn) {
-            getActivity().getMenuInflater().inflate(R.menu.week_list_item_popup, menu);
-        } else if (v == mEventList)  {
-            getActivity().getMenuInflater().inflate(R.menu.week_list_item_context_menu, menu);
+        if (v == mEventList)  {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+
+            if(info.targetView == mAddShiftBtn)
+                getActivity().getMenuInflater().inflate(R.menu.week_list_item_popup, menu);
+            else
+                getActivity().getMenuInflater().inflate(R.menu.week_list_item_context_menu, menu);
         }
     }
 
@@ -290,6 +262,37 @@ public class MonthFragment extends SherlockFragment implements View.OnClickListe
             final Intent intent = new Intent(getActivity(), EditShiftActivity.class);
             intent.putExtra(EditShiftActivity.EXTRA_SHIFT, holder.shift);
             startActivity(intent);
+        } else {
+            //Clicked on the 'Add Shift' button
+            final int jd = getSelectedJulianDay();
+
+            if(mHasTemplates) {
+                if(Api.isMin(Api.HONEYCOMB)) {
+                    final PopupMenu popup = new PopupMenu(getActivity(), view);
+                    popup.getMenuInflater().inflate(R.menu.week_list_item_popup, popup.getMenu());
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            if(item.getItemId() == R.id.template_shift) {
+                                showTemplateChooser(jd);
+                            } else if(item.getItemId() == R.id.new_shift) {
+                                final Intent intent = new Intent(getActivity(), EditShiftActivity.class);
+                                intent.putExtra(EditShiftActivity.EXTRA_JULIAN_DAY, jd);
+                                startActivity(intent);
+                            }
+                            return false;
+                        }
+                    });
+
+                    popup.show();
+                } else {
+                    mEventList.showContextMenuForChild(view);
+                }
+            } else {
+                final Intent intent = new Intent(getActivity(), EditShiftActivity.class);
+                intent.putExtra(EditShiftActivity.EXTRA_JULIAN_DAY, jd);
+                startActivity(intent);
+            }
         }
 
     }

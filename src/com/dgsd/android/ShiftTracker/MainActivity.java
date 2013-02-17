@@ -59,10 +59,14 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
         setContentView(R.layout.activity_main);
 
         final ActionBar ab = getSupportActionBar();
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.nav_items,
+                R.layout.sherlock_spinner_item);
+        adapter.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
+
         ab.setDisplayShowTitleEnabled(false);
         ab.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        ab.setListNavigationCallbacks(ArrayAdapter.createFromResource(this, R.array.nav_items,
-                android.R.layout.simple_spinner_dropdown_item), this);
+        ab.setListNavigationCallbacks(adapter, this);
 
         mPrefs = Prefs.getInstance(this);
 
