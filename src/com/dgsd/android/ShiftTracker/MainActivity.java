@@ -117,8 +117,8 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
     }
 
     @Override
-    protected void onSaveInstanceState(final Bundle outState) {
-        super.onSaveInstanceState(outState);
+    protected void onPause() {
+        super.onPause();
         mPrefs.set(KEY_SELECTED_INDEX, getSupportActionBar().getSelectedNavigationIndex());
     }
 
