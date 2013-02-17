@@ -18,6 +18,11 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/stats"
+        android:showAsAction="always"
+        android:title="@string/stats" />
+
+    <item
         android:id="@+id/go_to"
         android:showAsAction="always"
         android:icon="@drawable/ic_action_calendar"

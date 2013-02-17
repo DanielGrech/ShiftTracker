@@ -30,6 +30,8 @@ import com.actionbarsherlock.view.MenuItem;
 import com.dgsd.android.ShiftTracker.Adapter.MonthPagerAdapter;
 import com.dgsd.android.ShiftTracker.Adapter.WeekPagerAdapter;
 import com.dgsd.android.ShiftTracker.Fragment.DatePickerFragment;
+import com.dgsd.android.ShiftTracker.Fragment.HoursAndIncomeSummaryFragment;
+import com.dgsd.android.ShiftTracker.Fragment.LinkToPaidAppFragment;
 import com.dgsd.android.ShiftTracker.Util.*;
 import com.viewpagerindicator.TitlePageIndicator;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -51,6 +53,10 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
     private WeekPagerAdapter mWeekPagerAdapter;
     private MonthPagerAdapter mMonthPagerAdapter;
     private DatePickerFragment mGoToFragment;
+    private MenuItem mStatsMenuItem;
+
+    private HoursAndIncomeSummaryFragment mHoursAndIncomeFragment;
+    private LinkToPaidAppFragment mLinkToPaidAppFragment;
 
     private Prefs mPrefs;
 
@@ -118,7 +124,21 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getSupportMenuInflater().inflate(R.menu.main, menu);
+
+        mStatsMenuItem = menu.findItem(R.id.stats);
+
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(final Menu menu) {
+
+        final int selectedItem = getSupportActionBar().getSelectedNavigationIndex();
+
+        mStatsMenuItem.setEnabled(selectedItem == NAV_INDEX_MONTH);
+        mStatsMenuItem.setVisible(selectedItem == NAV_INDEX_MONTH);
+
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -147,6 +167,18 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
         } else if(item.getItemId() == R.id.get_full_version) {
             Uri uri = Uri.parse("market://details?id=com.dgsd.android.ShiftTracker");
             startActivity(new Intent(Intent.ACTION_VIEW, uri));
+        } else if(item.getItemId() == R.id.stats) {
+            if(StApp.isFreeApp(this)) {
+                if(mLinkToPaidAppFragment == null || !mLinkToPaidAppFragment.isResumed()) {
+                    mLinkToPaidAppFragment = LinkToPaidAppFragment.newInstance(getString(R.string.summary_unavailable_message));
+                    mLinkToPaidAppFragment.show(getSupportFragmentManager(), null);
+                }
+            } else {
+                if(mHoursAndIncomeFragment == null || !mHoursAndIncomeFragment.isResumed()) {
+                    mHoursAndIncomeFragment = HoursAndIncomeSummaryFragment.newInstance(mMonthPagerAdapter.getSelectedJulianDay(mPager.getCurrentItem()));
+                    mHoursAndIncomeFragment.show(getSupportFragmentManager(), null);
+                }
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -189,6 +221,8 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
                 mMonthPagerAdapter.selectJulianDay(pos, currentJd);
                 break;
         }
+
+        supportInvalidateOptionsMenu();
 
         return true;
     }
