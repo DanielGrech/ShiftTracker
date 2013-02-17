@@ -131,17 +131,6 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(final Menu menu) {
-
-        final int selectedItem = getSupportActionBar().getSelectedNavigationIndex();
-
-        mStatsMenuItem.setEnabled(selectedItem == NAV_INDEX_MONTH);
-        mStatsMenuItem.setVisible(selectedItem == NAV_INDEX_MONTH);
-
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.settings) {
             startActivity(new Intent(this, SettingsActivity.class));
@@ -168,6 +157,8 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
             Uri uri = Uri.parse("market://details?id=com.dgsd.android.ShiftTracker");
             startActivity(new Intent(Intent.ACTION_VIEW, uri));
         } else if(item.getItemId() == R.id.stats) {
+            final int selectedItem = getSupportActionBar().getSelectedNavigationIndex();
+
             if(StApp.isFreeApp(this)) {
                 if(mLinkToPaidAppFragment == null || !mLinkToPaidAppFragment.isResumed()) {
                     mLinkToPaidAppFragment = LinkToPaidAppFragment.newInstance(getString(R.string.summary_unavailable_message));
@@ -175,7 +166,15 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
                 }
             } else {
                 if(mHoursAndIncomeFragment == null || !mHoursAndIncomeFragment.isResumed()) {
-                    mHoursAndIncomeFragment = HoursAndIncomeSummaryFragment.newInstance(mMonthPagerAdapter.getSelectedJulianDay(mPager.getCurrentItem()));
+                    final int jd;
+                    if(selectedItem == NAV_INDEX_MONTH)
+                        jd = mMonthPagerAdapter.getSelectedJulianDay(mPager.getCurrentItem());
+                    else if(selectedItem == NAV_INDEX_WEEK)
+                        jd = mWeekPagerAdapter.getJulianDayForPosition(mPager.getCurrentItem()) + 6;
+                    else
+                        jd = TimeUtils.getCurrentJulianDay();
+
+                    mHoursAndIncomeFragment = HoursAndIncomeSummaryFragment.newInstance(jd);
                     mHoursAndIncomeFragment.show(getSupportFragmentManager(), null);
                 }
             }
