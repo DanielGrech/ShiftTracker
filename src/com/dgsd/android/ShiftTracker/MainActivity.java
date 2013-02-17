@@ -44,6 +44,8 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
     private static final int NAV_INDEX_WEEK = 0;
     private static final int NAV_INDEX_MONTH = 1;
 
+    private static final String KEY_SELECTED_INDEX = "_key_selected_index";
+
     private TitlePageIndicator mIndicator;
     private ViewPager mPager;
     private WeekPagerAdapter mWeekPagerAdapter;
@@ -99,6 +101,14 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
 
         mIndicator = (TitlePageIndicator) findViewById(R.id.indicator);
         mIndicator.setViewPager(mPager, mWeekPagerAdapter.getPositionForJulianDay(currentJd));
+
+        ab.setSelectedNavigationItem(mPrefs.get(KEY_SELECTED_INDEX, 0));
+    }
+
+    @Override
+    protected void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mPrefs.set(KEY_SELECTED_INDEX, getSupportActionBar().getSelectedNavigationIndex());
     }
 
     @Override
@@ -163,6 +173,7 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
     public boolean onNavigationItemSelected(final int pos, final long itemId) {
         final int currentJd = getCurrentlyDisplayedJd();
 
+        mPager.setAdapter(null);
         switch(pos) {
             case NAV_INDEX_WEEK:
                 mPager.setAdapter(mWeekPagerAdapter);
@@ -171,6 +182,7 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
             case NAV_INDEX_MONTH:
                 mPager.setAdapter(mMonthPagerAdapter);
                 mIndicator.setViewPager(mPager, mMonthPagerAdapter.getPositionForJulianDay(currentJd));
+                mMonthPagerAdapter.selectJulianDay(pos, currentJd);
                 break;
         }
 

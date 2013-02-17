@@ -96,6 +96,15 @@ public class MonthPagerAdapter extends FragmentStatePagerAdapter {
         return mTime.format("%b %Y");
     }
 
+    public void selectJulianDay(int pos, int jd) {
+        WeakReference<MonthFragment> fragRes = mPosToFragRef.get(pos);
+        MonthFragment frag = fragRes.get();
+
+        if(frag != null) {
+            frag.selectJulianDay(jd);
+        }
+    }
+
     public int getPositionForJulianDay(int julianDay) {
         mTime.setJulianDay(mCenterJulianDay);
 
