@@ -89,7 +89,12 @@ public class EditTextPreference extends DialogPreference {
 		}
 	}
 
-	@Override
+    @Override
+    protected View onCreateDialogView() {
+        return mEditText;
+    }
+
+    @Override
 	protected void onBindDialogView(View view) {
 		super.onBindDialogView(view);
 
