@@ -65,6 +65,9 @@ public class TimePickerPreferenceCompat extends DialogPreference implements
         setPersistent(true);
         mTime = new Time();
         mTime.setToNow();
+
+        setPositiveButtonText(R.string.done);
+        setNegativeButtonText(R.string.cancel);
     }
 
     /*

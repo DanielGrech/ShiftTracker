@@ -66,6 +66,8 @@ public class ListPreference extends DialogPreference {
 		a = context.obtainStyledAttributes(attrs, R.styleable.Preference, 0, 0);
 		mSummary = a.getString(R.styleable.Preference_summary);
 		a.recycle();
+
+        setNegativeButtonText(R.string.cancel);
 	}
 
 	public int findIndexOfValue(String value) {
@@ -145,7 +147,6 @@ public class ListPreference extends DialogPreference {
 						dialog.dismiss();
 					}
 				});
-		builder.setPositiveButton(null, null);
 	}
 
 	@Override
