@@ -164,6 +164,13 @@ public class TimeUtils {
         }
     }
 
+    public static int getMonthDay(int julianDay) {
+        synchronized (TIME_LOCK) {
+            mTime.setJulianDay(julianDay);
+            return mTime.monthDay;
+        }
+    }
+
     public static long getMillisSinceMidnight(long millis) {
         return millis - getStartMillisForJulianDay(getJulianDay(millis));
     }

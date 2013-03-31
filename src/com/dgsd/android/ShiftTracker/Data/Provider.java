@@ -43,8 +43,10 @@ public class Provider extends ContentProvider {
     private static UriMatcher mURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     public static final int SHIFTS = 0x1;
+    public static final int SHIFTS_WITH_DAYS = 0x2;
 
     public static Uri SHIFTS_URI = Uri.withAppendedPath(BASE_URI, "shifts");
+    public static Uri DAYS_WITH_SHIFTS = Uri.withAppendedPath(BASE_URI, "days_with_shifts");
 
     private Db mDb;
 
@@ -60,9 +62,11 @@ public class Provider extends ContentProvider {
         AUTHORITY = authority;
         BASE_URI = Uri.parse("content://" + AUTHORITY);
         SHIFTS_URI = Uri.withAppendedPath(BASE_URI, "shifts");
+        DAYS_WITH_SHIFTS = Uri.withAppendedPath(BASE_URI, "days_with_shifts");
 
         mURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         mURIMatcher.addURI(AUTHORITY, "shifts", SHIFTS);
+        mURIMatcher.addURI(AUTHORITY, "days_with_shifts", SHIFTS_WITH_DAYS);
     }
 
     @Override
@@ -83,8 +87,8 @@ public class Provider extends ContentProvider {
     @Override
     public Cursor query(final Uri uri, String[] proj, final String sel, final String[] selArgs, final String sort) {
         final int type = mURIMatcher.match(uri);
-        if(type == UriMatcher.NO_MATCH) {
-            if(BuildConfig.DEBUG)
+        if (type == UriMatcher.NO_MATCH) {
+            if (BuildConfig.DEBUG)
                 Log.w(TAG, "No match for URI: " + uri);
 
             return null;
@@ -93,21 +97,42 @@ public class Provider extends ContentProvider {
         try {
             SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
+            Cursor cursor = null;
             switch (type) {
                 case SHIFTS:
                     qb.setTables(DbTable.SHIFTS.name);
+
+                    if (!TextUtils.isEmpty(uri.getQueryParameter(QUERY_PARAMETER_DISTINCT)))
+                        qb.setDistinct(true);
+
+                    cursor = qb.query(mDb.getReadableDatabase(),
+                            proj,
+                            sel,
+                            selArgs,
+                            null,
+                            null,
+                            sort,
+                            uri.getQueryParameter(QUERY_PARAMETER_LIMIT));
+
+                    break;
+                case SHIFTS_WITH_DAYS:
+                    qb.setTables(DbTable.SHIFTS.name);
+
+                    cursor = qb.query(mDb.getReadableDatabase(),
+                            new String[]{
+                                DbField.JULIAN_DAY.name
+                            },
+                            null,
+                            null,
+                            DbField.JULIAN_DAY.name,
+                            sel,
+                            sort,
+                            null);
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown URI: " + uri);
             }
 
-            final String distinct = uri.getQueryParameter(QUERY_PARAMETER_DISTINCT);
-            final String limit = uri.getQueryParameter(QUERY_PARAMETER_LIMIT);
-
-            if(!TextUtils.isEmpty(distinct))
-                qb.setDistinct(true);
-
-            Cursor cursor = qb.query(mDb.getReadableDatabase(), proj, sel, selArgs, null, null, sort, limit);
             cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
             return cursor;
@@ -139,6 +164,7 @@ public class Provider extends ContentProvider {
                 Uri newUri = ContentUris.withAppendedId(uri, id);
 
                 getContext().getContentResolver().notifyChange(uri, null);
+                getContext().getContentResolver().notifyChange(DAYS_WITH_SHIFTS, null);
                 return newUri;
             } else {
                 throw new SQLException("Failed to insert row into " + uri);
@@ -168,6 +194,7 @@ public class Provider extends ContentProvider {
 
             int rowsAffected = mDb.getWritableDatabase().delete(table, sel, selArgs);
             getContext().getContentResolver().notifyChange(uri, null);
+            getContext().getContentResolver().notifyChange(DAYS_WITH_SHIFTS, null);
             return rowsAffected;
         } catch (Exception e) {
             if (BuildConfig.DEBUG) {
@@ -196,6 +223,7 @@ public class Provider extends ContentProvider {
 
             final int rowsAffected = db.update(table, values, sel, selArgs);
             getContext().getContentResolver().notifyChange(uri, null);
+            getContext().getContentResolver().notifyChange(DAYS_WITH_SHIFTS, null);
             return rowsAffected;
         } catch (Exception e) {
             if (BuildConfig.DEBUG) {

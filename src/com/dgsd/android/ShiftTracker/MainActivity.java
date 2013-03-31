@@ -189,14 +189,17 @@ public class MainActivity extends SherlockFragmentActivity implements DatePicker
         final PagerAdapter adapter = mPager.getAdapter();
 
         final int page;
-        if(adapter == mWeekPagerAdapter)
+        if(adapter == mWeekPagerAdapter) {
             page = mWeekPagerAdapter.getPositionForJulianDay(julianDay);
-        else if(adapter == mMonthPagerAdapter)
+        } else if(adapter == mMonthPagerAdapter) {
             page = mMonthPagerAdapter.getPositionForJulianDay(julianDay);
-        else
+        } else {
             page = 0;
+        }
 
         mIndicator.setCurrentItem(page);
+        if(adapter == mMonthPagerAdapter)
+            mMonthPagerAdapter.selectJulianDay(page, julianDay);
     }
 
     @Override

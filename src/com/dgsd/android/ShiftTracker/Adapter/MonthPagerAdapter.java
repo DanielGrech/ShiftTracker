@@ -98,7 +98,7 @@ public class MonthPagerAdapter extends FragmentStatePagerAdapter {
 
     public void selectJulianDay(int pos, int jd) {
         WeakReference<MonthFragment> fragRes = mPosToFragRef.get(pos);
-        MonthFragment frag = fragRes.get();
+        MonthFragment frag = fragRes == null ? null : fragRes.get();
 
         if(frag != null) {
             frag.selectJulianDay(jd);

@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
+import com.dgsd.android.MonthView.MonthView;
 import com.dgsd.android.ShiftTracker.Adapter.DayAdapter;
 import com.dgsd.android.ShiftTracker.Data.DbField;
 import com.dgsd.android.ShiftTracker.Data.Provider;
@@ -21,21 +22,17 @@ import com.dgsd.android.ShiftTracker.EditShiftActivity;
 import com.dgsd.android.ShiftTracker.Model.Shift;
 import com.dgsd.android.ShiftTracker.R;
 import com.dgsd.android.ShiftTracker.Service.DbService;
-import com.dgsd.android.ShiftTracker.Util.AlarmUtils;
-import com.dgsd.android.ShiftTracker.Util.Anim;
-import com.dgsd.android.ShiftTracker.Util.Api;
-import com.dgsd.android.ShiftTracker.Util.TimeUtils;
-import com.squareup.timessquare.CalendarPickerView;
+import com.dgsd.android.ShiftTracker.Util.*;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Created: 16/02/13 10:36 PM
  */
-public class MonthFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<Cursor>,CalendarPickerView.OnDateSelectedListener, AdapterView.OnItemClickListener {
+public class MonthFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<Cursor>,
+        AdapterView.OnItemClickListener, MonthView.OnDateClickedListener {
     public static final String TAG = MonthFragment.class.getSimpleName();
 
     private static final String KEY_MONTH = "_month";
@@ -43,11 +40,12 @@ public class MonthFragment extends SherlockFragment implements LoaderManager.Loa
 
     private static final int LOADER_ID_DAYS = 0;
     private static final int LOADER_ID_TEMPLATES = 1;
+    private static final int LOADER_ID_DAYS_WITH_SHIFTS = 2;
 
     private int mMonth;
     private int mYear;
 
-    private CalendarPickerView mCalendar;
+    private MonthView mMonthView;
 
     private TextView mAddShiftBtn;
 
@@ -85,20 +83,36 @@ public class MonthFragment extends SherlockFragment implements LoaderManager.Loa
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_month, container, false);
 
-        mCalendar = (CalendarPickerView) v.findViewById(R.id.calendar);
+        int startDay = Integer.valueOf(Prefs.getInstance(getActivity())
+                .get(getActivity().getString(R.string.settings_key_start_day), "2"));
 
-        Calendar min = Calendar.getInstance();
-        min.set(mYear, mMonth, 1);
+        switch(startDay) {
+            case 0:
+                startDay = Calendar.SUNDAY;
+                break;
+            case 1:
+                startDay = Calendar.MONDAY;
+                break;
+            case 2:
+                startDay = Calendar.TUESDAY;
+                break;
+            case 3:
+                startDay = Calendar.WEDNESDAY;
+                break;
+            case 4:
+                startDay = Calendar.THURSDAY;
+                break;
+            case 5:
+                startDay = Calendar.FRIDAY;
+                break;
+            case 6:
+                startDay = Calendar.SATURDAY;
+                break;
+        }
 
-        Calendar selected = Calendar.getInstance();
-        selected.set(mYear, mMonth, 1);
-
-        Calendar max = Calendar.getInstance();
-        max.set(mYear, mMonth, 1);
-        max.add(Calendar.MONTH, 1);
-
-        mCalendar.init(selected.getTime(), min.getTime(), max.getTime());
-        mCalendar.setOnDateSelectedListener(this);
+        mMonthView = (MonthView) v.findViewById(R.id.month);
+        mMonthView.set(mYear, mMonth, startDay);
+        mMonthView.setDateClickedListener(this);
 
         mAddShiftBtn = (TextView) LayoutInflater.from(getActivity())
                 .inflate(R.layout.month_view_add_shift, mEventList, false);
@@ -122,10 +136,15 @@ public class MonthFragment extends SherlockFragment implements LoaderManager.Loa
         super.onActivityCreated(savedInstanceState);
         getLoaderManager().initLoader(LOADER_ID_DAYS, null, this);
         getLoaderManager().initLoader(LOADER_ID_TEMPLATES, null, this);
+        getLoaderManager().initLoader(LOADER_ID_DAYS_WITH_SHIFTS, null, this);
     }
 
     public int getSelectedJulianDay() {
-        return TimeUtils.getJulianDay(mCalendar.getSelectedDate().getTime());
+        final Date d = mMonthView.getSelectedDate();
+        if(d == null)
+            return -1;
+        else
+            return TimeUtils.getJulianDay(d.getTime());
     }
 
     @Override
@@ -192,9 +211,7 @@ public class MonthFragment extends SherlockFragment implements LoaderManager.Loa
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(t.toMillis(true));
 
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-
-        onDateSelected(cal.getTime());
+        mMonthView.setSelected(cal.get(Calendar.DAY_OF_MONTH));
     }
 
     private void showTemplateChooser(final int julianDay) {
@@ -227,7 +244,22 @@ public class MonthFragment extends SherlockFragment implements LoaderManager.Loa
         else if(id == LOADER_ID_TEMPLATES)
             return new CursorLoader(getActivity(), Provider.SHIFTS_URI, null,
                     DbField.IS_TEMPLATE + "> 0", null, null);
-        else
+        else if(id == LOADER_ID_DAYS_WITH_SHIFTS) {
+            Time t = new Time();
+            t.set(1, mMonth, mYear);
+            t.normalize(true);
+            final int startJd = TimeUtils.getJulianDay(t);
+
+            t.set(1, mMonth + 1, mYear);
+            t.monthDay--;
+            t.normalize(true);
+            final int endJd = TimeUtils.getJulianDay(t);
+
+            return new CursorLoader(getActivity(), Provider.DAYS_WITH_SHIFTS, null,
+                    DbField.JULIAN_DAY + ">= " + startJd +
+                            " AND " + DbField.JULIAN_DAY + " <= " + endJd,
+                    null, null);
+        } else
             return null;
 
     }
@@ -238,22 +270,24 @@ public class MonthFragment extends SherlockFragment implements LoaderManager.Loa
             mAdapter.swapCursor(cursor);
         else if(loader.getId() == LOADER_ID_TEMPLATES)
             mHasTemplates = cursor != null && cursor.getCount() > 0;
+        else if(loader.getId() == LOADER_ID_DAYS_WITH_SHIFTS) {
+            if(cursor != null && cursor.moveToFirst()) {
+                Set<Integer> daysOfMonth = new HashSet<Integer>();
+                do {
+                    daysOfMonth.add(TimeUtils.getMonthDay(cursor.getInt(0)));
+                } while(cursor.moveToNext());
+
+                for(int i = 1; i <= 31; i++) {
+                    mMonthView.mark(i, daysOfMonth.contains(i));
+                }
+            }
+        }
+
     }
 
     @Override
     public void onLoaderReset(final Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
-    }
-
-    @Override
-    public void onDateSelected(final Date date) {
-        mAdapter.setJulianDay(TimeUtils.getJulianDay(date.getTime()));
-
-        if(isResumed()) {
-            Loader l = getLoaderManager().restartLoader(LOADER_ID_DAYS, null, this);
-            if(l != null)
-                l.forceLoad();
-        }
     }
 
     private void showMessage(String msg) {
@@ -301,5 +335,16 @@ public class MonthFragment extends SherlockFragment implements LoaderManager.Loa
             }
         }
 
+    }
+
+    @Override
+    public void onDateClicked(final Date d) {
+        mAdapter.setJulianDay(TimeUtils.getJulianDay(d.getTime()));
+
+        if(isResumed()) {
+            Loader l = getLoaderManager().restartLoader(LOADER_ID_DAYS, null, this);
+            if(l != null)
+                l.forceLoad();
+        }
     }
 }

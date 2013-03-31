@@ -132,6 +132,10 @@ public class DayAdapter extends CursorAdapter {
         mJulianDay = julianDay;
     }
 
+    public int getJulianDay() {
+        return mJulianDay;
+    }
+
     public CursorLoader getDayLoader(Context context) {
         final String sel = DbField.JULIAN_DAY + " = ?";
         final String[] args = { String.valueOf(mJulianDay) };
