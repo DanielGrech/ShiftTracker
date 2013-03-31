@@ -65,6 +65,9 @@ public class EditTextPreference extends DialogPreference {
 		mEditText = new EditText(context, attrs);
 		mEditText.setId(R.id.edit);
 		mEditText.setEnabled(true);
+
+        setPositiveButtonText(R.string.done);
+        setNegativeButtonText(R.string.cancel);
 	}
 
 	public EditText getEditText() {
