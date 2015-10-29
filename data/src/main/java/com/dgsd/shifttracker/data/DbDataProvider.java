@@ -2,6 +2,7 @@ package com.dgsd.shifttracker.data;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 
 import com.dgsd.shifttracker.model.Shift;
@@ -21,6 +22,7 @@ import static com.dgsd.shifttracker.data.DbContract.TABLE_SHIFTS;
 public class DbDataProvider implements DataProvider {
 
     private final BriteDatabase db;
+    private final Context context;
     private final ContentResolver contentResolver;
 
     public static DbDataProvider create(Context context, SqlBrite sqlBrite) {
@@ -28,12 +30,13 @@ public class DbDataProvider implements DataProvider {
         final DbOpenHelper dbOpenHelper = DbOpenHelper.getInstance(appContext);
         final BriteDatabase briteDb = sqlBrite.wrapDatabaseHelper(dbOpenHelper);
 
-        return new DbDataProvider(briteDb, appContext.getContentResolver());
+        return new DbDataProvider(briteDb, appContext);
     }
 
-    public DbDataProvider(BriteDatabase db, ContentResolver contentResolver) {
+    public DbDataProvider(BriteDatabase db, Context context) {
         this.db = db;
-        this.contentResolver = contentResolver;
+        this.context = context;
+        this.contentResolver = context.getContentResolver();
     }
 
     @Override
@@ -78,7 +81,7 @@ public class DbDataProvider implements DataProvider {
                 final long id = db.insert(TABLE_SHIFTS.name,
                         ModelUtils.convert(shift), CONFLICT_REPLACE);
                 if (id >= 0) {
-                    contentResolver.notifyChange(STContentProvider.SHIFTS_URI, null);
+                    notifyDataChanged();
                     return Observable.just(shift.withId(id));
                 } else {
                     return Observable.error(new RuntimeException("Adding shift unsuccessful"));
@@ -93,7 +96,7 @@ public class DbDataProvider implements DataProvider {
             @Override
             public Observable<Void> call() {
                 db.delete(TABLE_SHIFTS.name, Queries.DELETE_SHIFT_CLAUSE, String.valueOf(shiftId));
-                contentResolver.notifyChange(STContentProvider.SHIFTS_URI, null);
+                notifyDataChanged();
                 return Observable.just(null);
             }
         });
@@ -105,4 +108,9 @@ public class DbDataProvider implements DataProvider {
             return ModelUtils.convert(cursor);
         }
     };
+
+    private void notifyDataChanged() {
+        contentResolver.notifyChange(STContentProvider.SHIFTS_URI, null);
+        context.sendBroadcast(new Intent(DataProvider.UPDATE_ACTION));
+    }
 }

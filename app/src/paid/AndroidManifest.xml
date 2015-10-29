@@ -36,6 +36,42 @@
                 android:value="@string/dashclock_extension_description" />
         </service>
 
+        <receiver
+            android:name=".widget.NewShiftWidgetProvider"
+            android:label="@string/widget_label_new_shift">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_provider_new_shift" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.NextShiftWidgetProvider"
+            android:label="@string/widget_label_next_shift">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="data_provider_update" />
+            </intent-filter>
+
+            <!-- Handle device time changes -->
+            <intent-filter>
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_provider_next_shift" />
+        </receiver>
+
     </application>
 
 </manifest>

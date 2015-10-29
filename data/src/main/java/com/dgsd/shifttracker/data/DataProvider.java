@@ -8,6 +8,8 @@ import rx.Observable;
 
 public interface DataProvider {
 
+    String UPDATE_ACTION = "data_provider_update";
+
     Observable<List<Shift>> getShiftsBetween(long startMillis, long endMillis);
 
     Observable<List<Shift>> getTemplateShifts();
