@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentTop="true"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        <LinearLayout
+            android:id="@+id/from_to_card"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:showDividers="none">
+
+            <com.dgsd.android.shifttracker.view.DownArrowDateTextView
+                android:id="@+id/start_date"
+                style="@style/Statistics.DateInputField" />
+
+            <TextView
+                style="@style/Statistics.DateInputField"
+                android:layout_width="wrap_content"
+                android:layout_weight="0"
+                android:clickable="false"
+                android:paddingEnd="@dimen/padding_xsmall"
+                android:paddingStart="@dimen/padding_xsmall"
+                android:text="→" />
+
+            <com.dgsd.android.shifttracker.view.DownArrowDateTextView
+                android:id="@+id/end_date"
+                style="@style/Statistics.DateInputField" />
+
+        </LinearLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbarStyle="outsideOverlay">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/padding_default">
+
+            <LinearLayout
+                android:id="@+id/earnings_card"
+                style="@style/Statistics.CardWrapper"
+                android:layout_marginTop="@dimen/padding_default"
+                android:paddingBottom="0dp">
+
+                <TextView
+                    style="@style/Statistics.CardTitle"
+                    android:text="@string/statistics_label_earnings" />
+
+                <com.dgsd.android.shifttracker.view.BarGraph
+                    android:id="@+id/earnings_graph"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/bar_graph_height"
+                    android:layout_marginBottom="@dimen/padding_default"
+                    android:layout_marginTop="@dimen/padding_default" />
+
+                <LinearLayout style="@style/Statistics.CardItemWrapper">
+
+                    <TextView
+                        style="@style/Statistics.CardItemLabel"
+                        android:text="@string/statistics_label_total" />
+
+                    <TextView
+                        android:id="@+id/total_earnings_value"
+                        style="@style/Statistics.CardItemValue"
+                        android:layout_marginEnd="@dimen/padding_default" />
+
+                    <TextView
+                        style="@style/Statistics.CardItemLabel"
+                        android:text="@string/statistics_label_avg" />
+
+                    <TextView
+                        android:id="@+id/avg_earnings_value"
+                        style="@style/Statistics.CardItemValue" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/hours_card"
+                style="@style/Statistics.CardWrapper"
+                android:paddingBottom="0dp">
+
+                <TextView
+                    style="@style/Statistics.CardTitle"
+                    android:text="@string/statistics_label_hours" />
+
+                <com.dgsd.android.shifttracker.view.BarGraph
+                    android:id="@+id/time_worked_graph"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/bar_graph_height"
+                    android:layout_marginBottom="@dimen/padding_default"
+                    android:layout_marginTop="@dimen/padding_default" />
+
+                <LinearLayout style="@style/Statistics.CardItemWrapper">
+
+                    <TextView
+                        style="@style/Statistics.CardItemLabel"
+                        android:text="@string/statistics_label_total" />
+
+                    <TextView
+                        android:id="@+id/total_time_worked_value"
+                        style="@style/Statistics.CardItemValue"
+                        android:layout_marginEnd="@dimen/padding_default" />
+
+                    <TextView
+                        style="@style/Statistics.CardItemLabel"
+                        android:text="@string/statistics_label_avg" />
+
+                    <TextView
+                        android:id="@+id/avg_time_worked_value"
+                        style="@style/Statistics.CardItemValue" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/shift_count_card"
+                style="@style/Statistics.CardWrapper"
+                android:paddingBottom="0dp">
+
+                <TextView
+                    style="@style/Statistics.CardTitle"
+                    android:text="@string/statistics_label_shifts" />
+
+                <LinearLayout style="@style/Statistics.ShiftStatsItemWrapper">
+
+                    <TextView
+                        style="@style/Statistics.ShiftStatsTitle"
+                        android:text="@string/statistics_label_shift_count" />
+
+                    <TextView
+                        android:id='@+id/shift_count'
+                        style="@style/Statistics.ShiftStatsValue" />
+
+                </LinearLayout>
+
+                <LinearLayout style="@style/Statistics.ShiftStatsItemWrapper">
+
+                    <TextView
+                        style="@style/Statistics.ShiftStatsTitle"
+                        android:text="@string/statistics_label_average_earnings_per_day" />
+
+                    <TextView
+                        android:id='@+id/average_earnings_per_day'
+                        style="@style/Statistics.ShiftStatsValue" />
+
+                </LinearLayout>
+
+                <LinearLayout style="@style/Statistics.ShiftStatsItemWrapper">
+
+                    <TextView
+                        style="@style/Statistics.ShiftStatsTitle"
+                        android:text="@string/statistics_label_average_earnings_per_shift" />
+
+                    <TextView
+                        android:id='@+id/average_earnings_per_shift'
+                        style="@style/Statistics.ShiftStatsValue" />
+
+                </LinearLayout>
+
+                <LinearLayout style="@style/Statistics.ShiftStatsItemWrapper">
+
+                    <TextView
+                        style="@style/Statistics.ShiftStatsTitle"
+                        android:text="@string/statistics_label_highest_earning_shift" />
+
+                    <TextView
+                        android:id='@+id/highest_earning_shift'
+                        style="@style/Statistics.ShiftStatsValue" />
+
+                </LinearLayout>
+
+                <LinearLayout style="@style/Statistics.ShiftStatsItemWrapper">
+
+                    <TextView
+                        style="@style/Statistics.ShiftStatsTitle"
+                        android:text="@string/statistics_label_lowest_earning_shift" />
+
+                    <TextView
+                        android:id='@+id/lowest_earning_shift'
+                        style="@style/Statistics.ShiftStatsValue" />
+
+                </LinearLayout>
+
+                <LinearLayout style="@style/Statistics.ShiftStatsItemWrapper">
+
+                    <TextView
+                        style="@style/Statistics.ShiftStatsTitle"
+                        android:text="@string/statistics_label_average_hours_per_day" />
+
+                    <TextView
+                        android:id="@+id/average_time_worked_per_day"
+                        style="@style/Statistics.ShiftStatsValue" />
+
+                </LinearLayout>
+
+                <LinearLayout style="@style/Statistics.ShiftStatsItemWrapper">
+
+                    <TextView
+                        style="@style/Statistics.ShiftStatsTitle"
+                        android:text="@string/statistics_label_average_hours_per_shift" />
+
+                    <TextView
+                        android:id="@+id/average_time_worked_per_shift"
+                        style="@style/Statistics.ShiftStatsValue" />
+
+                </LinearLayout>
+
+                <LinearLayout style="@style/Statistics.ShiftStatsItemWrapper">
+
+                    <TextView
+                        style="@style/Statistics.ShiftStatsTitle"
+                        android:text="@string/statistics_label_longest_shift" />
+
+                    <TextView
+                        android:id='@+id/longest_shift'
+                        style="@style/Statistics.ShiftStatsValue" />
+
+                </LinearLayout>
+
+                <LinearLayout style="@style/Statistics.ShiftStatsItemWrapper">
+
+                    <TextView
+                        style="@style/Statistics.ShiftStatsTitle"
+                        android:text="@string/statistics_label_shortest_shift" />
+
+                    <TextView
+                        android:id='@+id/shortest_shift'
+                        style="@style/Statistics.ShiftStatsValue" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <include
+        android:id="@+id/ad_view"
+        layout="@layout/ad_banner_statistics" />
+
+</LinearLayout>

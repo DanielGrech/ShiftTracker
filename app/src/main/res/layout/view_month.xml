@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.dgsd.android.shifttracker.view.MonthView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:showIn="@layout/frag_month">
+
+    <include
+        android:id="@+id/days"
+        layout="@layout/view_month_row_header" />
+
+    <include
+        android:id="@+id/row1"
+        layout="@layout/view_month_row" />
+
+    <include
+        android:id="@+id/row2"
+        layout="@layout/view_month_row" />
+
+    <include
+        android:id="@+id/row3"
+        layout="@layout/view_month_row" />
+
+    <include
+        android:id="@+id/row4"
+        layout="@layout/view_month_row" />
+
+    <include
+        android:id="@+id/row5"
+        layout="@layout/view_month_row" />
+
+    <include
+        android:id="@+id/row6"
+        layout="@layout/view_month_row" />
+
+
+</com.dgsd.android.shifttracker.view.MonthView>

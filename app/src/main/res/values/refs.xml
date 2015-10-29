@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="layout" name="ad_banner_view_shift">@layout/empty_layout</item>
+    <item type="layout" name="ad_banner_add_shift">@layout/empty_layout</item>
+    <item type="layout" name="ad_banner_main">@layout/empty_layout</item>
+    <item type="layout" name="ad_banner_statistics">@layout/empty_layout</item>
+    <item type="layout" name="view_nav_header_contents">@layout/empty_layout</item>
+</resources>

@@ -1,0 +1,196 @@
+apply plugin: 'com.android.application'
+buildscript {
+    repositories {
+        jcenter()
+        maven { url 'http://maven.fabric.io/public' }
+    }
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.20.0'
+    }
+}
+
+apply plugin: 'android-apt'
+apply plugin: 'io.fabric'
+apply plugin: 'icon-version'
+apply plugin: 'spoon'
+
+apply from: '../buildscripts/jacoco.gradle'
+apply from: '../buildscripts/utils.gradle'
+
+android {
+    compileSdkVersion config.compileSdkVersion
+    buildToolsVersion config.buildToolsVersion
+
+    signingConfigs {
+        release {
+            if (config.releaseSigning.storePassword != null) {
+                storeFile file(config.releaseSigning.storeFile)
+                storePassword config.releaseSigning.storePassword
+                keyAlias config.releaseSigning.alias
+                keyPassword config.releaseSigning.aliasPassword
+            }
+        }
+    }
+
+    defaultConfig {
+        applicationId config.applicationId
+        minSdkVersion config.minSdkVersion
+        targetSdkVersion config.targetSdkVersion
+        versionCode config.versionCode
+        versionName config.versionName
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "BUILD_TIME", "\"${getBuildTime()}\""
+        buildConfigField "String", "GIT_SHA", "\"${getGitSha()}\""
+        buildConfigField "String", "BUILD_NUMBER", "\"${getCiBuildNumber()}\""
+        buildConfigField "String", "SUPPORT_EMAIL", "\"dgsoftwaredevelopment@gmail.com\""
+        buildConfigField "String", "GA_TRACKING_ID", "\"UA-36903330-6\""
+        buildConfigField "String", "PAID_APP_APPLICATION_ID", "\"${config.applicationId}\""
+
+        buildConfigField "int", "MIN_LAUNCHES_BEFORE_APPRATER", "7"
+        buildConfigField "int", "MIN_DAYS_BEFORE_APPRATER", "14"
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-${getCiBuildNumber()}"
+        }
+
+        jacocoEnabled.initWith(buildTypes.debug)
+        jacocoEnabled {
+            applicationIdSuffix ".debug.jacoco"
+            versionNameSuffix "-jacoco-${getCiBuildNumber()}"
+            testCoverageEnabled true
+        }
+
+        release {
+            minifyEnabled false
+            shrinkResources true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        free {
+            applicationId "${config.applicationId}Free"
+            buildConfigField "boolean", "IS_PAID", "false"
+            resValue "string", "app_name", "${config.appName} free"
+
+            buildConfigField "int", "MIN_LAUNCHES_BEFORE_SHOWING_ADS", "5"
+            buildConfigField "int", "MIN_DAYS_BEFORE_SHOWING_ADS", "14"
+        }
+
+        paid {
+            buildConfigField "boolean", "IS_PAID", "true"
+            resValue "string", "app_name", "${config.appName}"
+            buildConfigField "int", "MIN_LAUNCHES_BEFORE_SHOWING_ADS", "Integer.MAX_VALUE"
+            buildConfigField "int", "MIN_DAYS_BEFORE_SHOWING_ADS", "Integer.MAX_VALUE"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    testOptions {
+        unitTests {
+            returnDefaultValues = true
+        }
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'LICENSE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'NOTICE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+
+    if (isCiBuild()) {
+        applicationVariants.all { variant ->
+            variant.outputs.each { output ->
+                def existingFile = output.outputFile
+
+                def variantName = "${variant.flavorName}-${variant.buildType.name.toLowerCase()}"
+                def gitBranchName = "${gitBranchName()}"
+
+                def newName = "${appName}-${variantName}-${gitBranchName}-${config.versionCode}-${System.getenv("BUILD_NUMBER")}.apk"
+                output.outputFile = new File(existingFile.parent, newName)
+            }
+        }
+    }
+
+    configurations.all {
+        resolutionStrategy.force "com.android.support:support-annotations:${versions.androidSupport}"
+        exclude group: 'com.google.code.findbugs', module: 'jsr305'
+    }
+
+    applicationVariants.matching { it.buildType.name == 'jacocoEnabled' }.all { createJacocoTask(it) }
+}
+
+dependencies {
+    compile project(":model")
+    compile project(":data")
+    compile fileTree(dir: 'libs', include: '*.jar')
+    compile "com.android.support:support-v4:${versions.androidSupport}"
+    compile "com.android.support:appcompat-v7:${versions.androidSupport}"
+    compile "com.android.support:recyclerview-v7:${versions.androidSupport}"
+    compile "com.android.support:preference-v14:${versions.androidSupport}"
+    compile "com.android.support:design:${versions.androidSupport}"
+    compile "com.google.android.gms:play-services-analytics:${versions.playServices}"
+    compile "com.google.android.gms:play-services-ads:${versions.playServices}"
+    compile "com.google.dagger:dagger:${versions.dagger}"
+    compile "com.jakewharton.timber:timber:${versions.timber}"
+    compile "com.jakewharton:butterknife:${versions.butterknife}"
+    compile "javax.annotation:jsr250-api:${versions.jsr250}"
+    compile "com.facebook.stetho:stetho:${versions.stetho}"
+    compile "com.lacronicus:easydatastorelib:${versions.easyDataStore}"
+    compile "net.sf.opencsv:opencsv:${versions.openCsv}"
+    compile "de.psdev.licensesdialog:licensesdialog:${versions.licensesDialog}"
+    compile("com.crashlytics.sdk.android:crashlytics:${versions.fabricClient}") {
+        transitive = true;
+    }
+
+    paidCompile "com.google.android.apps.dashclock:dashclock-api:${versions.dashclock}"
+
+    compile "io.reactivex:rxandroid:${versions.rxAndroid}"
+    compile "com.jakewharton.rxbinding:rxbinding:${versions.rxBinding}"
+    compile "com.jakewharton.rxbinding:rxbinding-support-v4:${versions.rxBinding}"
+    compile "com.jakewharton.rxbinding:rxbinding-recyclerview-v7:${versions.rxBinding}"
+    compile "com.trello:rxlifecycle:${versions.rxLifecycle}"
+
+    debugCompile "com.squareup.leakcanary:leakcanary-android:${versions.leakCanary}"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:${versions.leakCanary}"
+
+    apt "com.google.dagger:dagger-compiler:${versions.dagger}"
+
+    testCompile "junit:junit:${versions.junit}"
+    testCompile "org.robolectric:robolectric:${versions.robolectric}"
+    testCompile "org.robolectric:shadows-support-v4:${versions.robolectric}"
+    testCompile "org.mockito:mockito-core:${versions.mockito}"
+    testCompile "org.assertj:assertj-core:${versions.assertJ}"
+
+    androidTestCompile "com.android.support.test.espresso:espresso-core:${versions.espresso}"
+    androidTestCompile "com.android.support.test:runner:${versions.esspressoSupport}"
+    androidTestCompile "com.android.support.test:rules:${versions.esspressoSupport}"
+    androidTestCompile "com.squareup.spoon:spoon-client:${versions.spoon}"
+    androidTestCompile "org.assertj:assertj-core:${versions.assertJ}"
+}
+
+// Display more verbose information when running tests from CLI
+tasks.withType(Test).whenTaskAdded { testTask ->
+    testTask.maxParallelForks 4
+    testTask.testLogging config.testOptions
+}
+
+spoon {
+    debug = true
+    noAnimations = !isCiBuild()
+}

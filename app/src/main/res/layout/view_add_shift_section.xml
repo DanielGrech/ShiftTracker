@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/section_icon"
+        android:layout_width="@dimen/add_shift_section_icon_size"
+        android:layout_height="@dimen/add_shift_section_icon_size"
+        android:padding="@dimen/add_shift_section_icon_padding"
+        android:layout_marginEnd="@dimen/padding_default" />
+
+    <LinearLayout
+        android:id="@+id/section_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+</merge>

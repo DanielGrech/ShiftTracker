@@ -1,0 +1,46 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.hmkcode.mongoz.MainActivity">
+
+
+    <item
+        android:id="@+id/add_shift"
+        android:icon="@drawable/ic_add"
+        android:title="@string/nav_item_add_shift" />
+
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/week_view"
+            android:icon="@drawable/ic_list"
+            android:title="@string/nav_item_week_view" />
+
+        <item
+            android:id="@+id/month_view"
+            android:icon="@drawable/ic_grid"
+            android:title="@string/nav_item_month_view" />
+    </group>
+
+    <item
+        android:id="@+id/stats_view"
+        android:icon="@drawable/ic_stats"
+        android:title="@string/nav_item_stats_view" />
+
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/nav_item_settings" />
+
+        <item
+            android:id="@+id/rate"
+            android:icon="@drawable/ic_star"
+            android:title="@string/nav_item_rate" />
+
+        <item
+            android:id="@+id/send_feedback"
+            android:icon="@drawable/ic_mail"
+            android:title="@string/nav_item_send_feedback" />
+    </group>
+
+</menu>

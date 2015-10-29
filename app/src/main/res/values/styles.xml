@@ -1,0 +1,170 @@
+<resources>
+
+    <style name="MonthView" />
+
+    <style name="MonthView.Row" />
+
+    <style name="MonthView.Row.Wrapper">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">40dp</item>
+    </style>
+
+    <style name="MonthView.Row.Cell">
+        <item name="android:textColor">@color/month_row_cell</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginStart">@dimen/padding_xsmall</item>
+        <item name="android:layout_marginEnd">@dimen/padding_xsmall</item>
+        <item name="android:padding">@dimen/month_day_text_padding</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/month_day_text_size</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:background">@drawable/bg_month_cell</item>
+    </style>
+
+    <style name="MonthView.Row.Cell.Header">
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
+        <item name="android:layout_marginStart">0dp</item>
+        <item name="android:layout_marginEnd">0dp</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textSize">@dimen/month_weekday_text_size</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="ShiftDetails" />
+
+    <style name="ShiftDetails.Section">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">@dimen/padding_small</item>
+        <item name="android:paddingBottom">@dimen/padding_small</item>
+    </style>
+
+    <style name="ShiftDetails.InputField">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:minHeight">@dimen/add_shift_input_field_min_height</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
+        <item name="android:textSize">@dimen/add_shift_field_text_size</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+
+    <style name="ShiftDetails.InputField.Title">
+        <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColorHint">#AAFFFFFF</item>
+        <item name="android:textSize">@dimen/add_shift_title_text_size</item>
+        <item name="android:inputType">textAutoComplete|textAutoCorrect|textCapSentences</item>
+        <item name="android:paddingStart">@dimen/padding_default</item>
+        <item name="android:paddingEnd">@dimen/padding_default</item>
+    </style>
+
+    <style name="Statistics" />
+
+    <style name="Statistics.CardWrapper">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@android:color/white</item>
+        <item name="android:paddingTop">@dimen/padding_small</item>
+        <item name="android:paddingBottom">@dimen/padding_default</item>
+        <item name="android:paddingStart">@dimen/padding_default</item>
+        <item name="android:paddingEnd">@dimen/padding_default</item>
+        <item name="android:layout_marginStart">@dimen/padding_statistics_horizontal</item>
+        <item name="android:layout_marginEnd">@dimen/padding_statistics_horizontal</item>
+        <item name="android:layout_marginBottom">@dimen/padding_default</item>
+        <item name="android:showDividers">middle</item>
+        <item name="android:divider">?android:attr/dividerHorizontal</item>
+    </style>
+
+    <style name="Statistics.CardTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Title</item>
+        <item name="android:paddingTop">@dimen/padding_default</item>
+        <item name="android:paddingBottom">@dimen/padding_default</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="Statistics.CardItemWrapper">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">?android:attr/listPreferredItemHeightSmall</item>
+        <item name="android:paddingTop">@dimen/padding_xsmall</item>
+        <item name="android:paddingBottom">@dimen/padding_xsmall</item>
+    </style>
+
+    <style name="Statistics.CardItemLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Caption</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="Statistics.CardItemValue">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:paddingStart">@dimen/padding_xsmall</item>
+        <item name="android:paddingEnd">@dimen/padding_xsmall</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:gravity">left|center_vertical</item>
+    </style>
+
+    <style name="Statistics.ShiftStatsItemWrapper">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?android:attr/listPreferredItemHeight</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="Statistics.ShiftStatsTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="Statistics.ShiftStatsValue">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:gravity">right</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="Statistics.DateInputField">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:clickable">true</item>
+        <item name="android:minHeight">?android:attr/actionBarSize</item>
+    </style>
+
+</resources>

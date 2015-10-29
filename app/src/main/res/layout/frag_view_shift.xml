@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_shift_appbar_height"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbarStyle="outsideOverlay"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_default"
+            android:divider="@drawable/shift_details_divider"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/padding_small"
+            android:paddingEnd="@dimen/padding_view_shift_horizontal"
+            android:paddingStart="@dimen/padding_view_shift_horizontal"
+            android:paddingTop="@dimen/padding_small"
+            android:showDividers="middle">
+
+            <com.dgsd.android.shifttracker.view.ShiftDetailSectionView
+                android:id="@+id/section_time"
+                style="@style/ShiftDetails.Section"
+                app:sectionIcon="@drawable/ic_time">
+
+                <TextView
+                    android:id="@+id/time_range"
+                    style="@style/ShiftDetails.InputField"
+                    android:layout_marginEnd="@dimen/padding_small"
+                    android:textColor="?android:attr/textColorPrimary" />
+
+                <TextView
+                    android:id="@+id/overtime_title"
+                    style="@style/ShiftDetails.InputField"
+                    android:text="@string/view_shift_overtime_title"
+                    android:textColor="?android:attr/textColorSecondary" />
+
+                <TextView
+                    android:id="@+id/overtime_time_range"
+                    style="@style/ShiftDetails.InputField"
+                    android:layout_marginEnd="@dimen/padding_small"
+                    android:paddingStart="@dimen/padding_default"
+                    android:textColor="?android:attr/textColorPrimary" />
+
+                <TextView
+                    android:id="@+id/overtime_pay_rate"
+                    style="@style/ShiftDetails.InputField"
+                    android:layout_marginTop="@dimen/padding_small"
+                    android:paddingStart="@dimen/padding_default"
+                    android:visibility="gone" />
+
+            </com.dgsd.android.shifttracker.view.ShiftDetailSectionView>
+
+            <com.dgsd.android.shifttracker.view.ShiftDetailSectionView
+                android:id="@+id/section_pay"
+                style="@style/ShiftDetails.Section"
+                app:sectionIcon="@drawable/ic_dollar">
+
+                <TextView
+                    android:id="@+id/pay_rate"
+                    style="@style/ShiftDetails.InputField" />
+
+                <Space
+                    android:id="@+id/pay_rate_and_break_spacing"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/padding_small" />
+
+                <TextView
+                    android:id="@+id/unpaid_break"
+                    style="@style/ShiftDetails.InputField" />
+
+            </com.dgsd.android.shifttracker.view.ShiftDetailSectionView>
+
+            <com.dgsd.android.shifttracker.view.ShiftDetailSectionView
+                android:id="@+id/section_notes"
+                style="@style/ShiftDetails.Section"
+                android:paddingEnd="@dimen/padding_small"
+                app:sectionIcon="@drawable/ic_list">
+
+                <TextView
+                    android:id="@+id/notes"
+                    style="@style/ShiftDetails.InputField"
+                    android:singleLine="false" />
+
+            </com.dgsd.android.shifttracker.view.ShiftDetailSectionView>
+
+            <com.dgsd.android.shifttracker.view.ShiftDetailSectionView
+                android:id="@+id/section_reminder"
+                style="@style/ShiftDetails.Section"
+                app:sectionIcon="@drawable/ic_alarm">
+
+                <TextView
+                    android:id="@+id/reminder"
+                    style="@style/ShiftDetails.InputField" />
+
+            </com.dgsd.android.shifttracker.view.ShiftDetailSectionView>
+
+            <LinearLayout
+                android:id="@+id/total_pay_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_default"
+                android:layout_marginTop="@dimen/padding_default"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/padding_default"
+                android:paddingTop="@dimen/padding_default">
+
+                <TextView
+                    style="@style/ShiftDetails.InputField"
+                    android:layout_width="wrap_content"
+                    android:text="@string/view_shift_total_pay_label"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/total_pay_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/padding_default"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <com.dgsd.android.shifttracker.view.TintedWhiteFloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/padding_default"
+        android:src="@drawable/ic_edit"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|end" />
+
+    <include
+        android:id="@+id/ad_view"
+        layout="@layout/ad_banner_view_shift" />
+</android.support.design.widget.CoordinatorLayout>

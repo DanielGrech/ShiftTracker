@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="month_day_text_size">14sp</dimen>
+    <dimen name="month_weekday_text_size">12sp</dimen>
+    <dimen name="month_day_text_padding">4dp</dimen>
+</resources>

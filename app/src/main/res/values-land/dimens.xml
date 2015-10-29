@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding_add_shift_horizontal">64dp</dimen>
+    <dimen name="padding_statistics_horizontal">64dp</dimen>
+    <dimen name="padding_week_view_horizontal">64dp</dimen>
+</resources>

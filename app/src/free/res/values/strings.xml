@@ -1,0 +1,10 @@
+<resources>
+
+    <string name="ad_unit_id_banner_main">ca-app-pub-7157106990325877/9939718149</string>
+    <string name="ad_unit_id_banner_statistics">ca-app-pub-7157106990325877/2416451341</string>
+    <string name="ad_unit_id_banner_view_shift">ca-app-pub-7157106990325877/3893184542</string>
+    <string name="ad_unit_id_banner_add_shift">ca-app-pub-7157106990325877/5369917746</string>
+    <string name="ad_unit_id_banner_test">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="ad_unit_id_interstitial_test">ca-app-pub-3940256099942544/1033173712</string>
+
+</resources>

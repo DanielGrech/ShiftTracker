@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        android:key="@string/settings_key_view_full_version"
+        android:title="@string/settings_title_view_full_version" />
+
+    <PreferenceCategory
+        android:key="@string/settings_cat_key_content"
+        android:title="@string/settings_cat_title_content">
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/days_of_week"
+            android:entryValues="@array/days_of_week_values"
+            android:key="@string/settings_key_start_day"
+            android:summary="@string/settings_summary_start_day"
+            android:title="@string/settings_title_start_day" />
+
+        <Preference
+            android:key="@string/settings_key_export_data"
+            android:summary="@string/settings_summary_export_data"
+            android:title="@string/settings_title_export_data" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="@string/settings_cat_key_defaults"
+        android:title="@string/settings_cat_title_defaults">
+
+        <Preference
+            android:key="@string/settings_key_default_start_time"
+            android:summary="@string/settings_summary_default_start_time"
+            android:title="@string/settings_title_default_start_time" />
+
+        <Preference
+            android:key="@string/settings_key_default_end_time"
+            android:summary="@string/settings_summary_default_end_time"
+            android:title="@string/settings_title_default_end_time" />
+
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/default_unpaid_break_labels"
+            android:entryValues="@array/default_unpaid_break_values"
+            android:key="@string/settings_key_default_break_duration"
+            android:summary="@string/settings_summary_default_break_duration"
+            android:title="@string/settings_title_default_break_duration" />
+
+        <Preference
+            android:key="@string/settings_key_default_pay_rate"
+            android:summary="@string/settings_summary_default_pay_rate"
+            android:title="@string/settings_title_default_pay_rate" />
+
+        <ListPreference
+            app:defaultValue="-1"
+            android:entries="@array/add_shift_reminder_labels"
+            android:entryValues="@array/add_shift_reminder_values"
+            android:key="@string/settings_key_default_reminder"
+            android:summary="@string/settings_summary_default_reminder"
+            android:title="@string/settings_summary_default_reminder" />
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        android:key="@string/settings_cat_key_about"
+        android:title="@string/settings_cat_title_about">
+
+        <Preference
+            android:key="@string/settings_key_app_version"
+            android:selectable="false"
+            android:title="@string/settings_title_app_version" />
+
+        <Preference
+            android:key="@string/settings_key_build_info"
+            android:selectable="false"
+            android:title="@string/settings_title_build_info" />
+
+        <Preference
+            android:key="@string/settings_key_rate"
+            android:summary="@string/settings_summary_rate"
+            android:title="@string/settings_title_rate" />
+
+        <Preference
+            android:key="@string/settings_key_support"
+            android:summary="@string/settings_summary_support"
+            android:title="@string/settings_title_support" />
+
+        <Preference
+            android:key="@string/settings_key_licenses"
+            android:summary="@string/settings_summary_licenses"
+            android:title="@string/settings_title_licenses" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

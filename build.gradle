@@ -1,0 +1,89 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url 'http://download.crashlytics.com/maven' }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.4.0-beta6'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'com.stanfy.spoon:spoon-gradle-plugin:1.0.3'
+        classpath 'pl.itako:icon-version:1.1.2'
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.7'
+    description = 'Create gradle wrapper files'
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        maven { url 'https://maven.fabric.io/public' }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    }
+}
+
+subprojects {
+    ext {
+        config = [
+                appName : "Shift Tracker",
+                applicationId : "com.dgsd.android.ShiftTracker",
+
+                compileSdkVersion : 23,
+                buildToolsVersion : "23.0.1",
+                minSdkVersion : 19,
+                targetSdkVersion : 23,
+
+                versionCode : 8,
+                versionName : "2.0",
+
+                releaseSigning : [
+                    storeFile : 'release.keystore',
+                    storePassword : System.getenv('RELEASE_STORE_PASSWORD'),
+                    alias : System.getenv('RELEASE_KEY_ALIAS'),
+                    aliasPassword: System.getenv('RELEASE_KEY_ALIAS_PASSWORD')
+                ],
+
+                testOptions : {
+                    events 'passed', 'failed'
+                    displayGranularity 2
+                    showExceptions true
+                    showStackTraces true
+                    showCauses true
+                    exceptionFormat 'full'
+                }
+        ]
+
+        versions = [
+                androidSupport : "23.1.0",
+                playServices: "8.1.0",
+                rxAndroid : "1.0.1",
+                rxBinding : "0.3.0",
+                rxLifecycle : "0.3.0",
+                easyDataStore : "1.0.3",
+                immutables : "2.0.21",
+                sqlbrite: "0.4.1",
+                rxJava : "1.0.14",
+                timber : "4.0.1",
+                butterknife : "7.0.1",
+                dashclock: "2.0.0",
+                openCsv: "2.3",
+                jsr250 : "1.0",
+                fabricClient : "2.5.2@aar",
+                stetho : "1.2.0",
+                licensesDialog: "1.8.0",
+                dagger : "2.0.1",
+                leakCanary : "1.4-SNAPSHOT",
+                jacoco : "0.7.2.201409121644",
+                mockito : "2.0.31-beta",
+                robolectric : "3.0",
+                junit : "4.12",
+                assertJ : "1.7.1",
+                espresso : "2.2.1",
+                esspressoSupport : "0.4",
+                spoon : "1.1.9",
+
+        ]
+    }
+}

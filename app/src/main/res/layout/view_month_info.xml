@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="@layout/frag_month">
+
+    <TextView
+        android:id="@+id/day_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/window_background"
+        android:clickable="true"
+        android:gravity="start|center_vertical"
+        android:minHeight="@dimen/month_fragment_day_title_height"
+        android:paddingEnd="@dimen/padding_default"
+        android:paddingStart="@dimen/padding_default"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textColor="@color/accent"
+        tools:text="Shifts for Wed, 27th May" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/divider" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/window_background">
+
+        <com.dgsd.android.shifttracker.view.RecyclingLinearLayout
+            android:id="@+id/shift_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="invisible" />
+
+        <LinearLayout
+            android:id="@+id/empty_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/empty_view_image"
+                android:layout_width="@dimen/shift_month_summary_empty_view_image_size"
+                android:layout_height="@dimen/shift_month_summary_empty_view_image_size" />
+
+            <TextView
+                android:id="@+id/empty_view_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/no_shifts"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@color/divider" />
+        </LinearLayout>
+
+    </FrameLayout>
+</merge>

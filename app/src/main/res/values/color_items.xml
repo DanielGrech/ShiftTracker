@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="color_item_labels">
+        <item>Red</item>
+        <item>Pink</item>
+        <item>Purple</item>
+        <item>Deep Purple</item>
+        <item>Indigo</item>
+        <item>Blue</item>
+        <item>Light Blu</item>
+        <item>Cyan</item>
+        <item>Teal</item>
+        <item>Green</item>
+        <item>Light Green</item>
+        <item>Lime</item>
+        <item>Yellow</item>
+        <item>Amber</item>
+        <item>Orange</item>
+        <item>Deep Orange</item>
+        <item>Brown Orange</item>
+        <item>Grey</item>
+        <item>Blue Grey</item>
+    </string-array>
+
+    <integer-array name="color_item_values">
+        <item>0xFFF44336</item>
+        <item>0xFFE91E63</item>
+        <item>0xFF9C27B0</item>
+        <item>0xFF673AB7</item>
+        <item>0xFF37568F</item>
+        <item>0xFF2196F3</item>
+        <item>0xFF03A9F4</item>
+        <item>0xFF00BCD4</item>
+        <item>0xFF009688</item>
+        <item>0xFF4CAF50</item>
+        <item>0xFF8BC34A</item>
+        <item>0xFFCDDC39</item>
+        <item>0xFFFFEB3B</item>
+        <item>0xFFFFC107</item>
+        <item>0xFFFF8900</item>
+        <item>0xFFFF5722</item>
+        <item>0xFF795548</item>
+        <item>0xFF9E9E9E</item>
+        <item>0xFF607D8B</item>
+    </integer-array>
+</resources>

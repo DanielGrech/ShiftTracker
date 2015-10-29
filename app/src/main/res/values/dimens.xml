@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding_default">15dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_xsmall">4dp</dimen>
+    <dimen name="nav_header_height">192dp</dimen>
+    <dimen name="main_title_strip_text_size">16sp</dimen>
+
+    <dimen name="month_day_text_size">14sp</dimen>
+    <dimen name="month_weekday_text_size">12sp</dimen>
+    <dimen name="month_day_text_padding">4dp</dimen>
+
+    <dimen name="add_shift_color_input_height">40dp</dimen>
+    <dimen name="add_shift_section_icon_size">40dp</dimen>
+    <dimen name="add_shift_section_icon_padding">8dp</dimen>
+    <dimen name="add_shift_divider_indent">55dp</dimen>
+    <dimen name="add_shift_input_field_min_height">40dp</dimen>
+    <dimen name="add_shift_field_text_size">16sp</dimen>
+    <dimen name="add_shift_title_text_size">22sp</dimen>
+    <dimen name="month_fragment_day_title_height">72dp</dimen>
+    <dimen name="shift_month_summary_empty_view_image_size">80dp</dimen>
+
+    <dimen name="padding_add_shift_horizontal">@dimen/padding_small</dimen>
+    <dimen name="padding_view_shift_horizontal">@dimen/padding_add_shift_horizontal</dimen>
+    <dimen name="padding_week_view_horizontal">0dp</dimen>
+    <dimen name="padding_statistics_horizontal">0dp</dimen>
+    <dimen name="view_shift_appbar_height">192dp</dimen>
+    <dimen name="color_indicator_size">20dp</dimen>
+    <dimen name="shift_list_color_indicator_size">10dp</dimen>
+
+    <dimen name="statistics_horizontal_padding">@dimen/padding_default</dimen>
+
+    <dimen name="bar_graph_axis_title_padding">4dp</dimen>
+    <dimen name="bar_graph_axis_title_text_size">14sp</dimen>
+    <dimen name="bar_graph_height">220dp</dimen>
+</resources>

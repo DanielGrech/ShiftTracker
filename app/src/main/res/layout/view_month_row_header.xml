@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.dgsd.android.shifttracker.view.MonthViewRow xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/MonthView.Row.Wrapper">
+
+    <com.dgsd.android.shifttracker.view.MonthViewCell
+        android:id="@+id/cell1"
+        style="@style/MonthView.Row.Cell.Header" />
+
+    <com.dgsd.android.shifttracker.view.MonthViewCell
+        android:id="@+id/cell2"
+        style="@style/MonthView.Row.Cell.Header" />
+
+    <com.dgsd.android.shifttracker.view.MonthViewCell
+        android:id="@+id/cell3"
+        style="@style/MonthView.Row.Cell.Header" />
+
+    <com.dgsd.android.shifttracker.view.MonthViewCell
+        android:id="@+id/cell4"
+        style="@style/MonthView.Row.Cell.Header" />
+
+    <com.dgsd.android.shifttracker.view.MonthViewCell
+        android:id="@+id/cell5"
+        style="@style/MonthView.Row.Cell.Header" />
+
+    <com.dgsd.android.shifttracker.view.MonthViewCell
+        android:id="@+id/cell6"
+        style="@style/MonthView.Row.Cell.Header" />
+
+    <com.dgsd.android.shifttracker.view.MonthViewCell
+        android:id="@+id/cell7"
+        style="@style/MonthView.Row.Cell.Header" />
+
+</com.dgsd.android.shifttracker.view.MonthViewRow>
