@@ -19,12 +19,18 @@
 
         <activity
             android:name=".activity.StartupActivity"
-            android:theme="@android:style/Theme.NoDisplay">
+            android:theme="@android:style/Theme.NoDisplay" />
+
+        <activity-alias
+            android:name="${applicationId}.StartupActivity"
+            android:targetActivity=".activity.StartupActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+
+        </activity-alias>
 
         <activity
             android:name=".activity.LegacyMigrationActivity"
