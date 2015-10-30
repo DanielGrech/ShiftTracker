@@ -4,6 +4,9 @@
 
     <application>
 
+        <meta-data android:name="com.google.android.backup.api_key"
+            android:value="AEdPqrEAAAAI5LxgkBOyLFOxkGNgntS2S_Grczgnf3RIst5Hlw" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

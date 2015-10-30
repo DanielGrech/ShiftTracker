@@ -1,5 +1,7 @@
 package com.dgsd.shifttracker.data;
 
+import android.app.backup.BackupAgent;
+import android.app.backup.BackupManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,19 +26,21 @@ public class DbDataProvider implements DataProvider {
     private final BriteDatabase db;
     private final Context context;
     private final ContentResolver contentResolver;
+    private final BackupManager backupManager;
 
     public static DbDataProvider create(Context context, SqlBrite sqlBrite) {
         final Context appContext = context.getApplicationContext();
         final DbOpenHelper dbOpenHelper = DbOpenHelper.getInstance(appContext);
         final BriteDatabase briteDb = sqlBrite.wrapDatabaseHelper(dbOpenHelper);
 
-        return new DbDataProvider(briteDb, appContext);
+        return new DbDataProvider(appContext, briteDb);
     }
 
-    public DbDataProvider(BriteDatabase db, Context context) {
+    public DbDataProvider(Context context, BriteDatabase db) {
         this.db = db;
         this.context = context;
         this.contentResolver = context.getContentResolver();
+        this.backupManager = new BackupManager(context);
     }
 
     @Override
@@ -112,5 +116,6 @@ public class DbDataProvider implements DataProvider {
     private void notifyDataChanged() {
         contentResolver.notifyChange(STContentProvider.SHIFTS_URI, null);
         context.sendBroadcast(new Intent(DataProvider.UPDATE_ACTION));
+        backupManager.dataChanged();
     }
 }
