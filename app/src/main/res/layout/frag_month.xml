@@ -8,6 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingStart="@dimen/padding_month_view_horiztonal"
+        android:paddingRight="@dimen/padding_month_view_horiztonal"
         android:orientation="vertical">
 
         <include

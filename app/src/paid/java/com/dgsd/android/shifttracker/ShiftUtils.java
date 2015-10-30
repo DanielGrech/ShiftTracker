@@ -17,7 +17,7 @@ public class ShiftUtils {
         // No instances..
     }
 
-    public static Shift getNextShift(Context context) {
+    public static Observable<Shift> getNextShift(Context context) {
         try {
             final DataProvider dataProvider = ((STApp) context.getApplicationContext())
                     .getAppServicesComponent()
@@ -35,9 +35,7 @@ public class ShiftUtils {
                         public Boolean call(Shift shift) {
                             return shift.timePeriod().startMillis() > System.currentTimeMillis();
                         }
-                    })
-                    .toBlocking()
-                    .firstOrDefault(null);
+                    });
         } catch (Exception ex) {
             Timber.e(ex, "Error getting next shift");
         }

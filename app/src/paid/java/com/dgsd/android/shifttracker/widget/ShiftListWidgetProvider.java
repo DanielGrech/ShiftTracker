@@ -61,45 +61,42 @@ public class ShiftListWidgetProvider extends AppWidgetProvider {
     }
 
     private void performUpdate(Context context, AppWidgetManager appWidgetManager, int[] ids) {
-        final Shift nextShift = ShiftUtils.getNextShift(context);
-        if (nextShift != null) {
-            for (int id : ids) {
-                final RemoteViews widget
-                        = new RemoteViews(context.getPackageName(), R.layout.widget_shift_list);
+        for (int id : ids) {
+            final RemoteViews widget
+                    = new RemoteViews(context.getPackageName(), R.layout.widget_shift_list);
 
-                //Launch the 'EditShiftActivity' when clicking on the add button
-                final Intent addIntent = AddShiftActivity.createIntent(context)
-                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                final PendingIntent addPendingIntent
-                        = getActivity(context, id, addIntent, FLAG_UPDATE_CURRENT);
-                widget.setOnClickPendingIntent(R.id.add_button, addPendingIntent);
+            //Launch the 'EditShiftActivity' when clicking on the add button
+            final Intent addIntent = AddShiftActivity.createIntent(context)
+                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            final PendingIntent addPendingIntent
+                    = getActivity(context, id, addIntent, FLAG_UPDATE_CURRENT);
+            widget.setOnClickPendingIntent(R.id.add_button, addPendingIntent);
 
-                // Launch app when the user taps on the header
-                final Intent headerIntent = HomeActivity.createIntent(context)
-                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                final PendingIntent launchAppPendingIntent
-                        = getActivity(context, id, headerIntent, FLAG_UPDATE_CURRENT);
-                widget.setOnClickPendingIntent(R.id.header, launchAppPendingIntent);
+            // Launch app when the user taps on the header
+            final Intent headerIntent = HomeActivity.createIntent(context)
+                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            final PendingIntent launchAppPendingIntent
+                    = getActivity(context, id, headerIntent, FLAG_UPDATE_CURRENT);
+            widget.setOnClickPendingIntent(R.id.header, launchAppPendingIntent);
 
-                //Set up listview adapter
-                final Intent svcIntent = new Intent(context, ShiftListWidgetService.class);
-                svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
-                svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
-                widget.setRemoteAdapter(R.id.list, svcIntent);
-                appWidgetManager.notifyAppWidgetViewDataChanged(id, R.id.list);
+            //Set up listview adapter
+            final Intent svcIntent = new Intent(context, ShiftListWidgetService.class);
+            svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
+            svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)));
+            widget.setRemoteAdapter(R.id.list, svcIntent);
+            appWidgetManager.notifyAppWidgetViewDataChanged(id, R.id.list);
 
-                //Empty view for list
-                widget.setEmptyView(R.id.list, android.R.id.empty);
+            //Empty view for list
+            widget.setEmptyView(R.id.list, android.R.id.empty);
 
-                //Intent for each list item
-                final Intent intentTemplate = new Intent(context, ViewShiftActivity.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                final PendingIntent pendingIntentTemplate
-                        = getActivity(context, id, intentTemplate, FLAG_UPDATE_CURRENT);
-                widget.setPendingIntentTemplate(R.id.list, pendingIntentTemplate);
+            //Intent for each list item
+            final Intent intentTemplate = new Intent(context, ViewShiftActivity.class)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            final PendingIntent pendingIntentTemplate
+                    = getActivity(context, id, intentTemplate, FLAG_UPDATE_CURRENT);
+            widget.setPendingIntentTemplate(R.id.list, pendingIntentTemplate);
 
-                appWidgetManager.updateAppWidget(id, widget);
-            }
+            appWidgetManager.updateAppWidget(id, widget);
         }
     }
 }

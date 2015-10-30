@@ -64,6 +64,7 @@
     <string name="settings_summary_build_info">Build Time: %1$s. Git Sha: %2$s</string>
     <string name="month_fragment_title_template">Shifts on %1$s</string>
     <string name="no_shifts">No shifts</string>
+    <string name="no_upcoming_shifts">No upcoming shifts</string>
 
     <string name="view_shift_break_duration_template">%1$s unpaid break</string>
     <string name="view_shift_pay_rate_template">%1$s per hour</string>

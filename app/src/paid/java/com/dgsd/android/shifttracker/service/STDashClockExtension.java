@@ -12,6 +12,8 @@ import com.dgsd.shifttracker.model.Shift;
 import com.google.android.apps.dashclock.api.DashClockExtension;
 import com.google.android.apps.dashclock.api.ExtensionData;
 
+import java.util.concurrent.TimeUnit;
+
 import timber.log.Timber;
 
 import static android.text.format.DateUtils.FORMAT_ABBREV_ALL;
@@ -35,7 +37,10 @@ public class STDashClockExtension extends DashClockExtension {
         Timber.d("onUpdateData(%s)", reason);
 
         try {
-            final Shift nextShift = ShiftUtils.getNextShift(this);
+            final Shift nextShift = ShiftUtils.getNextShift(this)
+                    .timeout(2, TimeUnit.SECONDS)
+                    .toBlocking()
+                    .firstOrDefault(null);
             if (nextShift != null) {
                 String title = getString(R.string.dashclock_extension_title);
                 if (!TextUtils.isEmpty(nextShift.title())) {

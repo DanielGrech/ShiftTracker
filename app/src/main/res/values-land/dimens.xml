@@ -3,4 +3,5 @@
     <dimen name="padding_add_shift_horizontal">64dp</dimen>
     <dimen name="padding_statistics_horizontal">64dp</dimen>
     <dimen name="padding_week_view_horizontal">64dp</dimen>
+    <dimen name="padding_month_view_horiztonal">64dp</dimen>
 </resources>

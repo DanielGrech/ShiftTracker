@@ -1,6 +1,7 @@
 package com.dgsd.android.shifttracker.view;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +75,10 @@ public class MonthFragmentContainerView extends ScrollView {
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            return;
+        }
 
         final float transY = Math.max(0, t * PARALLAX_FACTOR);
         final float alpha = Math.min(1f, Math.max(MIN_ALPHA, 1f - ((t * 1f) / monthView.getHeight())));

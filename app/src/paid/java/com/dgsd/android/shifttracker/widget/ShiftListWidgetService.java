@@ -34,7 +34,6 @@ import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
 import static android.text.format.DateUtils.FORMAT_ABBREV_ALL;
-import static android.text.format.DateUtils.FORMAT_SHOW_DATE;
 import static android.text.format.DateUtils.FORMAT_SHOW_TIME;
 import static android.text.format.DateUtils.formatDateTime;
 
@@ -152,18 +151,23 @@ public class ShiftListWidgetService extends RemoteViewsService {
                 title = shift.title();
             }
 
-            final String dateText = formatDateTime(context, shift.timePeriod().startMillis(),
-                    FORMAT_ABBREV_ALL | FORMAT_SHOW_DATE | FORMAT_SHOW_TIME);
-            String body = dateText + " - "
-                    + TimeUtils.formatDuration(shift.totalPaidDuration());
-            final float totalPay = shift.totalPay();
-            if (Float.compare(totalPay, 0) > 0) {
-                body += " - " + ModelUtils.formatCurrency(totalPay);
-            }
+
+            final String startTime = formatDateTime(
+                    context, shift.timePeriod().startMillis(), FORMAT_ABBREV_ALL | FORMAT_SHOW_TIME
+            );
+
+            final String endTime = formatDateTime(
+                    context, shift.timePeriod().endMillis(), FORMAT_ABBREV_ALL | FORMAT_SHOW_TIME
+            );
+
+            final String elapsedTime = TimeUtils.formatDuration(shift.totalPaidDuration());
+
+            String body = String.format("%s - %s (%s)", startTime, endTime, elapsedTime);
 
             widget.setTextViewText(R.id.title, title);
             widget.setTextViewText(R.id.summary, body);
 
+            final float totalPay = shift.totalPay();
             final String payText = Float.compare(totalPay, 0) > 0 ?
                     ModelUtils.formatCurrency(totalPay) : null;
             if (TextUtils.isEmpty(payText)) {

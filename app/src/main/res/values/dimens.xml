@@ -24,6 +24,7 @@
     <dimen name="padding_view_shift_horizontal">@dimen/padding_add_shift_horizontal</dimen>
     <dimen name="padding_week_view_horizontal">0dp</dimen>
     <dimen name="padding_statistics_horizontal">0dp</dimen>
+    <dimen name="padding_month_view_horiztonal">0dp</dimen>
     <dimen name="view_shift_appbar_height">192dp</dimen>
     <dimen name="color_indicator_size">20dp</dimen>
     <dimen name="shift_list_color_indicator_size">10dp</dimen>
