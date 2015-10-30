@@ -36,6 +36,11 @@
                 android:value="@string/dashclock_extension_description" />
         </service>
 
+        <service
+            android:name=".widget.ShiftListWidgetService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
         <receiver
             android:name=".widget.NewShiftWidgetProvider"
             android:label="@string/widget_label_new_shift">
@@ -70,6 +75,31 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_provider_next_shift" />
+        </receiver>
+
+        <receiver
+            android:name=".widget.ShiftListWidgetProvider"
+            android:label="@string/widget_label_shift_list">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="data_provider_update" />
+            </intent-filter>
+
+            <!-- Handle device time changes -->
+            <intent-filter>
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+            </intent-filter>
+
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_provider_shift_list" />
         </receiver>
 
     </application>

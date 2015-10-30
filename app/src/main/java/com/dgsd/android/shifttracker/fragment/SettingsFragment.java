@@ -153,6 +153,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
         if (!super.onPreferenceTreeClick(preference)) {
             final String prefKey = preference.getKey();
             if (TextUtils.equals(prefKey, supportPref.getKey())) {
+                AnalyticsManager.trackClick("support");
                 final Intent emailIntent = IntentUtils.getEmailIntent(
                         BuildConfig.SUPPORT_EMAIL, String.format("%s %s support",
                                 getString(R.string.app_name), BuildConfig.VERSION_NAME)
@@ -163,6 +164,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 }
                 return true;
             } else if (TextUtils.equals(prefKey, ratePref.getKey())) {
+                AnalyticsManager.trackClick("rate");
                 final Intent playStoreIntent = IntentUtils.getPlayStoreIntent();
                 if (IntentUtils.isAvailable(getActivity(), playStoreIntent)) {
                     startActivity(playStoreIntent);
@@ -170,6 +172,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
                 return true;
             } else if (TextUtils.equals(prefKey, licensesPref.getKey())) {
+                AnalyticsManager.trackClick("licenses");
                 new LicensesDialog.Builder(getActivity())
                         .setTitle(R.string.settings_title_licenses)
                         .setIncludeOwnLicense(true)
@@ -178,12 +181,14 @@ public class SettingsFragment extends PreferenceFragmentCompat
                         .show();
                 return true;
             } else if (TextUtils.equals(prefKey, fullVersionPref.getKey())) {
+                AnalyticsManager.trackClick("get_full_app");
                 final Intent playStoreIntent = IntentUtils.getPaidAppPlayStoreIntent();
                 if (IntentUtils.isAvailable(getActivity(), playStoreIntent)) {
                     startActivity(playStoreIntent);
                 }
                 return true;
             } else if (TextUtils.equals(prefKey, getString(R.string.settings_key_export_data))) {
+                AnalyticsManager.trackClick("export");
                 if (BuildConfig.IS_PAID) {
                     runExport();
                 } else {
@@ -191,10 +196,13 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 }
                 return true;
             } else if (TextUtils.equals(prefKey, startTimePref.getKey())) {
+                AnalyticsManager.trackClick("start_time");
                 showTimePickerForKey(prefKey);
             } else if (TextUtils.equals(prefKey, endTimePref.getKey())) {
+                AnalyticsManager.trackClick("end_time");
                 showTimePickerForKey(prefKey);
             } else if (TextUtils.equals(prefKey, payRatePref.getKey())) {
+                AnalyticsManager.trackClick("pay_rate");
                 showPayRateDialog();
             }
         }

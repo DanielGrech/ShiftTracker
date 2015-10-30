@@ -3,6 +3,8 @@ package com.dgsd.android.shifttracker.mvp.presenter;
 import android.support.annotation.NonNull;
 
 import com.dgsd.android.shifttracker.R;
+import com.dgsd.android.shifttracker.data.AppSettings;
+import com.dgsd.android.shifttracker.data.AppSettings.Defaults;
 import com.dgsd.android.shifttracker.manager.AnalyticsManager;
 import com.dgsd.android.shifttracker.module.AppServicesComponent;
 import com.dgsd.android.shifttracker.mvp.view.WeekMvpView;
@@ -25,6 +27,9 @@ public class WeekPresenter extends Presenter<WeekMvpView> {
     @Inject
     DataProvider dataProvider;
 
+    @Inject
+    AppSettings appSettings;
+
     final TimePeriod timePeriod;
 
     public WeekPresenter(@NonNull WeekMvpView view, AppServicesComponent component, TimePeriod timePeriod) {
@@ -46,7 +51,11 @@ public class WeekPresenter extends Presenter<WeekMvpView> {
                         .map(new Func1<List<Shift>, ShiftWeekMapping>() {
                             @Override
                             public ShiftWeekMapping call(List<Shift> shifts) {
-                                return new ShiftWeekMapping(shifts);
+                                final ShiftWeekMapping mapping = new ShiftWeekMapping(
+                                        appSettings.startDayOfWeek().get(Defaults.startDayOfWeek()), shifts);
+                                // Make sure internal cache is populated
+                                mapping.getMapping();
+                                return mapping;
                             }
                         });
 

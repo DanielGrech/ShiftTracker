@@ -12,7 +12,8 @@ import com.dgsd.shifttracker.model.TimePeriod;
 
 import java.util.Date;
 import java.util.Formatter;
-import java.util.concurrent.TimeUnit;
+
+import static com.dgsd.android.shifttracker.util.TimeUtils.convertTimeWeekDay;
 
 @SuppressWarnings("deprecation")
 public class WeekPagerAdapter extends BrowsablePagerAdapter {
@@ -125,35 +126,6 @@ public class WeekPagerAdapter extends BrowsablePagerAdapter {
     }
 
     private TimePeriod getTimePeriodForPosition(int pos) {
-        time.setJulianDay(getJulianDayForPosition(pos));
-        int adjustedWd = convertTimeWeekDay(time.weekDay);
-        if (adjustedWd != weekStartDay) {
-            while (adjustedWd != weekStartDay) {
-                time.monthDay--;
-                time.normalize(true);
-
-                adjustedWd = convertTimeWeekDay(time.weekDay);
-            }
-        }
-
-        final long startMillis = time.toMillis(true);
-        return TimePeriod.builder()
-                .startMillis(startMillis)
-                .endMillis(startMillis + TimeUnit.DAYS.toMillis(DAYS_IN_WEEK))
-                .create();
-    }
-
-    /**
-     * {@link Time} class has weekdays beginning with {@link Time#SUNDAY} == 0.
-     *
-     * Need to adjust for our input, which interprets 0 == MONDAY
-     */
-    private static final int convertTimeWeekDay(int weekDay) {
-        int proposedWeekDay = weekDay - 1;
-        if (proposedWeekDay < 0) {
-            proposedWeekDay = 6;// Sunday
-        }
-
-        return proposedWeekDay;
+        return TimeUtils.getWeekTimePeriod(getJulianDayForPosition(pos), weekStartDay);
     }
 }

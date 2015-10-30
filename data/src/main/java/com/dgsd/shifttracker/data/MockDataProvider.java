@@ -1,5 +1,8 @@
 package com.dgsd.shifttracker.data;
 
+import android.content.Context;
+import android.content.Intent;
+
 import com.dgsd.shifttracker.model.Shift;
 import com.dgsd.shifttracker.model.TimePeriod;
 
@@ -18,7 +21,10 @@ public class MockDataProvider implements DataProvider {
 
     final List<Shift> shifts = new LinkedList<>();
 
-    public MockDataProvider() {
+    final Context context;
+
+    public MockDataProvider(Context context) {
+        this.context = context;
         for (int i = 0; i < 5; i++) {
             shifts.add(createShiftForOffset(shifts.size(), i));
             for (int j = 0; j < i; j++) {
@@ -79,6 +85,7 @@ public class MockDataProvider implements DataProvider {
         }
 
         shifts.add(shift);
+        notifyDataChanged();
         return Observable.just(shift).delay(DEFAULT_DELAY, TimeUnit.SECONDS);
     }
 
@@ -95,6 +102,7 @@ public class MockDataProvider implements DataProvider {
                         break;
                     }
                 }
+                notifyDataChanged();
                 return null;
             }
         }).delay(DEFAULT_DELAY, TimeUnit.SECONDS);
@@ -120,5 +128,10 @@ public class MockDataProvider implements DataProvider {
                 .reminderBeforeShift(offset % 2 == 0 ? -1 : TimeUnit.HOURS.toMillis(1))
                 .isTemplate(offset % 2 == 0)
                 .create();
+    }
+
+    private void notifyDataChanged() {
+        context.getContentResolver().notifyChange(STContentProvider.SHIFTS_URI, null);
+        context.sendBroadcast(new Intent(DataProvider.UPDATE_ACTION));
     }
 }

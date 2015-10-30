@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <!-- Header -->
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary"
+        android:gravity="center_vertical|start"
+        android:minHeight="?android:attr/actionBarSize"
+        android:paddingStart="@dimen/padding_small">
+
+        <ImageButton
+            android:id="@+id/add_button"
+            android:layout_width="?android:attr/actionBarSize"
+            android:layout_height="?android:attr/actionBarSize"
+            android:layout_alignParentEnd="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="@string/nav_item_add_shift"
+            android:src="@drawable/ic_add_white" />
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="32dip"
+            android:layout_height="32dip"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/padding_small"
+            android:layout_marginStart="@dimen/padding_small"
+            android:layout_toEndOf="@id/icon"
+            android:layout_toStartOf="@id/add_button"
+            android:gravity="start|center_vertical"
+            android:singleLine="true"
+            android:text="@string/this_week"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@android:color/white" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_marginEnd="@dimen/padding_xsmall"
+        android:layout_marginStart="@dimen/padding_xsmall"
+        android:layout_weight="1"
+        android:background="#AA000000">
+        <!-- Event list -->
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="@null"
+            android:dividerHeight="1dip"
+            android:listSelector="@android:color/transparent" />
+
+        <include
+            android:id="@android:id/empty"
+            layout="@layout/widget_no_shifts" />
+    </FrameLayout>
+</LinearLayout>

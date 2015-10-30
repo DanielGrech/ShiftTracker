@@ -2,6 +2,8 @@ package com.dgsd.android.shifttracker.util;
 
 import android.text.format.Time;
 
+import com.dgsd.shifttracker.model.TimePeriod;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,6 +16,9 @@ public class TimeUtils {
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("ccc, d MMM yyyy");
 
     private static final DateFormat ABBREVIATED_DATE_FORMAT = new SimpleDateFormat("d MMM");
+
+    public static final long WEEK_IN_MILLIS
+            = TimeUnit.DAYS.toMillis(7) - TimeUnit.SECONDS.toMillis(1);
 
     private TimeUtils() {
         // No Instances
@@ -134,6 +139,41 @@ public class TimeUtils {
         return (time1.monthDay == time2.monthDay) &&
                 (time1.month == time2.month) &&
                 (time1.year == time2.year);
+    }
+
+    /**
+     * {@link Time} class has weekdays beginning with {@link Time#SUNDAY} == 0.
+     *
+     * Need to adjust for our input, which interprets 0 == MONDAY
+     */
+    public static int convertTimeWeekDay(int weekDay) {
+        int proposedWeekDay = weekDay - 1;
+        if (proposedWeekDay < 0) {
+            proposedWeekDay = 6;// Sunday
+        }
+
+        return proposedWeekDay;
+    }
+
+    public static TimePeriod getWeekTimePeriod(int julianDay, int weekStartDay) {
+        final Time time = new Time();
+        time.setJulianDay(julianDay);
+
+        int adjustedWd = convertTimeWeekDay(time.weekDay);
+        if (adjustedWd != weekStartDay) {
+            while (adjustedWd != weekStartDay) {
+                time.monthDay--;
+                time.normalize(true);
+
+                adjustedWd = convertTimeWeekDay(time.weekDay);
+            }
+        }
+
+        final long startMillis = time.toMillis(true);
+        return TimePeriod.builder()
+                .startMillis(startMillis)
+                .endMillis(startMillis + TimeUtils.WEEK_IN_MILLIS)
+                .create();
     }
 
 }

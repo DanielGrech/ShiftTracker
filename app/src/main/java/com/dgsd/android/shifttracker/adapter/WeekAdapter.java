@@ -15,13 +15,17 @@ import com.dgsd.shifttracker.model.ShiftWeekMapping;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.functions.Func1;
 import rx.subjects.PublishSubject;
+import timber.log.Timber;
 
 public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.ViewHolder> {
 
@@ -106,9 +110,9 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.ViewHolder> {
 
         if (weekMapping != null) {
             final Map<Integer, List<Shift>> mapping = weekMapping.getMapping();
-
+            int offset = 0;
             for (Map.Entry<Integer, List<Shift>> entry : mapping.entrySet()) {
-                items.add(ListItem.newDayTitleItem(entry.getKey()));
+                items.add(ListItem.newDayTitleItem(offset++));
 
                 if (entry.getValue() == null || entry.getValue().isEmpty()) {
                     items.add(ListItem.newEmptyItem(entry.getKey()));
@@ -140,13 +144,13 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.ViewHolder> {
                     ((TextView) itemView).setText(itemView.getContext().getString(R.string.no_shifts));
                     break;
                 case VIEW_TYPE_DAY_TITLE:
-                    ((TextView) itemView).setText(getTitleForWeekday(item.dayOfWeek));
+                    ((TextView) itemView).setText(getTitleForWeekday(item.offset));
                     break;
             }
         }
 
-        private String getTitleForWeekday(int dayOfWeek) {
-            calendar.setTimeInMillis(weekStartMillis + TimeUnit.DAYS.toMillis(dayOfWeek - 1));
+        private String getTitleForWeekday(int offset) {
+            calendar.setTimeInMillis(weekStartMillis + TimeUnit.DAYS.toMillis(offset));
             return TimeUtils.formatAsDate(calendar.getTime());
         }
 
@@ -156,7 +160,7 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.ViewHolder> {
                 final Shift shift = items.get(getAdapterPosition()).shift;
                 onShiftClickedSubject.onNext(shift);
             } else if (getItemViewType() == VIEW_TYPE_EMPTY_DAY) {
-                onEmptyDayClickedSubject.onNext(items.get(getAdapterPosition()).dayOfWeek);
+                onEmptyDayClickedSubject.onNext(items.get(getAdapterPosition()).offset);
             }
         }
 
@@ -174,24 +178,24 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.ViewHolder> {
     private static class ListItem {
 
         final Shift shift;
-        final int dayOfWeek;
+        final int offset;
         final int type;
 
         static ListItem newShiftItem(Shift shift) {
             return new ListItem(shift, -1, VIEW_TYPE_SHIFT);
         }
 
-        static ListItem newDayTitleItem(int dayOfWeek) {
-            return new ListItem(null, dayOfWeek, VIEW_TYPE_DAY_TITLE);
+        static ListItem newDayTitleItem(int offset) {
+            return new ListItem(null, offset, VIEW_TYPE_DAY_TITLE);
         }
 
-        static ListItem newEmptyItem(int dayOfWeek) {
-            return new ListItem(null, dayOfWeek, VIEW_TYPE_EMPTY_DAY);
+        static ListItem newEmptyItem(int offset) {
+            return new ListItem(null, offset, VIEW_TYPE_EMPTY_DAY);
         }
 
-        private ListItem(Shift shift, int dayOfWeek, int type) {
+        private ListItem(Shift shift, int offset, int type) {
             this.shift = shift;
-            this.dayOfWeek = dayOfWeek;
+            this.offset = offset;
             this.type = type;
         }
 
