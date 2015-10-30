@@ -5,12 +5,16 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.dgsd.android.shifttracker.R;
+import com.dgsd.android.shifttracker.data.AppSettings.Defaults;
 import com.dgsd.android.shifttracker.data.LegacyDbOpenHelper;
+import com.dgsd.android.shifttracker.util.ModelUtils;
 import com.dgsd.android.shifttracker.util.RxUtils;
 import com.dgsd.shifttracker.data.DataProvider;
 import com.dgsd.shifttracker.model.Shift;
+import com.dgsd.shifttracker.model.TimePeriod;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -56,7 +60,7 @@ public class LegacyMigrationActivity extends BaseActivity {
             public Shift call(LegacyDbOpenHelper.LegacyShift legacyShift) {
                 return convert(legacyShift);
             }
-        }).flatMap(new Func1<Shift, Observable<Shift>>() {
+        }).distinct().flatMap(new Func1<Shift, Observable<Shift>>() {
             @Override
             public Observable<Shift> call(Shift shift) {
                 return dataProvider.addShift(shift);
@@ -67,6 +71,7 @@ public class LegacyMigrationActivity extends BaseActivity {
                 .subscribe(new Subscriber<Shift>() {
                     @Override
                     public void onCompleted() {
+                        Timber.d("No shifts found which need migration");
                         onMigrationFinished();
                     }
 
@@ -90,6 +95,20 @@ public class LegacyMigrationActivity extends BaseActivity {
     }
 
     private Shift convert(LegacyDbOpenHelper.LegacyShift legacyShift) {
-        return null;
+        return Shift.builder()
+                .timePeriod(TimePeriod.builder()
+                        .startMillis(legacyShift.startTime)
+                        .endMillis(legacyShift.endTime)
+                        .create())
+                .unpaidBreakDuration(legacyShift.breakDuration < 0 ?
+                        -1 : TimeUnit.MINUTES.toMillis(legacyShift.breakDuration))
+                .reminderBeforeShift(legacyShift.reminder < 0 ?
+                        -1 : TimeUnit.MINUTES.toMillis(legacyShift.reminder))
+                .color(ModelUtils.getColorItems(this)[Defaults.colorItem()].color())
+                .title(legacyShift.name)
+                .notes(legacyShift.note)
+                .isTemplate(legacyShift.isTemplate)
+                .payRate(legacyShift.payRate)
+                .create();
     }
 }

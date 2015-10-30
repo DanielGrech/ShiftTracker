@@ -74,8 +74,8 @@ public abstract class Presenter<V extends MvpView> {
 
     protected <R> Subscription bind(Observable<R> observable, Observer<? super R> observer) {
         final Observable<R> sourceObservable = observable
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io());
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
 
         final Observable<R> boundObservable;
         if (view instanceof BaseFragment) {

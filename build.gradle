@@ -39,10 +39,10 @@ subprojects {
                 versionName : "2.0",
 
                 releaseSigning : [
-                    storeFile : 'release.keystore',
-                    storePassword : System.getenv('RELEASE_STORE_PASSWORD'),
-                    alias : System.getenv('RELEASE_KEY_ALIAS'),
-                    aliasPassword: System.getenv('RELEASE_KEY_ALIAS_PASSWORD')
+                    storeFile : System.getenv('DGSD_RELEASE_STORE_FILE'),
+                    storePassword : System.getenv('DGSD_RELEASE_STORE_PASSWORD'),
+                    alias : System.getenv('DGSD_RELEASE_KEY_ALIAS'),
+                    aliasPassword: System.getenv('DGSD_RELEASE_KEY_PASSWORD')
                 ],
 
                 testOptions : {
