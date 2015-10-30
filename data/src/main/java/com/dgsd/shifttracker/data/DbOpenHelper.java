@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 class DbOpenHelper extends SQLiteOpenHelper {
 
-    private static final String DB_NAME = "shift_tracker.db";
+    private static final String DB_NAME = "st.db";
     private static final int DB_VERSION = 1;
 
     private static DbOpenHelper instance;

@@ -18,13 +18,23 @@
             android:value="3673ac847cb74e5dd32f851f506aae9e67807837" />
 
         <activity
-            android:name=".activity.HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar.Home">
+            android:name=".activity.StartupActivity"
+            android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".activity.LegacyMigrationActivity"
+            android:theme="@style/Theme.AppCompat.Dialog.Alert"
+            android:excludeFromRecents="true"
+            android:noHistory="true"/>
+
+        <activity
+            android:name=".activity.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar.Home" />
 
         <activity
             android:name=".activity.AddShiftActivity"
