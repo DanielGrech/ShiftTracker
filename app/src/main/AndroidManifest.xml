@@ -9,11 +9,11 @@
     <application
         android:name=".STApp"
         android:allowBackup="true"
+        android:backupAgent=".STBackupAgent"
+        android:fullBackupOnly="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:fullBackupOnly="true"
-        android:backupAgent=".STBackupAgent">
+        android:theme="@style/AppTheme">
 
         <meta-data
             android:name="com.crashlytics.ApiKey"
@@ -21,7 +21,7 @@
 
         <activity
             android:name=".activity.StartupActivity"
-            android:theme="@android:style/Theme.NoDisplay" />
+            android:theme="@style/AppTheme.AppBarScrim" />
 
         <activity-alias
             android:name="${applicationId}.StartupActivity"
@@ -36,9 +36,9 @@
 
         <activity
             android:name=".activity.LegacyMigrationActivity"
-            android:theme="@style/Theme.AppCompat.Dialog.Alert"
             android:excludeFromRecents="true"
-            android:noHistory="true"/>
+            android:noHistory="true"
+            android:theme="@style/AppTheme.AppBarScrim" />
 
         <activity
             android:name=".activity.HomeActivity"
