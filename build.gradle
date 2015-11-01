@@ -38,6 +38,9 @@ subprojects {
                 versionCode : 8,
                 versionName : "2.0",
 
+                contentProviderAuthority: "com.dgsd.android.shifttracker.content_provider_auth",
+                contentProviderAuthorityFree: "com.dgsd.android.shifttracker.content_provider_auth_free",
+
                 releaseSigning : [
                     storeFile : System.getenv('DGSD_RELEASE_STORE_FILE'),
                     storePassword : System.getenv('DGSD_RELEASE_STORE_PASSWORD'),

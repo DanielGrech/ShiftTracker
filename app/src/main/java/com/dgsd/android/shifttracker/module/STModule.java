@@ -23,7 +23,6 @@ import com.squareup.leakcanary.RefWatcher;
 import com.squareup.sqlbrite.SqlBrite;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Singleton;

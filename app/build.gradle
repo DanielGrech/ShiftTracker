@@ -50,6 +50,8 @@ android {
 
         buildConfigField "int", "MIN_LAUNCHES_BEFORE_APPRATER", "7"
         buildConfigField "int", "MIN_DAYS_BEFORE_APPRATER", "14"
+
+        buildConfigField "String", "CONTENT_PROVIDER_AUTHORITY_FREE", "\"${config.contentProviderAuthorityFree}\""
     }
 
     buildTypes {
@@ -137,7 +139,8 @@ android {
 
 dependencies {
     compile project(":model")
-    compile project(":data")
+    paidCompile project(path: ":data", configuration: "paidRelease")
+    freeCompile project(path: ":data", configuration: "freeRelease")
     compile fileTree(dir: 'libs', include: '*.jar')
     compile "com.android.support:support-v4:${versions.androidSupport}"
     compile "com.android.support:appcompat-v7:${versions.androidSupport}"

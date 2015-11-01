@@ -46,6 +46,9 @@ public interface AppSettings {
     @Preference("has_shown_app_rating_dialog")
     BooleanEntry hasShownAppRatingDialog();
 
+    @Preference("has_migrated_free_data")
+    BooleanEntry hasMigratedFreeData();
+
     class Defaults {
         public static long startTime() {
             return TimeUnit.HOURS.toMillis(9);

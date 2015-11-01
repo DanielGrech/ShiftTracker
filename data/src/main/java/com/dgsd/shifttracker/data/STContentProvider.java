@@ -12,9 +12,10 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
+
 public class STContentProvider extends ContentProvider {
 
-    private static final String AUTHORITY = BuildConfig.APPLICATION_ID;
+    private static final String AUTHORITY = BuildConfig.CONTENT_PROVIDER_AUTHORITY;
 
     private static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
 

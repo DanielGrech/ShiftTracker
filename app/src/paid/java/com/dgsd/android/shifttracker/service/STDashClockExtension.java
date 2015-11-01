@@ -70,6 +70,8 @@ public class STDashClockExtension extends DashClockExtension {
                 publishUpdate(data);
 
                 return;
+            } else {
+                Timber.d("No next shift found");
             }
         } catch (Exception ex) {
             Timber.e(ex, "Error getting shifts for dashclock extension");

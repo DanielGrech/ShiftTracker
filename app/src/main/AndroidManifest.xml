@@ -66,6 +66,8 @@
 
         <service android:name=".service.ShowReminderService" />
 
+        <service android:name=".service.UpgradeMigrationService" />
+
         <receiver android:name=".receiver.ShowReminderReceiver" />
 
         <receiver android:name=".receiver.BootReceiver">

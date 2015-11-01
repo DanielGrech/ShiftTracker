@@ -3,7 +3,8 @@
 
     <application>
         <provider
-            android:authorities="${applicationId}"
-            android:name=".STContentProvider"/>
+            android:authorities="${contentProviderAuthority}"
+            android:name=".STContentProvider"
+            android:exported="true"/>
     </application>
 </manifest>

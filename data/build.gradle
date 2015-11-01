@@ -11,9 +11,27 @@ android {
         versionName config.versionName
     }
 
+    publishNonDefault true
+
     buildTypes {
         release {
             minifyEnabled false
+        }
+    }
+
+    productFlavors {
+        paid {
+            buildConfigField "String", "CONTENT_PROVIDER_AUTHORITY", "\"${config.contentProviderAuthority}\""
+            manifestPlaceholders = [
+                    "contentProviderAuthority" : "${config.contentProviderAuthority}"
+            ]
+        }
+
+        free {
+            buildConfigField "String", "CONTENT_PROVIDER_AUTHORITY", "\"${config.contentProviderAuthorityFree}\""
+            manifestPlaceholders = [
+                    "contentProviderAuthority" : "${config.contentProviderAuthorityFree}"
+            ]
         }
     }
 
