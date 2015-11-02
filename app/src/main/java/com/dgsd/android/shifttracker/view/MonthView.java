@@ -1,6 +1,8 @@
 package com.dgsd.android.shifttracker.view;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.annotation.ColorInt;
 import android.text.format.Time;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -176,10 +178,15 @@ public class MonthView extends LinearLayout implements View.OnClickListener {
     }
 
     public void setDayMarked(int day, boolean marked) {
+        setDayMarked(day, marked, Color.BLACK);
+    }
+
+    public void setDayMarked(int day, boolean marked, @ColorInt int color) {
         ensureHasSetMonth();
         MonthViewCell cell = dateCells[dayOfMonthToCellIndex(day)];
         if (cell.hasDate()) {
             cell.isMarked(marked);
+            cell.setTextColor(color);
         }
     }
 

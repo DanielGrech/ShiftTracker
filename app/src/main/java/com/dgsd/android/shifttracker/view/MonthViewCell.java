@@ -1,9 +1,13 @@
 package com.dgsd.android.shifttracker.view;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
+
+import com.dgsd.android.shifttracker.R;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -48,6 +52,22 @@ public class MonthViewCell extends TextView {
         year = -1;
         setText("");
         setEnabled(false);
+    }
+
+    @Override
+    public void setTextColor(int color) {
+        //noinspection deprecation
+        final int accentColor = getResources().getColor(R.color.accent);
+        super.setTextColor(new ColorStateList(
+                new int[][]{
+                        new int[]{android.R.attr.state_selected},
+                        new int[]{-android.R.attr.state_selected, android.R.attr.state_activated},
+                        new int[]{},
+                },
+                new int[]{
+                        Color.WHITE, accentColor, color
+                }
+        ));
     }
 
     public void isMarked(boolean isMarked) {

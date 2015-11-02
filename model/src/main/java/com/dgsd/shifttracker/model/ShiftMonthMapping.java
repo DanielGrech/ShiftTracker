@@ -18,7 +18,7 @@ public class ShiftMonthMapping {
 
     private Map<Integer, List<Shift>> mapByMonthDay;
 
-    private int[] monthDaysWithShifts;
+    private Map<Integer, Integer> monthDayToColor;
 
     public ShiftMonthMapping(List<Shift> shifts) {
         this.shifts = shifts == null ? new LinkedList<Shift>() : Collections.unmodifiableList(shifts);
@@ -31,47 +31,47 @@ public class ShiftMonthMapping {
     public Map<Integer, List<Shift>> getMapping() {
         if (this.mapByMonthDay == null) {
             this.mapByMonthDay = new HashMap<>();
+            this.monthDayToColor = new HashMap<>();
             populateMapping();
         }
 
         return this.mapByMonthDay;
     }
 
-    public int[] getMonthDaysWithShifts() {
+    public Map<Integer, Integer> getMonthDayToColor() {
         // Ensure our data is populated.
         getMapping();
 
-        return monthDaysWithShifts;
+        return monthDayToColor;
     }
 
     private void populateMapping() {
         final Calendar calendar = GregorianCalendar.getInstance();
 
-        final Set<Integer> daysWithShifts = new HashSet<>();
         final Set<Shift> alreadyAssigned = new HashSet<>();
         for (int i = 1; i <= MAX_DAYS_IN_MONTH; i++) {
             final List<Shift> shiftsOnDay = new LinkedList<>();
             for (Shift s : shifts) {
                 if (!alreadyAssigned.contains(s)) {
                     calendar.setTimeInMillis(s.timePeriod().startMillis());
-                    final int startDate = calendar.get(Calendar.DAY_OF_MONTH);
+                    final int startDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-                    if (startDate == i) {
-                        daysWithShifts.add(i);
+                    if (startDay == i) {
                         shiftsOnDay.add(s);
                         alreadyAssigned.add(s);
+
+                        final Integer currentColor = this.monthDayToColor.get(startDay);
+                        if (currentColor == null) {
+                            // No color assigned!
+                            this.monthDayToColor.put(startDay, s.color());
+                        } else if (currentColor != s.color()) {
+                            this.monthDayToColor.put(startDay, 0xFF000000);
+                        }
                     }
                 }
             }
 
-            mapByMonthDay.put(i, shiftsOnDay);
-        }
-
-        this.monthDaysWithShifts = new int[daysWithShifts.size()];
-
-        int index = 0;
-        for (Integer monthDay : daysWithShifts) {
-            this.monthDaysWithShifts[index++] = monthDay;
+            this.mapByMonthDay.put(i, shiftsOnDay);
         }
     }
 }

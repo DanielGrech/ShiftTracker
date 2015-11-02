@@ -1,6 +1,7 @@
 package com.dgsd.android.shifttracker.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -23,6 +24,7 @@ import com.dgsd.shifttracker.model.Shift;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 
@@ -83,10 +85,12 @@ public class MonthFragment extends PresentableFragment<MonthPresenter>
     }
 
     @Override
-    public void setDaysMarked(int[] monthDaysToMark) {
-        containerView.getMonthView().resetMarkedCells();
-        for (int monthDay : monthDaysToMark) {
-            containerView.getMonthView().setDayMarked(monthDay, true);
+    public void setDaysMarked(Map<Integer, Integer> monthDayToColorMap) {
+        final MonthView monthView = containerView.getMonthView();
+
+        monthView.resetMarkedCells();
+        for (Map.Entry<Integer, Integer> entry : monthDayToColorMap.entrySet()) {
+            monthView.setDayMarked(entry.getKey(), true, entry.getValue());
         }
     }
 

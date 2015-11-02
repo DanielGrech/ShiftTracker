@@ -98,7 +98,7 @@ public class MonthPresenter extends Presenter<MonthMvpView> {
         bind(shiftsObservable, new SimpleSubscriber<ShiftMonthMapping>() {
             @Override
             public void onNext(ShiftMonthMapping shiftsByMonthDay) {
-                getView().setDaysMarked(shiftsByMonthDay.getMonthDaysWithShifts());
+                getView().setDaysMarked(shiftsByMonthDay.getMonthDayToColor());
 
                 MonthPresenter.this.shiftsByMonthDay = shiftsByMonthDay;
                 if (selectedDate != null) {

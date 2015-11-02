@@ -3,12 +3,13 @@ package com.dgsd.android.shifttracker.mvp.view;
 import com.dgsd.shifttracker.model.Shift;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MonthMvpView extends MvpView {
 
     void setStartDayOfWeek(int startDay);
 
-    void setDaysMarked(int[] monthDaysToMark);
+    void setDaysMarked(Map<Integer, Integer> monthDayToColorMap);
 
     void setDayTitle(String title);
 
