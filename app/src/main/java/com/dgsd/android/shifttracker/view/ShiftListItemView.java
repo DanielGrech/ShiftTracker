@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -41,6 +42,9 @@ public class ShiftListItemView extends RelativeLayout {
 
     @Bind(R.id.color_indicator)
     View colorIndicator;
+
+    @Bind(R.id.edit_button)
+    ImageView editButton;
 
     private Shift shift;
 
@@ -98,5 +102,13 @@ public class ShiftListItemView extends RelativeLayout {
 
     public Shift getShift() {
         return shift;
+    }
+
+    public void setEditButtonVisible(boolean visible) {
+        ViewUtils.visibleWhen(visible, editButton);
+    }
+
+    public void setOnEditClickListener(View.OnClickListener listener) {
+        editButton.setOnClickListener(listener);
     }
 }

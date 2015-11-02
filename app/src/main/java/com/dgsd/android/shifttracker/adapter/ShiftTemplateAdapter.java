@@ -16,6 +16,8 @@ public class ShiftTemplateAdapter extends BaseAdapter {
 
     private final List<Shift> shifts;
 
+    private OnEditShiftClicked onEditShiftListener;
+
     public ShiftTemplateAdapter(List<Shift> shifts) {
         this.shifts = shifts;
     }
@@ -40,21 +42,34 @@ public class ShiftTemplateAdapter extends BaseAdapter {
         final ShiftListItemView view;
         if (convertView == null) {
             view = ShiftListItemView.inflate(parent);
+            view.setEditButtonVisible(true);
 
-            final int horiztonalPadding = getDialogPadding(parent.getContext());
+            final int horizontalPadding = getDialogPadding(parent.getContext());
             view.setPaddingRelative(
-                    horiztonalPadding,
+                    horizontalPadding,
                     view.getPaddingTop(),
-                    horiztonalPadding,
+                    horizontalPadding,
                     view.getPaddingTop()
             );
         } else {
             view = (ShiftListItemView) convertView;
         }
 
-        view.populate(getItem(position));
+        final Shift shift = getItem(position);
+        view.populate(shift);
+        view.setOnEditClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onEditShiftListener.onEditShift(shift);
+            }
+        });
 
         return view;
+    }
+
+    public void setOnEditShiftListener(OnEditShiftClicked listener) {
+        this.onEditShiftListener = listener;
+        notifyDataSetChanged();
     }
 
     private static int getDialogPadding(Context context) {
@@ -64,5 +79,9 @@ public class ShiftTemplateAdapter extends BaseAdapter {
         }
 
         return context.getResources().getDimensionPixelSize(value.resourceId);
+    }
+
+    public interface OnEditShiftClicked {
+        void onEditShift(Shift shift);
     }
 }

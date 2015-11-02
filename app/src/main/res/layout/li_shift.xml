@@ -4,19 +4,34 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
+    android:descendantFocusability="blocksDescendants"
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    android:paddingStart="@dimen/padding_default"
+    android:paddingBottom="@dimen/padding_small"
     android:paddingEnd="@dimen/padding_default"
-    android:paddingTop="@dimen/padding_small"
-    android:paddingBottom="@dimen/padding_small">
+    android:paddingStart="@dimen/padding_default"
+    android:paddingTop="@dimen/padding_small">
+
+    <ImageView
+        android:id="@+id/edit_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/padding_small"
+        android:background="?attr/selectableItemBackground"
+        android:padding="@dimen/padding_small"
+        android:src="@drawable/ic_edit_grey"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/total_pay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
+        android:layout_alignWithParentIfMissing="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="@dimen/padding_default"
+        android:layout_toStartOf="@id/edit_button"
         android:ellipsize="end"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceLarge"

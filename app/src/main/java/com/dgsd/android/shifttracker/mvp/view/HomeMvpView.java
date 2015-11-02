@@ -28,6 +28,8 @@ public interface HomeMvpView extends MvpView {
 
     void addShiftFromTemplate(Shift shift);
 
+    void editTemplateShift(Shift shift);
+
     void showError(String message);
 
     void showAd();

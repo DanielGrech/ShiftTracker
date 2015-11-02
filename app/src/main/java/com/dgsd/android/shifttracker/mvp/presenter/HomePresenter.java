@@ -167,6 +167,11 @@ public class HomePresenter extends Presenter<HomeMvpView> {
         getView().addNewShift();
     }
 
+    public void onEditShiftTemplate(Shift shift) {
+        AnalyticsManager.trackClick("edit_template_shift");
+        getView().editTemplateShift(shift);
+    }
+
     public void onAddShiftFromTemplateClicked(ViewType viewType, Shift shift, Date selectedDate) {
         AnalyticsManager.trackClick("add_shift_from_template");
         if (ViewType.WEEK.equals(viewType) || selectedDate == null) {

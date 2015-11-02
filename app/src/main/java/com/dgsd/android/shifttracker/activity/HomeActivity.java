@@ -229,9 +229,10 @@ public class HomeActivity extends PresentableActivity<HomePresenter> implements
 
     @Override
     public void showAddNewShiftFromTemplate(final List<Shift> templateShifts) {
-        new AlertDialog.Builder(getContext())
+        final ShiftTemplateAdapter adapter = new ShiftTemplateAdapter(templateShifts);
+        final AlertDialog dialog = new AlertDialog.Builder(getContext())
                 .setTitle(R.string.nav_item_add_shift)
-                .setAdapter(new ShiftTemplateAdapter(templateShifts), new DialogInterface.OnClickListener() {
+                .setAdapter(adapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         final Shift shift = templateShifts.get(which);
@@ -255,11 +256,24 @@ public class HomeActivity extends PresentableActivity<HomePresenter> implements
                     }
                 })
                 .show();
+
+        adapter.setOnEditShiftListener(new ShiftTemplateAdapter.OnEditShiftClicked() {
+            @Override
+            public void onEditShift(Shift shift) {
+                dialog.dismiss();
+                getPresenter().onEditShiftTemplate(shift);
+            }
+        });
     }
 
     @Override
     public void addShiftFromTemplate(Shift shift) {
         startActivity(AddShiftActivity.createIntentForClone(this, shift.id()));
+    }
+
+    @Override
+    public void editTemplateShift(Shift shift) {
+        startActivity(AddShiftActivity.createIntentForEdit(this, shift.id()));
     }
 
     @Override
