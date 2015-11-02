@@ -9,6 +9,7 @@ import android.net.Uri;
 import com.dgsd.android.shifttracker.BuildConfig;
 import com.dgsd.android.shifttracker.STApp;
 import com.dgsd.android.shifttracker.data.AppSettings;
+import com.dgsd.android.shifttracker.util.AlarmUtils;
 import com.dgsd.shifttracker.data.DataProvider;
 import com.dgsd.shifttracker.data.ModelUtils;
 import com.dgsd.shifttracker.model.Shift;
@@ -49,6 +50,17 @@ public class UpgradeMigrationService extends IntentService {
                             @Override
                             public Observable<Shift> call(Shift shift) {
                                 return dataProvider.addShift(shift);
+                            }
+                        })
+                        .doOnNext(new Action1<Shift>() {
+                            @Override
+                            public void call(Shift shift) {
+                                final Context context = UpgradeMigrationService.this;
+                                AlarmUtils.cancel(context, shift.id());
+
+                                if (shift.hasReminder() && !shift.reminderHasPassed()) {
+                                    ReminderScheduleService.schedule(context, shift);
+                                }
                             }
                         })
                         .subscribe(new Action1<Shift>() {
