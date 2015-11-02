@@ -67,7 +67,7 @@ subprojects {
                 easyDataStore : "1.0.3",
                 immutables : "2.0.21",
                 sqlbrite: "0.4.1",
-                rxJava : "1.0.14",
+                rxJava : "1.0.15",
                 timber : "4.0.1",
                 butterknife : "7.0.1",
                 dashclock: "2.0.0",
