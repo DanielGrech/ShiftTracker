@@ -7,6 +7,8 @@ import android.os.Bundle;
 import com.dgsd.android.shifttracker.R;
 import com.dgsd.android.shifttracker.data.AppSettings.Defaults;
 import com.dgsd.android.shifttracker.data.LegacyDbOpenHelper;
+import com.dgsd.android.shifttracker.service.ReminderScheduleService;
+import com.dgsd.android.shifttracker.util.AlarmUtils;
 import com.dgsd.android.shifttracker.util.ModelUtils;
 import com.dgsd.android.shifttracker.util.RxUtils;
 import com.dgsd.shifttracker.data.DataProvider;
@@ -19,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func0;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -64,6 +67,14 @@ public class LegacyMigrationActivity extends BaseActivity {
             @Override
             public Observable<Shift> call(Shift shift) {
                 return dataProvider.addShift(shift);
+            }
+        }).doOnNext(new Action1<Shift>() {
+            @Override
+            public void call(Shift shift) {
+                AlarmUtils.cancel(getApplicationContext(), shift.id());
+                if (shift.hasReminder() && !shift.reminderHasPassed()) {
+                    ReminderScheduleService.schedule(getApplicationContext(), shift);
+                }
             }
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
 
