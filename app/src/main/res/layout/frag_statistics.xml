@@ -64,8 +64,7 @@
             <LinearLayout
                 android:id="@+id/earnings_card"
                 style="@style/Statistics.CardWrapper"
-                android:layout_marginTop="@dimen/padding_default"
-                android:paddingBottom="0dp">
+                android:layout_marginTop="@dimen/padding_default">
 
                 <TextView
                     style="@style/Statistics.CardTitle"
@@ -103,8 +102,7 @@
 
             <LinearLayout
                 android:id="@+id/hours_card"
-                style="@style/Statistics.CardWrapper"
-                android:paddingBottom="0dp">
+                style="@style/Statistics.CardWrapper">
 
                 <TextView
                     style="@style/Statistics.CardTitle"
@@ -142,8 +140,7 @@
 
             <LinearLayout
                 android:id="@+id/shift_count_card"
-                style="@style/Statistics.CardWrapper"
-                android:paddingBottom="0dp">
+                style="@style/Statistics.CardWrapper">
 
                 <TextView
                     style="@style/Statistics.CardTitle"

@@ -36,7 +36,8 @@
                 android:paddingStart="@dimen/padding_default"
                 android:paddingEnd="@dimen/padding_default"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/main_title_strip_text_size" />
+                android:textSize="@dimen/main_title_strip_text_size"
+                android:elevation="@dimen/padding_xsmall"/>
 
         </com.dgsd.android.shifttracker.view.AlphaViewPager>
 
