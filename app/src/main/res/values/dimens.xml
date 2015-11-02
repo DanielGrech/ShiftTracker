@@ -17,7 +17,7 @@
     <dimen name="add_shift_input_field_min_height">40dp</dimen>
     <dimen name="add_shift_field_text_size">16sp</dimen>
     <dimen name="add_shift_title_text_size">22sp</dimen>
-    <dimen name="month_fragment_day_title_height">72dp</dimen>
+    <dimen name="month_fragment_day_title_height">60dp</dimen>
     <dimen name="shift_month_summary_empty_view_image_size">80dp</dimen>
 
     <dimen name="padding_add_shift_horizontal">@dimen/padding_small</dimen>

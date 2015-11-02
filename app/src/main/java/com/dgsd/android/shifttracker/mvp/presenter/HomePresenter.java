@@ -12,6 +12,8 @@ import com.dgsd.android.shifttracker.manager.AnalyticsManager;
 import com.dgsd.android.shifttracker.manager.AppRatingManager;
 import com.dgsd.android.shifttracker.module.AppServicesComponent;
 import com.dgsd.android.shifttracker.mvp.view.HomeMvpView;
+import com.dgsd.android.shifttracker.service.ReminderScheduleService;
+import com.dgsd.android.shifttracker.util.AlarmUtils;
 import com.dgsd.android.shifttracker.util.EnumUtils;
 import com.dgsd.shifttracker.data.DataProvider;
 import com.dgsd.shifttracker.model.Shift;
@@ -170,19 +172,41 @@ public class HomePresenter extends Presenter<HomeMvpView> {
         if (ViewType.WEEK.equals(viewType) || selectedDate == null) {
             getView().addShiftFromTemplate(shift);
         } else {
-            long startMillis = toDateTime(selectedDate, toTime(shift.timePeriod().startMillis()));
+            final long startMillis = toDateTime(selectedDate, toTime(shift.timePeriod().startMillis()));
+            final long endMillis = startMillis + shift.timePeriod().durationInMillis();
 
-            final Shift editedShift = shift.withId(-1)
+            Shift editedShift = shift.withId(-1)
                     .withIsTemplate(false)
                     .withTimePeriod(TimePeriod.builder()
                             .startMillis(startMillis)
-                            .endMillis(startMillis + shift.timePeriod().durationInMillis())
+                            .endMillis(endMillis)
                             .create());
+
+            if (shift.overtime() != null) {
+                final long prevGap = shift.overtime().startMillis() - shift.timePeriod().endMillis();
+                final long newStartMillis = editedShift.timePeriod().endMillis() + prevGap;
+                final long newEndMillis = newStartMillis + shift.overtime().durationInMillis();
+
+                editedShift = editedShift.withOvertime(TimePeriod.builder()
+                        .startMillis(newStartMillis)
+                        .endMillis(newEndMillis)
+                        .create());
+            }
+
             bind(dataProvider.addShift(editedShift), new SimpleSubscriber<Shift>() {
                 @Override
                 public void onError(Throwable e) {
                     Timber.e(e, "Error adding shift");
                     getView().showError(getContext().getString(R.string.error_saving_shift));
+                }
+
+                @Override
+                public void onNext(Shift shift) {
+                    AlarmUtils.cancel(getContext(), shift.id());
+
+                    if (shift.hasReminder() && !shift.reminderHasPassed()) {
+                        ReminderScheduleService.schedule(getContext(), shift);
+                    }
                 }
             });
         }

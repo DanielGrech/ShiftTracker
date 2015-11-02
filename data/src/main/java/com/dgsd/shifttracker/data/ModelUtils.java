@@ -45,9 +45,9 @@ public class ModelUtils {
         values.put(DbContract.COL_START_TIME.name, shift.timePeriod().startMillis());
         values.put(DbContract.COL_END_TIME.name, shift.timePeriod().endMillis());
         values.put(DbContract.COL_OVERTIME_START_TIME.name,
-                shift.overtime() == null ? -1 : shift.overtime().endMillis());
-        values.put(DbContract.COL_OVERTIME_END_TIME.name,
                 shift.overtime() == null ? -1 : shift.overtime().startMillis());
+        values.put(DbContract.COL_OVERTIME_END_TIME.name,
+                shift.overtime() == null ? -1 : shift.overtime().endMillis());
         values.put(DbContract.COL_OVERTIME_PAY_RATE.name, shift.overtimePayRate());
         return values;
     }
