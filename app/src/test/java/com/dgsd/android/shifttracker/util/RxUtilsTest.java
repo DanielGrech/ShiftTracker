@@ -1,8 +1,11 @@
 package com.dgsd.android.shifttracker.util;
 
+import android.app.Activity;
+
 import com.dgsd.android.shifttracker.R;
 import com.dgsd.android.shifttracker.STTestRunner;
 import com.dgsd.android.shifttracker.activity.HomeActivity;
+import com.dgsd.android.shifttracker.activity.SettingsActivity;
 import com.dgsd.android.shifttracker.fragment.BaseFragment;
 
 import org.junit.Test;
@@ -32,7 +35,7 @@ public class RxUtilsTest {
         final Observable<String> observable = Observable.just("").delay(2, TimeUnit.SECONDS);
         final TestSubscriber<String> subscriber = new TestSubscriber<>();
 
-        ActivityController<HomeActivity> controller = Robolectric.buildActivity(HomeActivity.class);
+        ActivityController<SettingsActivity> controller = Robolectric.buildActivity(SettingsActivity.class);
 
         controller.create();
         controller.resume();
@@ -65,7 +68,7 @@ public class RxUtilsTest {
 
         @Override
         protected int getLayoutId() {
-            return R.layout.act_home;
+            return R.layout.act_single_fragment;
         }
     }
 }

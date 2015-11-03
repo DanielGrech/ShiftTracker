@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("deprecation")
 public class TimeUtils {
 
-    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("ccc, d MMM yyyy");
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("EEE, d MMM yyyy");
 
     private static final DateFormat ABBREVIATED_DATE_FORMAT = new SimpleDateFormat("d MMM");
 

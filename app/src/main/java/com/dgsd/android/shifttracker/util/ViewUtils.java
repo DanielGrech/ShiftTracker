@@ -146,11 +146,7 @@ public class ViewUtils {
                             vto.removeOnPreDrawListener(this);
                         }
 
-                        if (Api.isMin(Api.KITKAT)) {
-                            if (view.isAttachedToWindow()) {
-                                action.run();
-                            }
-                        } else {
+                        if (view.isAttachedToWindow()) {
                             action.run();
                         }
 

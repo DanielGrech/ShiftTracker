@@ -1,6 +1,5 @@
 package com.dgsd.android.shifttracker.fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.view.LayoutInflater;
@@ -24,15 +23,6 @@ public abstract class BaseFragment extends RxFragment {
     protected abstract int getLayoutId();
 
     protected STApp app;
-
-    @Override
-    public void onAttach(Activity activity) {
-        if (activity instanceof BaseActivity) {
-            super.onAttach(activity);
-        } else {
-            throw new IllegalStateException("Fragment must be attached to an BaseActivity subclass");
-        }
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

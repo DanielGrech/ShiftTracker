@@ -40,7 +40,7 @@ public class RecyclingLinearLayoutTests {
     }
 
     @Test
-    public void should_show_one_view_for_each_data_item() {
+    public void testShowsOneViewForEachDataItem() {
         final List data = listOfSize(5);
         view.populate(data, textViewFactory);
 
@@ -49,7 +49,7 @@ public class RecyclingLinearLayoutTests {
     }
 
     @Test
-    public void should_hide_excess_views_on_repopulate() {
+    public void testHidesExcessViewsOnRepopulate() {
         List data = listOfSize(5);
         view.populate(data, textViewFactory);
 
@@ -68,7 +68,7 @@ public class RecyclingLinearLayoutTests {
     }
 
     @Test
-    public void should_show_extra_views_on_repopulate() {
+    public void testShowsExtraViewsOnRepopulate() {
         List data = listOfSize(5);
         view.populate(data, textViewFactory);
 

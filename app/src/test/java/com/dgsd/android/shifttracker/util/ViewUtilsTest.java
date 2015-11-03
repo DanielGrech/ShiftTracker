@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -332,7 +333,8 @@ public class ViewUtilsTest {
     public void testOnPreDraw() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
         final AtomicBoolean atm = new AtomicBoolean();
-        final View v = new View(RuntimeEnvironment.application);
+        final View v = spy(new View(RuntimeEnvironment.application));
+        when(v.isAttachedToWindow()).thenReturn(true);
 
         ViewUtils.onPreDraw(v, new Runnable() {
             @Override

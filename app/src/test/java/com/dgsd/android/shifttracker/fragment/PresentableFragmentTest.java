@@ -74,7 +74,7 @@ public class PresentableFragmentTest {
 
         @Override
         protected int getLayoutId() {
-            return R.layout.act_home;
+            return R.layout.act_settings;
         }
     }
 }
