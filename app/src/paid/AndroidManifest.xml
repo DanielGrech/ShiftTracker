@@ -1,11 +1,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dgsd.android.shifttracker">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application>
 
         <meta-data android:name="com.google.android.backup.api_key"
             android:value="AEdPqrEAAAAI5LxgkBOyLFOxkGNgntS2S_Grczgnf3RIst5Hlw" />
+
+        <receiver android:name=".receiver.BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
