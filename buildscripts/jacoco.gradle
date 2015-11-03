@@ -28,14 +28,16 @@ def createJacocoTask(variant) {
                            '**/Manifest*.*',
 
                            // App-specific classes
-                           'com/dgsd/android/ShiftTracker/module/*',
-                           'com/dgsd/android/ShiftTracker/mvp/view/*',
+                           'com/dgsd/android/shifttracker/module/*',
+                           'com/dgsd/android/shifttracker/mvp/view/*',
 
                            // These classes either aren't testable or aren't important..
-                           'com/dgsd/android/ShiftTracker/util/CrashlyticsLogger.*']
+                           'com/dgsd/android/shifttracker/util/CrashlyticsLogger.*',
+                           'com/dgsd/shifttracker/data/MockDataProvider*',
+                           'com/dgsd/shifttracker/data/DbContract$Queries*']
         )
 
-        def coverageSourceDirs = ["${rootDir}/app/src/main/java"]
+        def coverageSourceDirs = ["${rootDir}/${project.name}/src/main/java"]
         additionalSourceDirs = files(coverageSourceDirs)
         sourceDirectories = files(coverageSourceDirs)
         executionData = files("${project.buildDir}/jacoco/${testTaskName}.exec")

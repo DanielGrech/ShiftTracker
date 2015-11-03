@@ -76,9 +76,9 @@ class DbContract {
 
     static class Field {
 
-        private static final String TYPE_INTEGER = "INTEGER";
-        private static final String TYPE_REAL = "REAL";
-        private static final String TYPE_TEXT = "TEXT";
+        static final String TYPE_INTEGER = "INTEGER";
+        static final String TYPE_REAL = "REAL";
+        static final String TYPE_TEXT = "TEXT";
 
         final String name;
         final String type;
