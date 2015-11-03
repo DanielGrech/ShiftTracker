@@ -20,6 +20,8 @@ public class MonthViewCell extends TextView {
 
     private boolean marked;
 
+    private boolean isToday;
+
     public MonthViewCell(final Context context) {
         super(context);
     }
@@ -72,10 +74,15 @@ public class MonthViewCell extends TextView {
 
     public void isMarked(boolean isMarked) {
         marked = isMarked;
-        setTypeface(isMarked ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
+        setTypeface(isMarked || isToday ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
+        if (!marked) {
+            //noinspection deprecation
+            setTextColor(getResources().getColor(R.color.month_row_cell));
+        }
     }
 
     public void isToday(boolean isToday) {
+        this.isToday = isToday;
         setActivated(isToday);
         isMarked(this.marked || isToday);
     }
