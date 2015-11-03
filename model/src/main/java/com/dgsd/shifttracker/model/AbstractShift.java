@@ -81,7 +81,7 @@ abstract class AbstractShift implements Serializable {
     }
 
     public boolean reminderHasPassed() {
-        return hasReminder() && (reminderTime() > System.currentTimeMillis());
+        return hasReminder() && (reminderTime() < System.currentTimeMillis());
     }
 
     static float calculatePay(float payRate, TimePeriod timePeriod, long unpaidBreakDuration) {

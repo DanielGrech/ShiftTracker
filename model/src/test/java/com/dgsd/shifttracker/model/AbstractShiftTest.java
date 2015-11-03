@@ -118,7 +118,7 @@ public class AbstractShiftTest {
                         .endMillis(currentTime + TimeUnit.HOURS.toMillis(1))
                         .create());
 
-        assertThat(shift.reminderHasPassed()).isFalse();
+        assertThat(shift.reminderHasPassed()).isTrue();
     }
 
     @Test
@@ -136,7 +136,7 @@ public class AbstractShiftTest {
                         .endMillis(currentTime + TimeUnit.HOURS.toMillis(1))
                         .create());
 
-        assertThat(shift.reminderHasPassed()).isTrue();
+        assertThat(shift.reminderHasPassed()).isFalse();
     }
 
     private static Shift createDefaultShift() {
