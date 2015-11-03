@@ -65,7 +65,7 @@ subprojects {
                 rxBinding : "0.3.0",
                 rxLifecycle : "0.3.0",
                 easyDataStore : "1.0.3",
-                immutables : "2.0.21",
+                immutables : "2.1.0",
                 sqlbrite: "0.4.1",
                 rxJava : "1.0.15",
                 timber : "4.0.1",
