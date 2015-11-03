@@ -1,10 +1,10 @@
-package rx;
+package rx.plugins;
 
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
-import rx.plugins.RxJavaSchedulersHook;
+import rx.Scheduler;
 import rx.schedulers.TestScheduler;
 
 /**

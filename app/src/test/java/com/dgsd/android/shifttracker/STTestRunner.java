@@ -13,7 +13,7 @@ import org.robolectric.annotation.Config;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import rx.TestSchedulerRule;
+import rx.plugins.TestSchedulerRule;
 
 public class STTestRunner extends RobolectricGradleTestRunner {
 
@@ -62,7 +62,7 @@ public class STTestRunner extends RobolectricGradleTestRunner {
         }
     }
 
-    private class DelegatingConfig implements Config {
+    class DelegatingConfig implements Config {
 
         final Config delegate;
 
