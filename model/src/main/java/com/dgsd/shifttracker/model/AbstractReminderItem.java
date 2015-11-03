@@ -4,7 +4,7 @@ import org.immutables.value.Value;
 
 import java.io.Serializable;
 
-@Value.Immutable(intern = true)
+@Value.Immutable
 @ImmutableStyle
 abstract class AbstractReminderItem implements Serializable {
 

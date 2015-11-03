@@ -58,26 +58,89 @@ public class AbstractShiftTest {
 
     @Test
     public void testTotalPaidDurationWithNoBreakAndNoOvertime() {
-        final Shift shift = createShift(0, 0, 100, 0 , 0);
+        final Shift shift = createShift(0, 0, 100, 0, 0);
         assertThat(shift.totalPaidDuration()).isEqualTo(100);
     }
 
     @Test
     public void testTotalPaidDurationWithNoBreakWithOvertime() {
-        final Shift shift = createShift(0, 0, 100, 20 , 0);
+        final Shift shift = createShift(0, 0, 100, 20, 0);
         assertThat(shift.totalPaidDuration()).isEqualTo(120);
     }
 
     @Test
     public void testTotalPaidDurationWithBreakAndNoOvertime() {
-        final Shift shift = createShift(0, 20, 100, 0 , 0);
+        final Shift shift = createShift(0, 20, 100, 0, 0);
         assertThat(shift.totalPaidDuration()).isEqualTo(80);
     }
 
     @Test
     public void testTotalPaidDurationWithBreakAndOvertime() {
-        final Shift shift = createShift(0, 20, 100, 30 , 0);
+        final Shift shift = createShift(0, 20, 100, 30, 0);
         assertThat(shift.totalPaidDuration()).isEqualTo(110);
+    }
+
+    @Test
+    public void testHasReminder() {
+        final Shift shift = createDefaultShift()
+                .withReminderBeforeShift(TimeUnit.MINUTES.toMillis(10));
+        assertThat(shift.hasReminder()).isTrue();
+    }
+
+    @Test
+    public void testHasReminderWithNoReminderSet() {
+        assertThat(createDefaultShift().hasReminder()).isFalse();
+    }
+
+    @Test
+    public void testReminderTimeWithNoReminder() {
+        assertThat(createDefaultShift().reminderTime()).isEqualTo(-1);
+    }
+
+    @Test
+    public void testReminderTime() {
+        final Shift shift = createDefaultShift()
+                .withReminderBeforeShift(10)
+                .withTimePeriod(TimePeriod.builder()
+                        .startMillis(100)
+                        .endMillis(200)
+                        .create());
+        assertThat(shift.reminderTime()).isEqualTo(90);
+    }
+
+    @Test
+    public void testReminderHasPassed() {
+        final long currentTime = System.currentTimeMillis();
+        final Shift shift = createDefaultShift()
+                .withReminderBeforeShift(100)
+                .withTimePeriod(TimePeriod.builder()
+                        .startMillis(currentTime - TimeUnit.MINUTES.toMillis(5))
+                        .endMillis(currentTime + TimeUnit.HOURS.toMillis(1))
+                        .create());
+
+        assertThat(shift.reminderHasPassed()).isFalse();
+    }
+
+    @Test
+    public void testReminderHasPassedWithNoReminderSet() {
+        assertThat(createDefaultShift().reminderHasPassed()).isFalse();
+    }
+
+    @Test
+    public void testReminderHasPassedWhenInFuture() {
+        final long currentTime = System.currentTimeMillis();
+        final Shift shift = createDefaultShift()
+                .withReminderBeforeShift(100)
+                .withTimePeriod(TimePeriod.builder()
+                        .startMillis(currentTime + TimeUnit.MINUTES.toMillis(5))
+                        .endMillis(currentTime + TimeUnit.HOURS.toMillis(1))
+                        .create());
+
+        assertThat(shift.reminderHasPassed()).isTrue();
+    }
+
+    private static Shift createDefaultShift() {
+        return createShift(0, 0, 0, 0, 0);
     }
 
     private static Shift createShift(float payRate, long breakDuration, long regularPayDuration, long overtimeDuration, float overtimePayRate) {
