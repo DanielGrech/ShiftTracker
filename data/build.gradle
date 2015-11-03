@@ -1,5 +1,8 @@
 apply plugin: 'com.android.library'
 
+
+apply from: '../buildscripts/jacoco.gradle'
+
 android {
     compileSdkVersion config.compileSdkVersion
     buildToolsVersion config.buildToolsVersion
@@ -14,6 +17,12 @@ android {
     publishNonDefault true
 
     buildTypes {
+
+        jacocoEnabled.initWith(buildTypes.debug)
+        jacocoEnabled {
+            testCoverageEnabled true
+        }
+
         release {
             minifyEnabled false
         }
@@ -39,6 +48,8 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
+
+    libraryVariants.matching { it.buildType.name == 'jacocoEnabled' }.all { createJacocoTask(it) }
 }
 
 dependencies {

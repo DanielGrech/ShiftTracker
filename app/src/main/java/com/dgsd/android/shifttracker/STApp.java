@@ -6,21 +6,17 @@ import android.support.v7.preference.PreferenceManager;
 
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
-import io.fabric.sdk.android.Fabric;
-
 import com.dgsd.android.shifttracker.manager.AnalyticsManager;
-import com.dgsd.android.shifttracker.manager.AnalyticsManager.TrackingAgent;
-import com.facebook.stetho.Stetho;
-import com.squareup.leakcanary.LeakCanary;
-import com.squareup.leakcanary.RefWatcher;
 import com.dgsd.android.shifttracker.module.AppServicesComponent;
 import com.dgsd.android.shifttracker.module.DaggerAppServicesComponent;
 import com.dgsd.android.shifttracker.module.STModule;
 import com.dgsd.android.shifttracker.util.Api;
 import com.dgsd.android.shifttracker.util.CrashlyticsLogger;
+import com.facebook.stetho.Stetho;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 
-import java.util.List;
-
+import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 public class STApp extends Application {
