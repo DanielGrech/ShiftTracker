@@ -241,12 +241,17 @@ public class ViewUtils {
 
     public static Float extractPayRate(TextView view) {
         if (!TextUtils.isEmpty(view.getText())) {
-            final String payRateStr = view.getText().toString();
+            String payRateStr = view.getText().toString();
             if (!TextUtils.isEmpty(payRateStr)) {
                 try {
+                    payRateStr = payRateStr.trim();
                     return NumberFormat.getNumberInstance().parse(payRateStr).floatValue();
                 } catch (Exception e) {
-                    Timber.e(e, "Error parsing pay rate");
+                    try {
+                        return Float.parseFloat(payRateStr);
+                    } catch (Exception e1) {
+                        Timber.e(e1, "Error parsing pay rate");
+                    }
                 }
             }
         }
