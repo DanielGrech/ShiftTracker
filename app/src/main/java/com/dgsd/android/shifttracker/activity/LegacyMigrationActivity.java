@@ -51,38 +51,45 @@ public class LegacyMigrationActivity extends BaseActivity {
         final DataProvider dataProvider = app.getAppServicesComponent().dataProvider();
         final LegacyDbOpenHelper helper = LegacyDbOpenHelper.getInstance(this);
 
-        final Observable<Shift> observable = Observable.defer(new Func0<Observable<LegacyDbOpenHelper.LegacyShift>>() {
-            @Override
-            public Observable<LegacyDbOpenHelper.LegacyShift> call() {
-                final List<LegacyDbOpenHelper.LegacyShift> shifts = helper.getShifts();
-                return shifts == null ?
-                        Observable.<LegacyDbOpenHelper.LegacyShift>empty() : Observable.from(shifts);
-            }
-        }).map(new Func1<LegacyDbOpenHelper.LegacyShift, Shift>() {
-            @Override
-            public Shift call(LegacyDbOpenHelper.LegacyShift legacyShift) {
-                return convert(legacyShift);
-            }
-        }).distinct().flatMap(new Func1<Shift, Observable<Shift>>() {
-            @Override
-            public Observable<Shift> call(Shift shift) {
-                return dataProvider.addShift(shift);
-            }
-        }).doOnNext(new Action1<Shift>() {
-            @Override
-            public void call(Shift shift) {
-                AlarmUtils.cancel(getApplicationContext(), shift.id());
-                if (shift.hasReminder() && !shift.reminderHasPassed()) {
-                    ReminderScheduleService.schedule(getApplicationContext(), shift);
-                }
-            }
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+        final Observable<Shift> observable = Observable
+                .defer(new Func0<Observable<LegacyDbOpenHelper.LegacyShift>>() {
+                    @Override
+                    public Observable<LegacyDbOpenHelper.LegacyShift> call() {
+                        final List<LegacyDbOpenHelper.LegacyShift> shifts = helper.getShifts();
+                        return shifts == null ?
+                                Observable.<LegacyDbOpenHelper.LegacyShift>empty() : Observable.from(shifts);
+                    }
+                })
+                .map(new Func1<LegacyDbOpenHelper.LegacyShift, Shift>() {
+                    @Override
+                    public Shift call(LegacyDbOpenHelper.LegacyShift legacyShift) {
+                        return convert(legacyShift);
+                    }
+                })
+                .distinct()
+                .flatMap(new Func1<Shift, Observable<Shift>>() {
+                    @Override
+                    public Observable<Shift> call(Shift shift) {
+                        return dataProvider.addShift(shift);
+                    }
+                })
+                .doOnNext(new Action1<Shift>() {
+                    @Override
+                    public void call(Shift shift) {
+                        AlarmUtils.cancel(getApplicationContext(), shift.id());
+                        if (shift.hasReminder() && !shift.reminderHasPassed()) {
+                            ReminderScheduleService.schedule(getApplicationContext(), shift);
+                        }
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
 
         RxUtils.bindActivity(this, observable)
                 .subscribe(new Subscriber<Shift>() {
                     @Override
                     public void onCompleted() {
-                        Timber.d("No shifts found which need migration");
+                        Timber.d("Finished migrating shifts");
                         onMigrationFinished();
                     }
 
