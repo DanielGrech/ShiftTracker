@@ -11,6 +11,7 @@ import android.widget.PopupMenu;
 
 import com.dgsd.android.shifttracker.R;
 import com.dgsd.android.shifttracker.activity.AddShiftActivity;
+import com.dgsd.android.shifttracker.activity.HomeActivity;
 import com.dgsd.android.shifttracker.activity.ViewShiftActivity;
 import com.dgsd.android.shifttracker.manager.AnalyticsManager;
 import com.dgsd.android.shifttracker.module.AppServicesComponent;
@@ -130,6 +131,14 @@ public class MonthFragment extends PresentableFragment<MonthPresenter>
     @Override
     public void cloneShift(Shift shift) {
         startActivity(AddShiftActivity.createIntentForClone(getContext(), shift.id()));
+    }
+
+    @Override
+    public void showTitle(String title) {
+        // Hax! To only set title from current page
+        if (getActivity() instanceof HomeActivity) {
+            ((HomeActivity) getActivity()).setTitleFromFragment(title, this);
+        }
     }
 
     @Override

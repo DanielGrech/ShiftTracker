@@ -70,6 +70,16 @@ public class MonthPagerAdapter extends BrowsablePagerAdapter {
         return time.format("%b %Y");
     }
 
+    @Override
+    public String getStatisticsSummary(int position) {
+        final MonthFragment frag = (MonthFragment) getFragmentAt(position);
+        if (frag == null) {
+            return "";
+        } else {
+            return frag.getPresenter().getStatisticsSummary();
+        }
+    }
+
     private MonthYear getMonthYear(final int position) {
         final int centerPosition = PAGE_COUNT / 2;
 

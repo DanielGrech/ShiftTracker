@@ -124,6 +124,8 @@
     <string name="export_shift_email_subject">Shift Tracker data export</string>
     <string name="dashclock_extension_title">Next shift</string>
     <string name="this_week">This week</string>
+    <string name="shift_collection_title_template">Total %1$s / %2$s</string>
+    <string name="shift_collection_title_no_shift">No shifts worked</string>
 
     <string-array name="month_header_titles">
         <item>Mon</item>

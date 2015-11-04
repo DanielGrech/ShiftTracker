@@ -12,6 +12,7 @@ import android.widget.PopupMenu;
 
 import com.dgsd.android.shifttracker.R;
 import com.dgsd.android.shifttracker.activity.AddShiftActivity;
+import com.dgsd.android.shifttracker.activity.HomeActivity;
 import com.dgsd.android.shifttracker.activity.ViewShiftActivity;
 import com.dgsd.android.shifttracker.adapter.WeekAdapter;
 import com.dgsd.android.shifttracker.module.AppServicesComponent;
@@ -114,6 +115,14 @@ public class WeekFragment extends PresentableFragment<WeekPresenter> implements 
     @Override
     public void showError(String message) {
         Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showTitle(String title) {
+        // Hax! To only set title from current page
+        if (getActivity() instanceof HomeActivity) {
+            ((HomeActivity) getActivity()).setTitleFromFragment(title, this);
+        }
     }
 
     @Override

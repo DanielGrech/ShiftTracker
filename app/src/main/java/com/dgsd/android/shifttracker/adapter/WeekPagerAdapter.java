@@ -61,6 +61,16 @@ public class WeekPagerAdapter extends BrowsablePagerAdapter {
     }
 
     @Override
+    public String getStatisticsSummary(int position) {
+        final WeekFragment frag = (WeekFragment) getFragmentAt(position);
+        if (frag == null) {
+            return "";
+        } else {
+            return frag.getPresenter().getStatisticsSummary();
+        }
+    }
+
+    @Override
     public Date getSelectedDateForItem(int position) {
         if (position == getStartingPosition()) {
             return new Date();

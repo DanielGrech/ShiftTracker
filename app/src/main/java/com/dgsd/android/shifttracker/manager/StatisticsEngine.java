@@ -176,7 +176,7 @@ public class StatisticsEngine {
         return getTotalTimeWorked(shifts);
     }
 
-    private static long getTotalTimeWorked(List<Shift> shifts) {
+    public static long getTotalTimeWorked(List<Shift> shifts) {
         long total = 0;
         for (Shift shift : shifts) {
             total += shift.totalPaidDuration();
@@ -185,7 +185,7 @@ public class StatisticsEngine {
         return total;
     }
 
-    private static float getTotalEarnings(List<Shift> shifts) {
+    public static float getTotalEarnings(List<Shift> shifts) {
         float total = 0.0f;
         for (Shift shift : shifts) {
             total += shift.totalPay();

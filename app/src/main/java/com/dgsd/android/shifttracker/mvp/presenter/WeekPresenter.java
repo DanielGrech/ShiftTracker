@@ -8,7 +8,6 @@ import com.dgsd.android.shifttracker.data.AppSettings.Defaults;
 import com.dgsd.android.shifttracker.manager.AnalyticsManager;
 import com.dgsd.android.shifttracker.module.AppServicesComponent;
 import com.dgsd.android.shifttracker.mvp.view.WeekMvpView;
-import com.dgsd.shifttracker.data.DataProvider;
 import com.dgsd.shifttracker.model.Shift;
 import com.dgsd.shifttracker.model.ShiftWeekMapping;
 import com.dgsd.shifttracker.model.TimePeriod;
@@ -22,20 +21,14 @@ import rx.Observable;
 import rx.functions.Func1;
 import timber.log.Timber;
 
-public class WeekPresenter extends Presenter<WeekMvpView> {
-
-    @Inject
-    DataProvider dataProvider;
+public class WeekPresenter extends ShiftCollectionPresenter<WeekMvpView> {
 
     @Inject
     AppSettings appSettings;
 
-    final TimePeriod timePeriod;
-
     public WeekPresenter(@NonNull WeekMvpView view, AppServicesComponent component, TimePeriod timePeriod) {
-        super(view, component);
+        super(view, component, timePeriod.startMillis(), timePeriod.endMillis());
         component.inject(this);
-        this.timePeriod = timePeriod;
     }
 
     @Override
@@ -47,28 +40,28 @@ public class WeekPresenter extends Presenter<WeekMvpView> {
 
     private void reloadShifts() {
         Observable<ShiftWeekMapping> mappingObservable =
-                dataProvider.getShiftsBetween(timePeriod.startMillis(), timePeriod.endMillis())
-                        .map(new Func1<List<Shift>, ShiftWeekMapping>() {
-                            @Override
-                            public ShiftWeekMapping call(List<Shift> shifts) {
-                                final ShiftWeekMapping mapping = new ShiftWeekMapping(
-                                        appSettings.startDayOfWeek().get(Defaults.startDayOfWeek()), shifts);
-                                // Make sure internal cache is populated
-                                mapping.getMapping();
-                                return mapping;
-                            }
-                        });
+                getShifts().map(new Func1<List<Shift>, ShiftWeekMapping>() {
+                    @Override
+                    public ShiftWeekMapping call(List<Shift> shifts) {
+                        final ShiftWeekMapping mapping = new ShiftWeekMapping(
+                                appSettings.startDayOfWeek().get(Defaults.startDayOfWeek()), shifts);
+                        // Make sure internal cache is populated
+                        mapping.getMapping();
+                        return mapping;
+                    }
+                });
 
         bind(mappingObservable, new SimpleSubscriber<ShiftWeekMapping>() {
             @Override
             public void onNext(ShiftWeekMapping weekMapping) {
                 getView().showShifts(weekMapping);
+                getView().showTitle(getStatisticsSummary());
             }
         });
     }
 
     public long getStartOfWeek() {
-        return timePeriod.startMillis();
+        return startMillis;
     }
 
     public void onShiftClicked(Shift shift) {

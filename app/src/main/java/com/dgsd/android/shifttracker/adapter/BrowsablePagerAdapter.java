@@ -20,6 +20,8 @@ public abstract class BrowsablePagerAdapter extends FragmentStatePagerAdapter {
 
     protected abstract String getTitleForPosition(int position);
 
+    public abstract String getStatisticsSummary(int position);
+
     public abstract Date getSelectedDateForItem(int position);
 
     public abstract int getPositionForDate(Date date);
@@ -43,6 +45,33 @@ public abstract class BrowsablePagerAdapter extends FragmentStatePagerAdapter {
     }
 
     protected Fragment getFragmentAt(int position) {
+        final List<?> list = getFragmentList();
+        if (list != null) {
+            if (position < list.size()) {
+                final Object obj = list.get(position);
+                if (obj instanceof Fragment) {
+                    return (Fragment) obj;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public int getPositionForFragment(Fragment fragment) {
+        final List<?> list = getFragmentList();
+        if (list != null) {
+            for (int i = 0, size = list.size(); i < size; i++) {
+                if (list.get(i) == fragment) {
+                    return i;
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    private List<?> getFragmentList() {
         try {
             if (fragmentsField == null) {
                 fragmentsField = FragmentStatePagerAdapter.class.getDeclaredField("mFragments");
@@ -51,13 +80,7 @@ public abstract class BrowsablePagerAdapter extends FragmentStatePagerAdapter {
 
             final Object variable = fragmentsField.get(this);
             if (variable != null && List.class.isInstance(variable)) {
-                final List<?> list = (List<?>) variable;
-                if (position < list.size()) {
-                    final Object obj = list.get(position);
-                    if (obj instanceof Fragment) {
-                        return (Fragment) obj;
-                    }
-                }
+                return (List<?>) variable;
             }
         } catch (Exception e) {
             Timber.e(e, "Error getting fragments from manager");

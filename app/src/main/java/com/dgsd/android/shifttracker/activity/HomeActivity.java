@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -44,7 +45,7 @@ import butterknife.OnClick;
 import static com.dgsd.android.shifttracker.util.DrawableUtils.getTintedDrawable;
 
 public class HomeActivity extends PresentableActivity<HomePresenter> implements
-        HomeMvpView, NavigationView.OnNavigationItemSelectedListener {
+        HomeMvpView, NavigationView.OnNavigationItemSelectedListener, ViewPager.OnPageChangeListener {
 
     @Bind(R.id.drawer_layout)
     DrawerLayout drawerLayout;
@@ -96,6 +97,8 @@ public class HomeActivity extends PresentableActivity<HomePresenter> implements
 
         navigationView.setNavigationItemSelectedListener(this);
         setupNavigationHeader();
+
+        viewPager.addOnPageChangeListener(this);
     }
 
     @Override
@@ -306,6 +309,33 @@ public class HomeActivity extends PresentableActivity<HomePresenter> implements
         });
     }
 
+    @Override
+    public void onPageSelected(int position) {
+        if (viewPager.getAdapter() != null && viewPager.getAdapter() instanceof BrowsablePagerAdapter) {
+            final BrowsablePagerAdapter adapter = (BrowsablePagerAdapter) viewPager.getAdapter();
+            setTitle(adapter.getStatisticsSummary(position));
+        }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        // No-op
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        // No-op
+    }
+
+    public void setTitleFromFragment(String title, Fragment fragment) {
+        if (viewPager.getAdapter() != null && viewPager.getAdapter() instanceof BrowsablePagerAdapter) {
+            final BrowsablePagerAdapter adapter = (BrowsablePagerAdapter) viewPager.getAdapter();
+            if (viewPager.getCurrentItem() == adapter.getPositionForFragment(fragment)) {
+                setTitle(title);
+            }
+        }
+    }
+
     private void setupNavigationHeader() {
         final View navHeader = navigationView.inflateHeaderView(R.layout.view_nav_header);
         if (!BuildConfig.IS_PAID) {
@@ -321,7 +351,7 @@ public class HomeActivity extends PresentableActivity<HomePresenter> implements
         }
     }
 
-    private void resetAdapter(BrowsablePagerAdapter newAdapter) {
+    private void resetAdapter(final BrowsablePagerAdapter newAdapter) {
         int startingPos = newAdapter.getStartingPosition();
 
         final BrowsablePagerAdapter existingAdapter = (BrowsablePagerAdapter) viewPager.getAdapter();

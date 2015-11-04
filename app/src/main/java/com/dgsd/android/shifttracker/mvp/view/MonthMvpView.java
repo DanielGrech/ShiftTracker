@@ -24,4 +24,6 @@ public interface MonthMvpView extends MvpView {
     void exportToCalendar(Shift shift);
 
     void cloneShift(Shift shift);
+
+    void showTitle(String title);
 }

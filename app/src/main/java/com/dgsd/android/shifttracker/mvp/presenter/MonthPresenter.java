@@ -24,7 +24,7 @@ import rx.functions.Func1;
 import timber.log.Timber;
 
 @SuppressWarnings("deprecation")
-public class MonthPresenter extends Presenter<MonthMvpView> {
+public class MonthPresenter extends ShiftCollectionPresenter<MonthMvpView> {
 
     @Inject
     AppSettings appSettings;
@@ -39,7 +39,7 @@ public class MonthPresenter extends Presenter<MonthMvpView> {
     private ShiftMonthMapping shiftsByMonthDay;
 
     public MonthPresenter(@NonNull MonthMvpView view, AppServicesComponent component, MonthYear monthYear) {
-        super(view, component);
+        super(view, component, monthYear.startMillis(), monthYear.endMillis());
         component.inject(this);
 
         this.monthYear = monthYear;
@@ -87,13 +87,12 @@ public class MonthPresenter extends Presenter<MonthMvpView> {
 
     private void reloadShifts() {
         Observable<ShiftMonthMapping> shiftsObservable =
-                dataProvider.getShiftsBetween(monthYear.startMillis(), monthYear.endMillis())
-                        .map(new Func1<List<Shift>, ShiftMonthMapping>() {
-                            @Override
-                            public ShiftMonthMapping call(List<Shift> shifts) {
-                                return new ShiftMonthMapping(shifts);
-                            }
-                        });
+                getShifts().map(new Func1<List<Shift>, ShiftMonthMapping>() {
+                    @Override
+                    public ShiftMonthMapping call(List<Shift> shifts) {
+                        return new ShiftMonthMapping(shifts);
+                    }
+                });
 
         bind(shiftsObservable, new SimpleSubscriber<ShiftMonthMapping>() {
             @Override
@@ -104,6 +103,8 @@ public class MonthPresenter extends Presenter<MonthMvpView> {
                 if (selectedDate != null) {
                     onDateSelected(selectedDate);
                 }
+
+                getView().showTitle(getStatisticsSummary());
             }
         });
     }

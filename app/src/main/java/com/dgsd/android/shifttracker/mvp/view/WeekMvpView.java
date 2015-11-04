@@ -18,4 +18,6 @@ public interface WeekMvpView extends MvpView {
     void exportToCalendar(Shift shift);
 
     void showError(String message);
+
+    void showTitle(String title);
 }
