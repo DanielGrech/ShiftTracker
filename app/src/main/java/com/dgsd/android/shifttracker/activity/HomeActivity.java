@@ -22,7 +22,6 @@ import com.dgsd.android.shifttracker.BuildConfig;
 import com.dgsd.android.shifttracker.R;
 import com.dgsd.android.shifttracker.adapter.BrowsablePagerAdapter;
 import com.dgsd.android.shifttracker.adapter.MonthPagerAdapter;
-import com.dgsd.android.shifttracker.adapter.ShiftTemplateAdapter;
 import com.dgsd.android.shifttracker.adapter.WeekPagerAdapter;
 import com.dgsd.android.shifttracker.manager.AnalyticsManager;
 import com.dgsd.android.shifttracker.module.AppServicesComponent;
@@ -30,6 +29,7 @@ import com.dgsd.android.shifttracker.mvp.presenter.HomePresenter;
 import com.dgsd.android.shifttracker.mvp.presenter.HomePresenter.ViewType;
 import com.dgsd.android.shifttracker.mvp.view.HomeMvpView;
 import com.dgsd.android.shifttracker.util.AdUtils;
+import com.dgsd.android.shifttracker.util.DialogUtils;
 import com.dgsd.android.shifttracker.util.IntentUtils;
 import com.dgsd.android.shifttracker.util.TimeUtils;
 import com.dgsd.android.shifttracker.view.TintedWhiteFloatingActionButton;
@@ -232,41 +232,37 @@ public class HomeActivity extends PresentableActivity<HomePresenter> implements
 
     @Override
     public void showAddNewShiftFromTemplate(final List<Shift> templateShifts) {
-        final ShiftTemplateAdapter adapter = new ShiftTemplateAdapter(templateShifts);
-        final AlertDialog dialog = new AlertDialog.Builder(getContext())
-                .setTitle(R.string.nav_item_add_shift)
-                .setAdapter(adapter, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        final Shift shift = templateShifts.get(which);
-                        final ViewType type = viewPager.getAdapter() instanceof WeekPagerAdapter ?
-                                ViewType.WEEK : ViewType.MONTH;
-                        getPresenter().onAddShiftFromTemplateClicked(type, shift, getSelectedDate());
-                    }
-                })
-                .setPositiveButton(R.string.create_new_shift, new DialogInterface.OnClickListener() {
+        DialogUtils.getShiftTemplateDialog(
+                getContext(), templateShifts,
+                new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         getPresenter().onAddNewShiftClicked();
                         dialog.dismiss();
                     }
-                })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                },
+                new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         AnalyticsManager.trackClick("cancel_add_shift");
                         dialog.dismiss();
                     }
-                })
-                .show();
-
-        adapter.setOnEditShiftListener(new ShiftTemplateAdapter.OnEditShiftClicked() {
-            @Override
-            public void onEditShift(Shift shift) {
-                dialog.dismiss();
-                getPresenter().onEditShiftTemplate(shift);
-            }
-        });
+                },
+                new DialogUtils.OnShiftClickedListener() {
+                    @Override
+                    public void onShiftClicked(Shift shift) {
+                        final ViewType type = viewPager.getAdapter() instanceof WeekPagerAdapter ?
+                                ViewType.WEEK : ViewType.MONTH;
+                        getPresenter().onAddShiftFromTemplateClicked(type, shift, getSelectedDate());
+                    }
+                },
+                new DialogUtils.OnEditShiftClickedListener() {
+                    @Override
+                    public void onEditShiftClicked(Shift shift) {
+                        getPresenter().onEditShiftTemplate(shift);
+                    }
+                }
+        ).show();
     }
 
     @Override

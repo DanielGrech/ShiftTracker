@@ -6,8 +6,14 @@ import android.support.annotation.ColorInt;
 import com.dgsd.android.shifttracker.R;
 import com.dgsd.shifttracker.model.ColorItem;
 import com.dgsd.shifttracker.model.ReminderItem;
+import com.dgsd.shifttracker.model.Shift;
+import com.dgsd.shifttracker.model.TimePeriod;
 
 import java.text.NumberFormat;
+import java.util.Date;
+
+import static com.dgsd.android.shifttracker.util.TimeUtils.toDateTime;
+import static com.dgsd.android.shifttracker.util.TimeUtils.toTime;
 
 public class ModelUtils {
 
@@ -98,5 +104,29 @@ public class ModelUtils {
 
     public static String formatCurrency(float amount) {
         return CURRENCY_FORMAT.format(amount).replaceAll("\\.00", "");
+    }
+
+    public static Shift createFromTemplate(Shift template, Date date) {
+        final long startMillis = toDateTime(date, toTime(template.timePeriod().startMillis()));
+        final long endMillis = startMillis + template.timePeriod().durationInMillis();
+
+        Shift newShift = template.withId(-1)
+                .withIsTemplate(false)
+                .withTimePeriod(TimePeriod.builder()
+                        .startMillis(startMillis)
+                        .endMillis(endMillis)
+                        .create());
+        if (template.overtime() != null) {
+            final long prevGap = template.overtime().startMillis() - template.timePeriod().endMillis();
+            final long newStartMillis = newShift.timePeriod().endMillis() + prevGap;
+            final long newEndMillis = newStartMillis + template.overtime().durationInMillis();
+
+            newShift = newShift.withOvertime(TimePeriod.builder()
+                    .startMillis(newStartMillis)
+                    .endMillis(newEndMillis)
+                    .create());
+        }
+
+        return newShift;
     }
 }

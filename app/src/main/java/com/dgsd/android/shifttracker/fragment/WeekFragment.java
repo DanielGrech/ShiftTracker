@@ -1,5 +1,6 @@
 package com.dgsd.android.shifttracker.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -15,9 +16,11 @@ import com.dgsd.android.shifttracker.activity.AddShiftActivity;
 import com.dgsd.android.shifttracker.activity.HomeActivity;
 import com.dgsd.android.shifttracker.activity.ViewShiftActivity;
 import com.dgsd.android.shifttracker.adapter.WeekAdapter;
+import com.dgsd.android.shifttracker.manager.AnalyticsManager;
 import com.dgsd.android.shifttracker.module.AppServicesComponent;
 import com.dgsd.android.shifttracker.mvp.presenter.WeekPresenter;
 import com.dgsd.android.shifttracker.mvp.view.WeekMvpView;
+import com.dgsd.android.shifttracker.util.DialogUtils;
 import com.dgsd.android.shifttracker.util.IntentUtils;
 import com.dgsd.shifttracker.model.Shift;
 import com.dgsd.shifttracker.model.ShiftWeekMapping;
@@ -25,6 +28,7 @@ import com.dgsd.shifttracker.model.TimePeriod;
 import com.trello.rxlifecycle.RxLifecycle;
 
 import java.util.Date;
+import java.util.List;
 
 import butterknife.Bind;
 import rx.functions.Action1;
@@ -84,7 +88,7 @@ public class WeekFragment extends PresentableFragment<WeekPresenter> implements 
                 .subscribe(new Action1<Long>() {
                     @Override
                     public void call(Long millis) {
-                        getPresenter().onAddShiftClicked(new Date(millis));
+                        getPresenter().onAddShiftClicked(new Date(millis), false);
                     }
                 });
         weekAdapter.observeShiftLongClicked()
@@ -126,6 +130,39 @@ public class WeekFragment extends PresentableFragment<WeekPresenter> implements 
     }
 
     @Override
+    public void showAddNewShiftFromTemplate(List<Shift> templateShifts, final Date date) {
+        DialogUtils.getShiftTemplateDialog(
+                getContext(), templateShifts,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        getPresenter().onAddShiftClicked(date, true);
+                        dialog.dismiss();
+                    }
+                },
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        AnalyticsManager.trackClick("cancel_add_shift");
+                        dialog.dismiss();
+                    }
+                },
+                new DialogUtils.OnShiftClickedListener() {
+                    @Override
+                    public void onShiftClicked(Shift shift) {
+                        getPresenter().onAddShiftFromTemplateClicked(shift, date);
+                    }
+                },
+                new DialogUtils.OnEditShiftClickedListener() {
+                    @Override
+                    public void onEditShiftClicked(Shift shift) {
+                        getPresenter().onEditShiftTemplate(shift);
+                    }
+                }
+        ).show();
+    }
+
+    @Override
     public void exportToCalendar(Shift shift) {
         final Intent calIntent = IntentUtils.getCalendarItemIntent(shift);
         if (IntentUtils.isAvailable(getContext(), calIntent)) {
@@ -136,6 +173,11 @@ public class WeekFragment extends PresentableFragment<WeekPresenter> implements 
     @Override
     public void cloneShift(Shift shift) {
         startActivity(AddShiftActivity.createIntentForClone(getContext(), shift.id()));
+    }
+
+    @Override
+    public void editTemplateShift(Shift shift) {
+        startActivity(AddShiftActivity.createIntentForEdit(getContext(), shift.id()));
     }
 
     private void showContextMenu(View view, final Shift shift) {
