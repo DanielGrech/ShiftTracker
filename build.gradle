@@ -31,12 +31,12 @@ subprojects {
                 applicationId : "com.dgsd.android.ShiftTracker",
 
                 compileSdkVersion : 23,
-                buildToolsVersion : "23.0.1",
+                buildToolsVersion : "23.0.2",
                 minSdkVersion : 19,
                 targetSdkVersion : 23,
 
-                versionCode : 8,
-                versionName : "2.0",
+                versionCode : 9,
+                versionName : "2.0.1",
 
                 contentProviderAuthority: "com.dgsd.android.shifttracker.content_provider_auth",
                 contentProviderAuthorityFree: "com.dgsd.android.shifttracker.content_provider_auth_free",
