@@ -141,7 +141,8 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.ViewHolder> {
                     ((ShiftListItemView) itemView).populate(item.shift);
                     break;
                 case VIEW_TYPE_EMPTY_DAY:
-                    ((TextView) itemView).setText(itemView.getContext().getString(R.string.no_shifts));
+                    ((TextView) itemView).setText(
+                            itemView.getContext().getString(R.string.nav_item_add_shift));
                     break;
                 case VIEW_TYPE_DAY_TITLE:
                     ((TextView) itemView).setText(getTitleForWeekday(item.offset));
