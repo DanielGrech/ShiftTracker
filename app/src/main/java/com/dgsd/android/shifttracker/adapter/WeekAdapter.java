@@ -94,8 +94,8 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.ViewHolder> {
     public Observable<Long> observeEmptyDayClicked() {
         return onEmptyDayClickedSubject.asObservable().map(new Func1<Integer, Long>() {
             @Override
-            public Long call(Integer day) {
-                return weekStartMillis + TimeUnit.DAYS.toMillis(day - 1);
+            public Long call(Integer offset) {
+                return weekStartMillis + TimeUnit.DAYS.toMillis(offset);
             }
         });
     }
@@ -112,10 +112,11 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.ViewHolder> {
             final Map<Integer, List<Shift>> mapping = weekMapping.getMapping();
             int offset = 0;
             for (Map.Entry<Integer, List<Shift>> entry : mapping.entrySet()) {
-                items.add(ListItem.newDayTitleItem(offset++));
+                final int offsetForThisItem = offset++;
+                items.add(ListItem.newDayTitleItem(offsetForThisItem));
 
                 if (entry.getValue() == null || entry.getValue().isEmpty()) {
-                    items.add(ListItem.newEmptyItem(entry.getKey()));
+                    items.add(ListItem.newEmptyItem(offsetForThisItem));
                 } else {
                     for (Shift shift : entry.getValue()) {
                         items.add(ListItem.newShiftItem(shift));
