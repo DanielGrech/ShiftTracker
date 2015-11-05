@@ -31,14 +31,12 @@ import com.dgsd.android.shifttracker.data.AppSettings.Defaults;
 import com.dgsd.android.shifttracker.manager.AnalyticsManager;
 import com.dgsd.android.shifttracker.util.IntentUtils;
 import com.dgsd.android.shifttracker.util.ModelUtils;
-import com.dgsd.android.shifttracker.util.RxUtils;
 import com.dgsd.android.shifttracker.util.ShiftToCsvMapper;
 import com.dgsd.android.shifttracker.util.UpgradeAppPrompt;
 import com.dgsd.android.shifttracker.util.ViewUtils;
 import com.dgsd.shifttracker.data.DataProvider;
 import com.dgsd.shifttracker.model.ReminderItem;
 import com.dgsd.shifttracker.model.Shift;
-import com.trello.rxlifecycle.RxLifecycle;
 
 import java.io.IOException;
 import java.util.List;
