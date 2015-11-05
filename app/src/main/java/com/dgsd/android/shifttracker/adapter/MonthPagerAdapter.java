@@ -40,7 +40,7 @@ public class MonthPagerAdapter extends BrowsablePagerAdapter {
 
     @Override
     public Date getSelectedDateForItem(int position) {
-        final MonthFragment frag = (MonthFragment) getFragmentAt(position);
+        final MonthFragment frag = getFragmentAt(position, MonthFragment.class);
         return frag == null ? null : frag.getPresenter().getSelectedDate();
     }
 
@@ -72,7 +72,7 @@ public class MonthPagerAdapter extends BrowsablePagerAdapter {
 
     @Override
     public String getStatisticsSummary(int position) {
-        final MonthFragment frag = (MonthFragment) getFragmentAt(position);
+        final MonthFragment frag = getFragmentAt(position, MonthFragment.class);
         if (frag == null) {
             return "";
         } else {

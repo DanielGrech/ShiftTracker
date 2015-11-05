@@ -44,13 +44,13 @@ public abstract class BrowsablePagerAdapter extends FragmentStatePagerAdapter {
         return title;
     }
 
-    protected Fragment getFragmentAt(int position) {
+    protected <T extends Fragment> T getFragmentAt(int position, Class<T> fragCls) {
         final List<?> list = getFragmentList();
         if (list != null) {
             if (position < list.size()) {
                 final Object obj = list.get(position);
-                if (obj instanceof Fragment) {
-                    return (Fragment) obj;
+                if (fragCls.isInstance(obj)) {
+                    return fragCls.cast(obj);
                 }
             }
         }

@@ -35,8 +35,8 @@ subprojects {
                 minSdkVersion : 19,
                 targetSdkVersion : 23,
 
-                versionCode : 9,
-                versionName : "2.0.1",
+                versionCode : 10,
+                versionName : "2.0.2",
 
                 contentProviderAuthority: "com.dgsd.android.shifttracker.content_provider_auth",
                 contentProviderAuthorityFree: "com.dgsd.android.shifttracker.content_provider_auth_free",

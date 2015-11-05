@@ -62,7 +62,7 @@ public class WeekPagerAdapter extends BrowsablePagerAdapter {
 
     @Override
     public String getStatisticsSummary(int position) {
-        final WeekFragment frag = (WeekFragment) getFragmentAt(position);
+        final WeekFragment frag = getFragmentAt(position, WeekFragment.class);
         if (frag == null) {
             return "";
         } else {
