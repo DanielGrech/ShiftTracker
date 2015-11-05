@@ -15,17 +15,12 @@ import com.dgsd.shifttracker.model.ShiftWeekMapping;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
-import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.functions.Func1;
 import rx.subjects.PublishSubject;
-import timber.log.Timber;
 
 public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.ViewHolder> {
 
@@ -35,7 +30,7 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.ViewHolder> {
 
     private List<ListItem> items = new ArrayList<>();
 
-    private long weekStartMillis = -1;
+    private int weekStartJulianDay;
 
     private Calendar calendar = Calendar.getInstance();
 
@@ -95,13 +90,13 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.ViewHolder> {
         return onEmptyDayClickedSubject.asObservable().map(new Func1<Integer, Long>() {
             @Override
             public Long call(Integer offset) {
-                return weekStartMillis + TimeUnit.DAYS.toMillis(offset);
+                return TimeUtils.toMillis(weekStartJulianDay + offset);
             }
         });
     }
 
     public void setWeekStartMillis(long weekStartMillis) {
-        this.weekStartMillis = weekStartMillis;
+        this.weekStartJulianDay = TimeUtils.getJulianDay(weekStartMillis);
         notifyDataSetChanged();
     }
 
@@ -152,7 +147,7 @@ public class WeekAdapter extends RecyclerView.Adapter<WeekAdapter.ViewHolder> {
         }
 
         private String getTitleForWeekday(int offset) {
-            calendar.setTimeInMillis(weekStartMillis + TimeUnit.DAYS.toMillis(offset));
+            calendar.setTimeInMillis(TimeUtils.toMillis(weekStartJulianDay + offset));
             return TimeUtils.formatAsDate(calendar.getTime());
         }
 

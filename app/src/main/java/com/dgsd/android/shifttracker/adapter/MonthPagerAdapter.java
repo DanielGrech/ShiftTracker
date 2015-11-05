@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentManager;
 import android.text.format.Time;
 
 import com.dgsd.android.shifttracker.fragment.MonthFragment;
-import com.dgsd.android.shifttracker.util.TimeUtils;
 import com.dgsd.shifttracker.model.MonthYear;
 
 import java.util.Calendar;

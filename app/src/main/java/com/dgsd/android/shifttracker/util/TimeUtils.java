@@ -176,4 +176,8 @@ public class TimeUtils {
                 .create();
     }
 
+    public static long toMillis(int julianDay) {
+        final Time time = new Time();
+        return time.setJulianDay(julianDay);
+    }
 }
