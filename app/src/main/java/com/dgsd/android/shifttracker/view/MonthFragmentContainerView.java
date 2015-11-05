@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 
 import static com.dgsd.android.shifttracker.util.DrawableUtils.getTintedDrawable;
 
-public class MonthFragmentContainerView extends ScrollView {
+public class MonthFragmentContainerView extends ScrollView implements Runnable {
 
     private static final float PARALLAX_FACTOR = 0.5f;
     private static final float MIN_ALPHA = 0.1f;
@@ -58,15 +58,7 @@ public class MonthFragmentContainerView extends ScrollView {
     protected void onFinishInflate() {
         super.onFinishInflate();
         ButterKnife.bind(this);
-        ViewUtils.onPreDraw(this, new Runnable() {
-            @Override
-            public void run() {
-                if (dayTitle != null) {
-                    shiftContainer.setMinimumHeight(getHeight() - dayTitle.getHeight());
-                    calculateEmptyViewPosition(0);
-                }
-            }
-        });
+        ViewUtils.onPreDraw(this, this);
 
         emptyViewImage.setImageDrawable(getTintedDrawable(getContext(),
                 R.drawable.ic_smilie, getResources().getColor(R.color.divider)));
@@ -87,6 +79,17 @@ public class MonthFragmentContainerView extends ScrollView {
         monthView.setAlpha(alpha);
 
         calculateEmptyViewPosition(t);
+    }
+
+    /**
+     * Run in onPreDraw immediately after inflation
+     */
+    @Override
+    public void run() {
+        if (dayTitle != null) {
+            shiftContainer.setMinimumHeight(getHeight() - dayTitle.getHeight());
+            calculateEmptyViewPosition(0);
+        }
     }
 
     private void calculateEmptyViewPosition(int scrollOffset) {
