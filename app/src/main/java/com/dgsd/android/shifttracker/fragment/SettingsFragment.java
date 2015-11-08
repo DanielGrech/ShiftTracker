@@ -354,7 +354,12 @@ public class SettingsFragment extends PreferenceFragmentCompat
                     @Override
                     public Uri call(List<Shift> shifts) {
                         try {
-                            return new ShiftToCsvMapper(getContext()).generateCsvFile(shifts);
+                            if (getActivity() != null) {
+                                return new ShiftToCsvMapper(getActivity().getApplicationContext())
+                                        .generateCsvFile(shifts);
+                            } else {
+                                throw new RuntimeException("getActivity() == null");
+                            }
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
