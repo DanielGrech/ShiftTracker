@@ -53,10 +53,20 @@ public class LegacyDbOpenHelper extends SQLiteOpenHelper {
                 null
         );
 
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                shifts.add(new LegacyShift(cursor));
-            } while (cursor.moveToNext());
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    shifts.add(new LegacyShift(cursor));
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                try {
+                    cursor.close();
+                } catch (Exception ex) {
+                    // Oh well..
+                }
+            }
         }
 
         return shifts;
@@ -88,17 +98,50 @@ public class LegacyDbOpenHelper extends SQLiteOpenHelper {
 
         LegacyShift(Cursor cursor) {
             int colCount = 0;
-            id = cursor.getLong(colCount++);
-            julianDay = cursor.getInt(colCount++);
-            endJulianDay = cursor.getInt(colCount++);
-            startTime = cursor.getLong(colCount++);
-            endTime = cursor.getLong(colCount++);
-            payRate = cursor.getFloat(colCount++);
-            name = cursor.getString(colCount++);
-            note = cursor.getString(colCount++);
-            breakDuration = cursor.getInt(colCount++);
-            isTemplate = cursor.getInt(colCount++) > 0;
-            reminder = cursor.getInt(colCount++);
+
+            id = safeGetLong(cursor, colCount++);
+            julianDay = safeGetInt(cursor, colCount++);
+            endJulianDay = safeGetInt(cursor, colCount++);
+            startTime = safeGetLong(cursor, colCount++);
+            endTime = safeGetLong(cursor, colCount++);
+            payRate = safeGetFloat(cursor, colCount++);
+            name = safeGetString(cursor, colCount++);
+            note = safeGetString(cursor, colCount++);
+            breakDuration = safeGetInt(cursor, colCount++);
+            isTemplate = safeGetInt(cursor, colCount++) > 0;
+            reminder = safeGetInt(cursor, colCount++);
+        }
+
+        int safeGetInt(Cursor cursor, int index) {
+            if (cursor.isNull(index)) {
+                return -1;
+            } else {
+                return cursor.getInt(index);
+            }
+        }
+
+        long safeGetLong(Cursor cursor, int index) {
+            if (cursor.isNull(index)) {
+                return -1;
+            } else {
+                return cursor.getLong(index);
+            }
+        }
+
+        float safeGetFloat(Cursor cursor, int index) {
+            if (cursor.isNull(index)) {
+                return -1;
+            } else {
+                return cursor.getFloat(index);
+            }
+        }
+
+        String safeGetString(Cursor cursor, int index) {
+            if (cursor.isNull(index)) {
+                return null;
+            } else {
+                return cursor.getString(index);
+            }
         }
     }
 }
