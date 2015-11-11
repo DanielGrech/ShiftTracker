@@ -185,109 +185,19 @@ public class AddShiftPresenter extends Presenter<AddShiftMvpView> {
     }
 
     public void onStartTimeChanged(int hourOfDay, int minute) {
-        final Date startDate = getView().getCurrentStartDate();
-        final Date endDate = getView().getCurrentEndDate();
-
-        final Time currentStartTime = getView().getCurrentStartTime();
-        final Time endTime = getView().getCurrentEndTime();
-
-        final Time newStartTime = toTime(hourOfDay, minute);
-
-        if (newStartTime.after(endTime) && isSameDay(startDate, endDate)) {
-            final long prevDuration = endTime.toMillis(false) - currentStartTime.toMillis(false);
-
-            final Time newEndTime = toTime(newStartTime.toMillis(false) + prevDuration);
-            if (newEndTime.hour < newStartTime.hour) {
-                // We've rolled over to the next day...
-                onEndTimeChanged(23, 59);
-            } else {
-                onEndTimeChanged(newEndTime.hour, newEndTime.minute);
-            }
-        }
-
-        getView().showStartTime(newStartTime);
+        onStartTimeChanged(getView(), hourOfDay, minute);
     }
 
     public void onEndTimeChanged(int hourOfDay, int minute) {
-        final boolean overtimeIsVisible = getView().isOvertimeShowing();
-
-        final Date startDate = getView().getCurrentStartDate();
-        final Date endDate = getView().getCurrentEndDate();
-        final Date overtimeStartDate = getView().getCurrentOvertimeStartDate();
-
-        final Time currentEndTime = getView().getCurrentEndTime();
-        final Time startTime = getView().getCurrentStartTime();
-        final Time overtimeStartTime = getView().getCurrentOvertimeStartTime();
-        final Time newEndTime = toTime(hourOfDay, minute);
-
-        if (newEndTime.before(startTime) && isSameDay(startDate, endDate)) {
-            final long prevDuration = currentEndTime.toMillis(false) - startTime.toMillis(false);
-
-            final Time newStartTime = toTime(newEndTime.toMillis(false) - prevDuration);
-            if (newStartTime.hour > newEndTime.hour) {
-                // We've rolled over to the previous day..
-                onStartTimeChanged(0, 0);
-            } else {
-                onStartTimeChanged(newStartTime.hour, newStartTime.minute);
-            }
-        } else if (overtimeIsVisible && overtimeStartTime.before(newEndTime)
-                && isSameDay(endDate, overtimeStartDate)) {
-            onOvertimeStartTimeChanged(newEndTime.hour, newEndTime.minute);
-        }
-
-        getView().showEndTime(newEndTime);
+        onEndTimeChanged(getView(), hourOfDay, minute);
     }
 
     public void onOvertimeStartTimeChanged(int hourOfDay, int minute) {
-        final Date endDate = getView().getCurrentEndDate();
-        final Date overtimeStartDate = getView().getCurrentOvertimeStartDate();
-        final Date overtimeEndDate = getView().getCurrentEndDate();
-
-        final Time endTime = getView().getCurrentEndTime();
-        final Time overtimeEndTime = getView().getCurrentOvertimeEndTime();
-        final Time overtimeStartTime = getView().getCurrentOvertimeStartTime();
-        final Time newOvertimeStartTime = toTime(hourOfDay, minute);
-
-        if (newOvertimeStartTime.after(overtimeEndTime) && isSameDay(overtimeEndDate, overtimeStartDate)) {
-            final long prevDuration = overtimeEndTime.toMillis(false) - overtimeStartTime.toMillis(false);
-
-            final Time newOvertimeEndTime = toTime(newOvertimeStartTime.toMillis(false) + prevDuration);
-
-            if (newOvertimeEndTime.hour < newOvertimeStartTime.hour) {
-                // We've rolled over to the next day..
-                onOvertimeEndTimeChanged(23, 59);
-            } else {
-                onOvertimeEndTimeChanged(newOvertimeEndTime.hour, newOvertimeEndTime.minute);
-            }
-        } else if (newOvertimeStartTime.before(endTime) && isSameDay(endDate, overtimeStartDate)) {
-            onEndTimeChanged(newOvertimeStartTime.hour, newOvertimeStartTime.minute);
-        }
-
-        getView().showOvertimeStartTime(newOvertimeStartTime);
+        onOvertimeStartTimeChanged(getView(), hourOfDay, minute);
     }
 
     public void onOvertimeEndTimeChanged(int hourOfDay, int minute) {
-        final Date overtimeStartDate = getView().getCurrentOvertimeStartDate();
-        final Date overtimeEndDate = getView().getCurrentEndDate();
-
-        final Time overtimeEndTime = getView().getCurrentOvertimeEndTime();
-        final Time overtimeStartTime = getView().getCurrentOvertimeStartTime();
-        final Time newOvertimeEndTime = toTime(hourOfDay, minute);
-
-        if (newOvertimeEndTime.before(overtimeStartTime) && isSameDay(overtimeStartDate, overtimeEndDate)) {
-            final long prevDuration = overtimeEndTime.toMillis(false) - overtimeStartTime.toMillis(false);
-
-            final Time newOvertimeStartTime = toTime(newOvertimeEndTime.toMillis(false) - prevDuration);
-
-            if (newOvertimeStartTime.hour > newOvertimeEndTime.hour) {
-                // We've rolled over to the previous day..
-                onOvertimeStartTimeChanged(0, 0);
-            } else {
-                onOvertimeStartTimeChanged(newOvertimeStartTime.hour, newOvertimeStartTime.minute);
-            }
-        }
-
-        getView().showOvertimeEndTime(newOvertimeEndTime);
+        onOvertimeEndTimeChanged(getView(), hourOfDay, minute);
     }
 
     void setupColors() {
@@ -481,5 +391,121 @@ public class AddShiftPresenter extends Presenter<AddShiftMvpView> {
                 getView().getCurrentStartDate(), getView().getCurrentEndDate(),
                 getView().getCurrentOvertimeStartDate(), getView().getCurrentOvertimeEndDate()
         );
+    }
+
+    static void onStartTimeChanged(AddShiftMvpView view, int hourOfDay, int minute) {
+        final Date startDate = view.getCurrentStartDate();
+        final Date endDate = view.getCurrentEndDate();
+
+        final Time currentStartTime = view.getCurrentStartTime();
+        final Time endTime = view.getCurrentEndTime();
+
+        final Time newStartTime = toTime(hourOfDay, minute);
+
+        if (isAfterOrEqual(newStartTime, endTime) && isSameDay(startDate, endDate)) {
+            final long prevDuration = endTime.toMillis(false) - currentStartTime.toMillis(false);
+
+            final Time newEndTime = toTime(newStartTime.toMillis(false) + prevDuration);
+            if (newEndTime.hour < newStartTime.hour) {
+                // We've rolled over to the next day...
+                onEndTimeChanged(view, 23, 59);
+            } else {
+                onEndTimeChanged(view, newEndTime.hour, newEndTime.minute);
+            }
+        }
+
+        view.showStartTime(newStartTime);
+    }
+
+    static void onEndTimeChanged(AddShiftMvpView view, int hourOfDay, int minute) {
+        final boolean overtimeIsVisible = view.isOvertimeShowing();
+
+        final Date startDate = view.getCurrentStartDate();
+        final Date endDate = view.getCurrentEndDate();
+        final Date overtimeStartDate = view.getCurrentOvertimeStartDate();
+
+        final Time currentEndTime = view.getCurrentEndTime();
+        final Time startTime = view.getCurrentStartTime();
+        final Time overtimeStartTime = view.getCurrentOvertimeStartTime();
+        final Time newEndTime = toTime(hourOfDay, minute);
+
+        if (isBeforeOrEqual(newEndTime, startTime) && isSameDay(startDate, endDate)) {
+            final long prevDuration = currentEndTime.toMillis(false) - startTime.toMillis(false);
+
+            final Time newStartTime = toTime(newEndTime.toMillis(false) - prevDuration);
+            if (newStartTime.hour > newEndTime.hour) {
+                // We've rolled over to the previous day..
+                onStartTimeChanged(view, 0, 0);
+            } else {
+                onStartTimeChanged(view, newStartTime.hour, newStartTime.minute);
+            }
+        } else if (overtimeIsVisible && isBeforeOrEqual(overtimeStartTime, newEndTime)
+                && isSameDay(endDate, overtimeStartDate)) {
+            onOvertimeStartTimeChanged(view, newEndTime.hour, newEndTime.minute);
+        }
+
+        view.showEndTime(newEndTime);
+    }
+
+    static void onOvertimeStartTimeChanged(AddShiftMvpView view, int hourOfDay, int minute) {
+        final Date endDate = view.getCurrentEndDate();
+        final Date overtimeStartDate = view.getCurrentOvertimeStartDate();
+        final Date overtimeEndDate = view.getCurrentOvertimeEndDate();
+
+        final Time endTime = view.getCurrentEndTime();
+        final Time overtimeEndTime = view.getCurrentOvertimeEndTime();
+        final Time overtimeStartTime = view.getCurrentOvertimeStartTime();
+        final Time newOvertimeStartTime = toTime(hourOfDay, minute);
+
+        if (isAfterOrEqual(newOvertimeStartTime, overtimeEndTime) && isSameDay(overtimeEndDate, overtimeStartDate)) {
+            final long prevDuration = overtimeEndTime.toMillis(false) - overtimeStartTime.toMillis(false);
+
+            final Time newOvertimeEndTime = toTime(newOvertimeStartTime.toMillis(false) + prevDuration);
+
+            if (newOvertimeEndTime.hour < newOvertimeStartTime.hour ||
+                    (newOvertimeEndTime.hour == newOvertimeStartTime.hour && newOvertimeEndTime.minute < newOvertimeStartTime.minute)) {
+                // We've rolled over to the next day..
+                onOvertimeEndTimeChanged(view, 23, 59);
+            } else {
+                onOvertimeEndTimeChanged(view, newOvertimeEndTime.hour, newOvertimeEndTime.minute);
+            }
+        } else if (isBeforeOrEqual(newOvertimeStartTime, endTime) && isSameDay(endDate, overtimeStartDate)) {
+            onEndTimeChanged(view, newOvertimeStartTime.hour, newOvertimeStartTime.minute);
+        }
+
+        view.showOvertimeStartTime(newOvertimeStartTime);
+    }
+
+    static void onOvertimeEndTimeChanged(AddShiftMvpView view, int hourOfDay, int minute) {
+        final Date overtimeStartDate = view.getCurrentOvertimeStartDate();
+        final Date overtimeEndDate = view.getCurrentOvertimeEndDate();
+
+        final Time overtimeEndTime = view.getCurrentOvertimeEndTime();
+        final Time overtimeStartTime = view.getCurrentOvertimeStartTime();
+        final Time newOvertimeEndTime = toTime(hourOfDay, minute);
+
+        if (isBeforeOrEqual(newOvertimeEndTime, overtimeStartTime) && isSameDay(overtimeStartDate, overtimeEndDate)) {
+            final long prevDuration = overtimeEndTime.toMillis(false) - overtimeStartTime.toMillis(false);
+
+            final Time newOvertimeStartTime = toTime(newOvertimeEndTime.toMillis(false) - prevDuration);
+
+            if (newOvertimeStartTime.hour > newOvertimeEndTime.hour ||
+                    (newOvertimeStartTime.hour == newOvertimeEndTime.hour && newOvertimeStartTime.minute > newOvertimeEndTime.minute)) {
+                // We've rolled over to the previous day..
+                onOvertimeStartTimeChanged(view, 0, 0);
+            } else {
+                onOvertimeStartTimeChanged(view, newOvertimeStartTime.hour, newOvertimeStartTime.minute);
+            }
+        }
+
+        view.showOvertimeEndTime(newOvertimeEndTime);
+    }
+
+    static boolean isBeforeOrEqual(Time first, Time second) {
+        return Time.compare(first, second) <= 0;
+    }
+
+    static boolean isAfterOrEqual(Time first, Time second) {
+        return Time.compare(first, second) >= 0;
     }
 }
