@@ -165,6 +165,17 @@ public class AddShiftPresenterTest {
     }
 
     @Test
+    public void testOnEndTimeChangedToBeBeforeStartWhenPreviouslyEqual() {
+        final AddShiftMvpView view = createView();
+
+        when(view.getCurrentStartTime()).thenReturn(toTime(17, 0));
+        AddShiftPresenter.onEndTimeChanged(view, 9, 0);
+
+        verify(view).showEndTime(argThat(new TimeMatcher(9, 0)));
+        verify(view).showStartTime(argThat(new TimeMatcher(9, 0)));
+    }
+
+    @Test
     public void testOnOvertimeStartTimeChangedWhenPushingBackOvertimeEnd() {
         final AddShiftMvpView view = createView();
 
