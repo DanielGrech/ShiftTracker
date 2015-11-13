@@ -3,6 +3,7 @@ package com.dgsd.android.shifttracker.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.Time;
 
 import com.dgsd.android.shifttracker.R;
 import com.dgsd.android.shifttracker.data.AppSettings.Defaults;
@@ -115,8 +116,8 @@ public class LegacyMigrationActivity extends BaseActivity {
     private Shift convert(LegacyDbOpenHelper.LegacyShift legacyShift) {
         return Shift.builder()
                 .timePeriod(TimePeriod.builder()
-                        .startMillis(legacyShift.startTime)
-                        .endMillis(legacyShift.endTime)
+                        .startMillis(getMillisFrom(legacyShift.julianDay, legacyShift.startTime))
+                        .endMillis(getMillisFrom(legacyShift.endJulianDay, legacyShift.endTime))
                         .create())
                 .unpaidBreakDuration(legacyShift.breakDuration < 0 ?
                         -1 : TimeUnit.MINUTES.toMillis(legacyShift.breakDuration))
@@ -128,5 +129,23 @@ public class LegacyMigrationActivity extends BaseActivity {
                 .isTemplate(legacyShift.isTemplate)
                 .payRate(legacyShift.payRate)
                 .create();
+    }
+
+    @SuppressWarnings("deprecation")
+    private static long getMillisFrom(int julianDay, long timeOfDayMillis) {
+        final Time time1 = new Time();
+        final Time time2 = new Time();
+
+        time1.setJulianDay(julianDay);
+
+        time2.set(timeOfDayMillis);
+        time2.normalize(true);
+
+        time1.hour = time2.hour;
+        time1.minute = time2.minute;
+        time1.second = time2.second;
+
+        time1.normalize(true);
+        return time1.toMillis(true);
     }
 }
