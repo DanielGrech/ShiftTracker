@@ -46,6 +46,12 @@ public class UpgradeMigrationService extends IntentService {
             try {
                 final List<Shift> shifts = getShiftsFromFreeApp();
                 Observable.from(shifts)
+                        .map(new Func1<Shift, Shift>() {
+                            @Override
+                            public Shift call(Shift shift) {
+                                return shift.withId(-1);
+                            }
+                        })
                         .flatMap(new Func1<Shift, Observable<Shift>>() {
                             @Override
                             public Observable<Shift> call(Shift shift) {
